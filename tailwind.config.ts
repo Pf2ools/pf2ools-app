@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss';
 import forms from '@tailwindcss/forms';
 import { skeleton } from '@skeletonlabs/tw-plugin';
 import { RemasterGreen } from './src/themes/RemasterGreen';
+import { CoreRed } from './src/themes/CoreRed';
 
 export default {
 	darkMode: 'class',
@@ -17,7 +18,7 @@ export default {
 		forms,
 		skeleton({
 			themes: {
-				custom: [RemasterGreen],
+				custom: [RemasterGreen, CoreRed],
 			},
 		}),
 	],
