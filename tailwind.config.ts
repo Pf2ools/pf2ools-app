@@ -13,6 +13,9 @@ export default {
 	],
 	theme: {
 		extend: {
+			scale: {
+				'200': '2',
+			},
 			spacing: {
 				'1/10': '10%',
 				'2/10': '20%',

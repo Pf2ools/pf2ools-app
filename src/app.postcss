@@ -1,53 +1,12 @@
+@import './css/fonts.postcss';
+@import './css/transitions.postcss';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @tailwind variants;
 
-/* Global Styles and Fonts */
-@font-face {
-	font-family: 'pathfinder2eactions';
-	src:
-		local('font'),
-		url('/fonts/Pathfinder2eActions.ttf') format('truetype');
-	font-weight: bold;
-	size-adjust: 160%;
-}
-
-@font-face {
-	font-family: 'Ysabeau';
-	src:
-		local('font'),
-		url('/fonts/Ysabeau/Ysabeau-VariableFont_wght.ttf') format('truetype');
-	size-adjust: 105%;
-}
-
-@font-face {
-	font-family: 'Ysabeau';
-	src:
-		local('font'),
-		url('/fonts/Ysabeau/Ysabeau-Italic-VariableFont_wght.ttf') format('truetype');
-	size-adjust: 105%;
-	font-style: italic;
-}
-
-@font-face {
-	font-family: 'Quicksand';
-	src:
-		local('font'),
-		url('/fonts/Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype');
-}
-
-@font-face {
-	font-family: 'Taroca';
-	src:
-		local('font'),
-		url('/fonts/Taroca Regular.ttf') format('truetype');
-}
-
-@font-face {
-	font-family: 'Teko';
-	src:
-		local('font'),
-		url('/fonts/Teko/Teko-VariableFont_wght.ttf') format('truetype');
-	size-adjust: 120%;
+html,
+body {
+	@apply h-full overflow-hidden;
 }

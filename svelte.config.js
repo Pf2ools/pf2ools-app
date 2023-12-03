@@ -10,7 +10,9 @@ const config = {
 	}),
 
 	vitePlugin: {
-		inspector: true,
+		inspector: {
+			toggleKeyCombo: 'alt+shift+c',
+		},
 	},
 
 	kit: {
