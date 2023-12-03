@@ -21,16 +21,13 @@
 	import { slide } from 'svelte/transition';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
-	let headline = false;
-
-	let timer: NodeJS.Timeout | undefined;
-	const debounce = (value: any) => {
-		clearTimeout(timer);
-		timer = setTimeout(() => {
-			headline = value;
-		}, 100);
-	};
-
+	type anchors = {
+		name: string;
+		pages?: (typeof anchors)[number][];
+		href?: string;
+		search?: true;
+		settings?: true;
+	}[];
 	const anchors = [
 		{
 			name: 'Rules',
@@ -95,6 +92,16 @@
 		},
 		{ name: 'Settings', settings: true },
 	];
+
+	let headline: (typeof anchors)[number] | false = false;
+
+	let timer: NodeJS.Timeout | undefined;
+	const debounce = (value: any, event: Event) => {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			headline = value;
+		}, 100);
+	};
 </script>
 
 <svelte:head>
@@ -107,12 +114,12 @@
 			<svelte:fragment slot="lead">
 				<div class="absolute py-5 hidden sm:flex">
 					<img src="icons/source/pf2e.svg" alt="pf2ools logo" class="w-8 scale-200" />
-					<div class="pl-8 pt-1">pf2ools</div>
+					<a href="/" class="ml-8 py-1">pf2ools</a>
 				</div>
 			</svelte:fragment>
 
 			<div class="flex">
-				<div class="mx-auto" aria-level="0">
+				<div class="mx-auto" role="navigation">
 					<TabGroup
 						justify="justify-center"
 						hover="hover:variant-soft-primary"
@@ -121,120 +128,101 @@
 						border=""
 						class="active-bg"
 					>
-						{#each anchors as { name, pages, search, settings }, i}
+						{#each anchors as { name, pages, search, settings }}
 							{#if search}
 								<TabAnchor
-									class="w-24 h-16 text-xs"
+									id="tab-{name}"
+									class="w-24 h-16 text-xs border-token border-surface-200-700-token"
 									padding="py-2"
-									on:mouseover={() => debounce(true)}
-									on:mouseleave={() => debounce(false)}
+									on:focus={(e) => debounce(true, e)}
+									on:blur={(e) => debounce(false, e)}
+									on:mouseover={(e) => debounce(true, e)}
+									on:mouseleave={(e) => debounce(false, e)}
+									on:keydown={(e) =>
+										e.key === 'Enter' || e.key === 'ArrowDown'
+											? document.querySelector('#headline')?.firstChild?.firstChild?.focus()
+											: null}
+									tabIndex="0"
 								>
 									<svelte:fragment slot="lead">(ico)</svelte:fragment>
 									<span>(search)</span>
 								</TabAnchor>
 							{:else if settings}
 								<TabAnchor
-									class="w-24 h-16 text-xs"
+									id="tab-{name}"
+									class="w-24 h-16 text-xs border-token border-surface-200-700-token"
 									padding="py-2"
-									on:mouseover={() => debounce(true)}
-									on:mouseleave={() => debounce(false)}
+									on:focus={(e) => debounce(true, e)}
+									on:blur={(e) => debounce(false, e)}
+									on:mouseover={(e) => debounce(true, e)}
+									on:mouseleave={(e) => debounce(false, e)}
+									on:keydown={(e) =>
+										e.key === 'Enter' || e.key === 'ArrowDown'
+											? document.querySelector('#headline')?.firstChild?.firstChild?.focus()
+											: null}
+									tabIndex="0"
 								>
 									<svelte:fragment slot="lead">(ico)</svelte:fragment>
 									<span>(settings)</span>
 								</TabAnchor>
 							{:else}
 								<TabAnchor
-									class="w-24 h-16 text-xs"
+									id="tab-{name}"
+									class="w-24 h-16 text-xs border-token border-surface-200-700-token"
 									padding="py-2"
-									on:mouseover={() => debounce(pages)}
-									on:mouseleave={() => debounce(false)}
+									on:focus={(e) => debounce({ pages, name }, e)}
+									on:blur={(e) => debounce(false, e)}
+									on:mouseover={(e) => debounce({ pages, name }, e)}
+									on:mouseleave={(e) => debounce(false, e)}
+									on:keydown={(e) =>
+										e.key === 'Enter' || e.key === 'ArrowDown'
+											? document.querySelector('#headline')?.firstChild?.firstChild?.focus()
+											: null}
+									tabIndex="0"
 								>
 									<svelte:fragment slot="lead">(ico)</svelte:fragment>
 									<span>{name}</span>
 								</TabAnchor>
 							{/if}
 						{/each}
-						<!-- <TabAnchor
-							class="w-24 h-16 text-xs"
-							padding="py-2"
-							on:mouseover={() => debounce(true)}
-							on:mouseleave={() => debounce(false)}
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(rules)</span>
-						</TabAnchor>
-						<TabAnchor
-							class="w-24 h-16 text-xs"
-							padding="py-2"
-							on:mouseover={() => debounce(true)}
-							on:mouseleave={() => debounce(false)}
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(player)</span>
-						</TabAnchor>
-						<TabAnchor
-							class="w-24 h-16 text-xs"
-							padding="py-2"
-							on:mouseover={() => debounce(true)}
-							on:mouseleave={() => debounce(false)}
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(game master)</span>
-						</TabAnchor>
-						<TabAnchor
-							class="w-24 h-16 text-xs"
-							padding="py-2"
-							on:mouseover={() => debounce(true)}
-							on:mouseleave={() => debounce(false)}
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(search)</span>
-						</TabAnchor>
-						<TabAnchor
-							class="w-24 h-16 text-xs"
-							padding="py-2"
-							on:mouseover={() => debounce(true)}
-							on:mouseleave={() => debounce(false)}
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(references)</span>
-						</TabAnchor>
-						<TabAnchor
-							class="w-24 h-16 text-xs"
-							padding="py-2"
-							on:mouseover={() => debounce(true)}
-							on:mouseleave={() => debounce(false)}
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(utilities)</span>
-						</TabAnchor>
-						<TabAnchor
-							class="w-24 h-16 text-xs"
-							padding="py-2"
-							on:mouseover={() => debounce(true)}
-							on:mouseleave={() => debounce(false)}
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(settings)</span>
-						</TabAnchor> -->
 					</TabGroup>
 				</div>
 			</div>
 			<svelte:fragment slot="headline">
 				{#if headline}
 					<div
-						class="flex absolute w-full bg-surface-100-800-token -mx-8"
+						id="headline"
+						class="flex absolute w-full bg-surface-100-800-token -mx-8 px-2/10 min-h-8 h-fit-content"
 						in:slide={{ duration: 300 }}
 						out:slide={{ duration: 300, delay: 500 }}
-						role="heading"
-						aria-level="1"
+						role="navigation"
 						aria-label="Headline"
-						on:mouseover={() => debounce(true)}
-						on:mouseleave={() => debounce(false)}
-						on:focus={() => debounce(true)}
-						on:blur={() => debounce(false)}
+						on:mouseleave={(e) => debounce(false, e)}
+						on:focus={(e) => debounce(true, e)}
+						on:blur={(e) => debounce(false, e)}
 					>
-						<div class="mx-auto">(headline)</div>
+						<div class="mx-auto flex flex-wrap justify-center">
+							{#if Array.isArray(headline.pages)}
+								{#each headline.pages as { name, href }}
+									<a
+										{href}
+										class="px-8 py-2 text-xs hover:variant-soft-primary border-token border-surface-200-700-token"
+										on:mouseover={(e) => debounce(headline, e)}
+										on:mouseleave={(e) => debounce(false, e)}
+										on:focus={(e) => debounce(headline, e)}
+										on:blur={(e) => debounce(false, e)}
+										on:keydown={(e) =>
+											e.key === 'Backspace' || e.key === 'ArrowUp'
+												? document.getElementById(`tab-${headline.name}`)?.focus()
+												: null}
+									>
+										{name}
+									</a>
+								{/each}
+							{:else}
+								tru tru
+							{/if}
+						</div>
 					</div>
 				{/if}
 			</svelte:fragment>
