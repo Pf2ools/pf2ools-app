@@ -24,12 +24,77 @@
 	let headline = false;
 
 	let timer: NodeJS.Timeout | undefined;
-	const debounce = (value: boolean) => {
+	const debounce = (value: any) => {
 		clearTimeout(timer);
 		timer = setTimeout(() => {
 			headline = value;
 		}, 100);
 	};
+
+	const anchors = [
+		{
+			name: 'Rules',
+			pages: [
+				{ name: 'Quick Reference', href: '/quickref' },
+				{ name: 'Variant Rules', href: '/variant-rules' },
+				{ name: 'Tables', href: '/tables' },
+			],
+		},
+		{
+			name: 'Character',
+			pages: [
+				{ name: 'Ancestries', href: '/ancestries' },
+				{ name: 'Backgrounds', href: '/backgrounds' },
+				{ name: 'Classes', href: '/classes' },
+				{ name: 'Archetypes', href: '/archetypes' },
+				{ name: 'Feats', href: '/feats' },
+				{ name: 'Companions', href: '/companions' },
+				{ name: 'Optional Features', href: '/optional-features' },
+			],
+		},
+		{
+			name: 'Game Master',
+			pages: [
+				{ name: 'GM Screen', href: '/gm-screen' },
+				{ name: 'Events', href: '/events ' },
+				{ name: 'Hazards', href: '/hazards' },
+				{ name: 'Relic Gifts', href: '/relic-gifts' },
+			],
+		},
+		{ name: 'Search', search: true },
+		{
+			name: 'References',
+			pages: [
+				{ name: 'Actions', href: '/actions' },
+				{ name: 'Bestiary', href: '/bestiary' },
+				{ name: 'Conditions', href: '/conditions' },
+				{ name: 'Items', href: '/items' },
+				{ name: 'Spells', href: '/spells' },
+				{ name: 'Afflictions', href: '/afflictions' },
+				{ name: 'Rituals', href: '/rituals' },
+				{ name: 'Vehicles', href: '/vehicles' },
+				{ name: 'Deities', href: '/deities' },
+				{ name: 'Languages', href: '/languages' },
+				{ name: 'Places', href: '/places' },
+				{ name: 'Organizations', href: '/organizations' },
+				{ name: 'Creature Abilities', href: '/creature-abilities' },
+				{ name: 'Creature Templates', href: '/creature-templates' },
+				{ name: 'Traits', href: '/traits' },
+			],
+		},
+		{
+			name: 'Utilities',
+			pages: [
+				{ name: 'Homebrew Manager', href: '/homebrew-manager' },
+				{ name: 'Renderer Demo', href: '/renderer-demo' },
+				{ name: 'Homebrew Maker', href: '/homebrew-maker' },
+				{ name: 'Changelog', href: '/changelog' },
+				{ name: 'Privacy Policy', href: '/privacy-policy' },
+				{ name: 'Licenses', href: '/licenses' },
+			],
+		},
+		{ name: 'Settings', settings: true },
+	];
 </script>
 
 <svelte:head>
@@ -50,14 +115,46 @@
 				<div class="mx-auto" aria-level="0">
 					<TabGroup
 						justify="justify-center"
-						active="variant-filled-primary"
 						hover="hover:variant-soft-primary"
 						flex="flex-1 lg:flex-none"
 						rounded=""
 						border=""
-						class=""
+						class="active-bg"
 					>
-						<TabAnchor
+						{#each anchors as { name, pages, search, settings }, i}
+							{#if search}
+								<TabAnchor
+									class="w-24 h-16 text-xs"
+									padding="py-2"
+									on:mouseover={() => debounce(true)}
+									on:mouseleave={() => debounce(false)}
+								>
+									<svelte:fragment slot="lead">(ico)</svelte:fragment>
+									<span>(search)</span>
+								</TabAnchor>
+							{:else if settings}
+								<TabAnchor
+									class="w-24 h-16 text-xs"
+									padding="py-2"
+									on:mouseover={() => debounce(true)}
+									on:mouseleave={() => debounce(false)}
+								>
+									<svelte:fragment slot="lead">(ico)</svelte:fragment>
+									<span>(settings)</span>
+								</TabAnchor>
+							{:else}
+								<TabAnchor
+									class="w-24 h-16 text-xs"
+									padding="py-2"
+									on:mouseover={() => debounce(pages)}
+									on:mouseleave={() => debounce(false)}
+								>
+									<svelte:fragment slot="lead">(ico)</svelte:fragment>
+									<span>{name}</span>
+								</TabAnchor>
+							{/if}
+						{/each}
+						<!-- <TabAnchor
 							class="w-24 h-16 text-xs"
 							padding="py-2"
 							on:mouseover={() => debounce(true)}
@@ -119,7 +216,7 @@
 						>
 							<svelte:fragment slot="lead">(ico)</svelte:fragment>
 							<span>(settings)</span>
-						</TabAnchor>
+						</TabAnchor> -->
 					</TabGroup>
 				</div>
 			</div>
