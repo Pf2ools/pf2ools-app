@@ -72,11 +72,11 @@
 						<TabAnchor
 							class="w-16 h-16 text-xs"
 							padding="py-2"
-							href="/index"
-							selected={$page.url.pathname === '/index'}
+							href="/references"
+							selected={$page.url.pathname === '/references'}
 						>
 							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(index)</span>
+							<span>(references)</span>
 						</TabAnchor>
 						<TabAnchor
 							class="w-16 h-16 text-xs"
