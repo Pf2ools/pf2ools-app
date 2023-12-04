@@ -130,11 +130,10 @@
 					class="w-24 h-16 text-xs border-token border-surface-200-700-token"
 					padding="py-2"
 					on:focus={(e) => debounce({ name, search }, e)}
-					on:blur={(e) => debounce(false, e)}
 					on:click={(e) => (headline?.search ? debounce(false, e) : debounce({ name, search }, e))}
 					on:keydown={moveFocus}
 					tabIndex="0"
-					active="variant-filled-primary"
+					active="variant-soft-primary"
 					selected={headline.name === name}
 				>
 					<svelte:fragment slot="lead">(ico)</svelte:fragment>
@@ -145,13 +144,13 @@
 					id="tab-{name}"
 					class="w-24 h-16 text-xs border-token border-surface-200-700-token"
 					padding="py-2"
-					on:focus={(e) => debounce({ name, search }, e)}
+					on:focus={(e) => debounce({ settings, name }, e)}
 					on:blur={(e) => debounce(false, e)}
-					on:click={(e) =>
-						headline?.settings ? debounce(false, e) : debounce({ name, settings }, e)}
+					on:mouseover={(e) => debounce({ settings, name }, e)}
+					on:mouseleave={(e) => debounce(false, e)}
 					on:keydown={moveFocus}
 					tabIndex="0"
-					active="variant-filled-primary"
+					active="variant-soft-primary"
 					selected={headline.name === name}
 				>
 					<svelte:fragment slot="lead">(ico)</svelte:fragment>
@@ -160,7 +159,9 @@
 			{:else if pages}
 				<TabAnchor
 					id="tab-{name}"
-					class="w-24 h-16 text-xs border-token border-surface-200-700-token"
+					class="{headline.name === name
+						? 'variant-soft-primary'
+						: ''} w-24 h-16 text-xs border-token border-surface-200-700-token"
 					padding="py-2"
 					on:focus={(e) => debounce({ pages, name }, e)}
 					on:blur={(e) => debounce(false, e)}
@@ -189,7 +190,7 @@
 				role="navigation"
 				aria-label="Headline"
 				on:mouseover={(e) => debounce(headline, e)}
-				on:mouseleave={(e) => (headline?.search || headline?.settings ? null : debounce(false, e))}
+				on:mouseleave={(e) => (headline?.search ? null : debounce(false, e))}
 				on:focus={(e) => debounce(true, e)}
 				on:blur={(e) => debounce(false, e)}
 			>
