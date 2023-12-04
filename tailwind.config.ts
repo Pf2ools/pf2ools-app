@@ -15,6 +15,7 @@ export default {
 		extend: {
 			scale: {
 				'200': '2',
+				'175': '1.75',
 			},
 			spacing: {
 				'1/10': '10%',
