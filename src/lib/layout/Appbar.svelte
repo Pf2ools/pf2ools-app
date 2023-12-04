@@ -75,14 +75,14 @@
 		{ name: 'Settings', settings: true },
 	] as const;
 
-	let headline: anchor | false = false;
+	let headline: anchor = anchors[3];
 
 	let timer: NodeJS.Timeout | undefined;
 	const debounce = (value: any, event: Event) => {
 		clearTimeout(timer);
 		timer = setTimeout(() => {
 			headline = value;
-		}, 100);
+		}, 50);
 	};
 
 	function moveFocus(e: KeyboardEvent, group?: string) {
@@ -96,13 +96,15 @@
 		}
 		if (e.key === 'ArrowLeft') {
 			e.preventDefault();
-			((e.target as HTMLElement).nextElementSibling as HTMLElement)?.focus?.();
+			((e.target as HTMLElement).previousElementSibling as HTMLElement)?.focus?.();
 		}
 		if (e.key === 'ArrowRight') {
 			e.preventDefault();
 			((e.target as HTMLElement).nextElementSibling as HTMLElement)?.focus?.();
 		}
 	}
+
+	$: console.log(headline);
 </script>
 
 <AppBar shadow="shadow-2xl" gap="gap-8" padding="px-8" spacing="">
@@ -127,12 +129,13 @@
 					id="tab-{name}"
 					class="w-24 h-16 text-xs border-token border-surface-200-700-token"
 					padding="py-2"
-					on:focus={(e) => debounce(true, e)}
+					on:focus={(e) => debounce({ name, search }, e)}
 					on:blur={(e) => debounce(false, e)}
-					on:mouseover={(e) => debounce(true, e)}
-					on:mouseleave={(e) => debounce(false, e)}
+					on:click={(e) => (headline?.search ? debounce(false, e) : debounce({ name, search }, e))}
 					on:keydown={moveFocus}
 					tabIndex="0"
+					active="variant-filled-primary"
+					selected={headline.name === name}
 				>
 					<svelte:fragment slot="lead">(ico)</svelte:fragment>
 					<span>(search)</span>
@@ -142,12 +145,14 @@
 					id="tab-{name}"
 					class="w-24 h-16 text-xs border-token border-surface-200-700-token"
 					padding="py-2"
-					on:focus={(e) => debounce(true, e)}
+					on:focus={(e) => debounce({ name, search }, e)}
 					on:blur={(e) => debounce(false, e)}
-					on:mouseover={(e) => debounce(true, e)}
-					on:mouseleave={(e) => debounce(false, e)}
+					on:click={(e) =>
+						headline?.settings ? debounce(false, e) : debounce({ name, settings }, e)}
 					on:keydown={moveFocus}
 					tabIndex="0"
+					active="variant-filled-primary"
+					selected={headline.name === name}
 				>
 					<svelte:fragment slot="lead">(ico)</svelte:fragment>
 					<span>(settings)</span>
@@ -156,7 +161,6 @@
 				<TabAnchor
 					id="tab-{name}"
 					class="w-24 h-16 text-xs border-token border-surface-200-700-token"
-					active="variant-filled-primary"
 					padding="py-2"
 					on:focus={(e) => debounce({ pages, name }, e)}
 					on:blur={(e) => debounce(false, e)}
@@ -164,6 +168,7 @@
 					on:mouseleave={(e) => debounce(false, e)}
 					on:keydown={moveFocus}
 					tabIndex="0"
+					active="variant-filled-primary"
 					selected={pages.map((x) => x.href).includes($page.url.pathname)}
 				>
 					<svelte:fragment slot="lead">(ico)</svelte:fragment>
@@ -177,22 +182,27 @@
 		{#if headline}
 			<div
 				id="headline"
-				class="flex absolute w-full bg-surface-100/90 dark:bg-surface-800/90 -mx-8 px-1/10 min-h-8 h-fit-content"
+				class="flex absolute w-full bg-surface-100/90 dark:bg-surface-800/90 -mx-8 px-2/10 min-h-8 h-fit-content"
+				class:!bg-transparent={headline.search || headline.settings}
 				in:slide={{ duration: 300 }}
 				out:slide={{ duration: 300, delay: 500 }}
 				role="navigation"
 				aria-label="Headline"
 				on:mouseover={(e) => debounce(headline, e)}
-				on:mouseleave={(e) => debounce(false, e)}
+				on:mouseleave={(e) => (headline?.search || headline?.settings ? null : debounce(false, e))}
 				on:focus={(e) => debounce(true, e)}
 				on:blur={(e) => debounce(false, e)}
 			>
 				<div class="mx-auto flex flex-wrap justify-center">
-					{#if Array.isArray(headline.pages)}
+					{#if headline.settings}
+						settings
+					{:else if headline.search}
+						search
+					{:else if headline.pages}
 						{#each headline.pages as { name, href }}
 							<a
 								{href}
-								class="bg-surface-100 dark:bg-surface-800 px-8 py-2 text-xs hover:variant-filled-primary border-token border-surface-200-700-token"
+								class="bg-surface-100 dark:bg-surface-800 px-8 py-2 text-sm hover:variant-filled-primary border-token border-surface-200-700-token"
 								class:!variant-filled-primary={href === $page.url.pathname}
 								on:mouseover={(e) => debounce(headline, e)}
 								on:mouseleave={(e) => debounce(false, e)}
@@ -203,8 +213,6 @@
 								{name}
 							</a>
 						{/each}
-					{:else}
-						tru tru
 					{/if}
 				</div>
 			</div>
