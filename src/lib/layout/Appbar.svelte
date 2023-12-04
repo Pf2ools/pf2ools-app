@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { AppBar, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
 	import { slide } from 'svelte/transition';
 
@@ -83,6 +84,25 @@
 			headline = value;
 		}, 100);
 	};
+
+	function moveFocus(e: KeyboardEvent, group?: string) {
+		if (e.key === 'ArrowDown' || e.key === 'Enter') {
+			e.preventDefault();
+			(document.querySelector('#headline')?.firstChild?.firstChild as HTMLElement)?.focus?.();
+		}
+		if (group && (e.key === 'ArrowUp' || e.key === 'Backspace')) {
+			e.preventDefault();
+			(document.getElementById(`tab-${group}`) as HTMLElement)?.focus?.();
+		}
+		if (e.key === 'ArrowLeft') {
+			e.preventDefault();
+			((e.target as HTMLElement).nextElementSibling as HTMLElement)?.focus?.();
+		}
+		if (e.key === 'ArrowRight') {
+			e.preventDefault();
+			((e.target as HTMLElement).nextElementSibling as HTMLElement)?.focus?.();
+		}
+	}
 </script>
 
 <AppBar shadow="shadow-2xl" gap="gap-8" padding="px-8" spacing="">
@@ -93,85 +113,76 @@
 		</div>
 	</svelte:fragment>
 
-	<div class="flex">
-		<div class="mx-auto" role="navigation">
-			<TabGroup
-				justify="justify-center"
-				hover="hover:variant-soft-primary"
-				flex="flex-1 lg:flex-none"
-				rounded=""
-				border=""
-				class="active-bg"
-			>
-				{#each anchors as { name, pages, search, settings }}
-					{#if search}
-						<TabAnchor
-							id="tab-{name}"
-							class="w-24 h-16 text-xs border-token border-surface-200-700-token"
-							padding="py-2"
-							on:focus={(e) => debounce(true, e)}
-							on:blur={(e) => debounce(false, e)}
-							on:mouseover={(e) => debounce(true, e)}
-							on:mouseleave={(e) => debounce(false, e)}
-							on:keydown={(e) =>
-								e.key === 'Enter' || e.key === 'ArrowDown'
-									? document.querySelector('#headline')?.firstChild?.firstChild?.focus()
-									: null}
-							tabIndex="0"
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(search)</span>
-						</TabAnchor>
-					{:else if settings}
-						<TabAnchor
-							id="tab-{name}"
-							class="w-24 h-16 text-xs border-token border-surface-200-700-token"
-							padding="py-2"
-							on:focus={(e) => debounce(true, e)}
-							on:blur={(e) => debounce(false, e)}
-							on:mouseover={(e) => debounce(true, e)}
-							on:mouseleave={(e) => debounce(false, e)}
-							on:keydown={(e) =>
-								e.key === 'Enter' || e.key === 'ArrowDown'
-									? document.querySelector('#headline')?.firstChild?.firstChild?.focus()
-									: null}
-							tabIndex="0"
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>(settings)</span>
-						</TabAnchor>
-					{:else}
-						<TabAnchor
-							id="tab-{name}"
-							class="w-24 h-16 text-xs border-token border-surface-200-700-token"
-							padding="py-2"
-							on:focus={(e) => debounce({ pages, name }, e)}
-							on:blur={(e) => debounce(false, e)}
-							on:mouseover={(e) => debounce({ pages, name }, e)}
-							on:mouseleave={(e) => debounce(false, e)}
-							on:keydown={(e) =>
-								e.key === 'Enter' || e.key === 'ArrowDown'
-									? document.querySelector('#headline')?.firstChild?.firstChild?.focus()
-									: null}
-							tabIndex="0"
-						>
-							<svelte:fragment slot="lead">(ico)</svelte:fragment>
-							<span>{name}</span>
-						</TabAnchor>
-					{/if}
-				{/each}
-			</TabGroup>
-		</div>
-	</div>
+	<TabGroup
+		justify="justify-center"
+		hover="hover:variant-soft-primary"
+		flex="flex-1 lg:flex-none"
+		rounded=""
+		border=""
+		class="active-bg"
+	>
+		{#each anchors as { name, pages, search, settings }}
+			{#if search}
+				<TabAnchor
+					id="tab-{name}"
+					class="w-24 h-16 text-xs border-token border-surface-200-700-token"
+					padding="py-2"
+					on:focus={(e) => debounce(true, e)}
+					on:blur={(e) => debounce(false, e)}
+					on:mouseover={(e) => debounce(true, e)}
+					on:mouseleave={(e) => debounce(false, e)}
+					on:keydown={moveFocus}
+					tabIndex="0"
+				>
+					<svelte:fragment slot="lead">(ico)</svelte:fragment>
+					<span>(search)</span>
+				</TabAnchor>
+			{:else if settings}
+				<TabAnchor
+					id="tab-{name}"
+					class="w-24 h-16 text-xs border-token border-surface-200-700-token"
+					padding="py-2"
+					on:focus={(e) => debounce(true, e)}
+					on:blur={(e) => debounce(false, e)}
+					on:mouseover={(e) => debounce(true, e)}
+					on:mouseleave={(e) => debounce(false, e)}
+					on:keydown={moveFocus}
+					tabIndex="0"
+				>
+					<svelte:fragment slot="lead">(ico)</svelte:fragment>
+					<span>(settings)</span>
+				</TabAnchor>
+			{:else if pages}
+				<TabAnchor
+					id="tab-{name}"
+					class="w-24 h-16 text-xs border-token border-surface-200-700-token"
+					active="variant-filled-primary"
+					padding="py-2"
+					on:focus={(e) => debounce({ pages, name }, e)}
+					on:blur={(e) => debounce(false, e)}
+					on:mouseover={(e) => debounce({ pages, name }, e)}
+					on:mouseleave={(e) => debounce(false, e)}
+					on:keydown={moveFocus}
+					tabIndex="0"
+					selected={pages.map((x) => x.href).includes($page.url.pathname)}
+				>
+					<svelte:fragment slot="lead">(ico)</svelte:fragment>
+					<span>{name}</span>
+				</TabAnchor>
+			{/if}
+		{/each}
+	</TabGroup>
+
 	<svelte:fragment slot="headline">
 		{#if headline}
 			<div
 				id="headline"
-				class="flex absolute w-full bg-surface-100-800-token -mx-8 px-2/10 min-h-8 h-fit-content"
+				class="flex absolute w-full bg-surface-100/90 dark:bg-surface-800/90 -mx-8 px-1/10 min-h-8 h-fit-content"
 				in:slide={{ duration: 300 }}
 				out:slide={{ duration: 300, delay: 500 }}
 				role="navigation"
 				aria-label="Headline"
+				on:mouseover={(e) => debounce(headline, e)}
 				on:mouseleave={(e) => debounce(false, e)}
 				on:focus={(e) => debounce(true, e)}
 				on:blur={(e) => debounce(false, e)}
@@ -181,15 +192,13 @@
 						{#each headline.pages as { name, href }}
 							<a
 								{href}
-								class="px-8 py-2 text-xs hover:variant-soft-primary border-token border-surface-200-700-token"
+								class="bg-surface-100 dark:bg-surface-800 px-8 py-2 text-xs hover:variant-filled-primary border-token border-surface-200-700-token"
+								class:!variant-filled-primary={href === $page.url.pathname}
 								on:mouseover={(e) => debounce(headline, e)}
 								on:mouseleave={(e) => debounce(false, e)}
 								on:focus={(e) => debounce(headline, e)}
 								on:blur={(e) => debounce(false, e)}
-								on:keydown={(e) =>
-									e.key === 'Backspace' || e.key === 'ArrowUp'
-										? document.getElementById(`tab-${headline.name}`)?.focus()
-										: null}
+								on:keydown={(e) => moveFocus(e, headline.name)}
 							>
 								{name}
 							</a>
