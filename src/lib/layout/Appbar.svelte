@@ -103,8 +103,6 @@
 			((e.target as HTMLElement).nextElementSibling as HTMLElement)?.focus?.();
 		}
 	}
-
-	$: console.log(headline);
 </script>
 
 <AppBar shadow="shadow-2xl" gap="gap-8" padding="px-8" spacing="">

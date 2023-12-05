@@ -1,0 +1,3 @@
+[submodule "src/lib/data/pf2ools-data"]
+	path = src/lib/data/pf2ools-data
+	url = https://github.com/Pf2ools/pf2ools-data

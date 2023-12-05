@@ -1,6 +1,4 @@
-<!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
-
-<div class="container mx-auto flex justify-center items-center pt-4 h-full">
+<div class="container flex justify-center h-full">
 	<div class="space-y-5">
 		<h1 class="h1">Dorime 😑</h1>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam at enim velit. Duis lorem velit, efficitur
