@@ -1,6 +1,6 @@
 // Could be optimized by using ?raw and using JSON.parse() instead of importing the JSON file directly, as it generates a javascript object itself.
 // However, performance tests on the biggest dataset we have right now (backgrounds) is either within margin of error, or more likely, I don't know what I am doing.
-import type { SafeParseError, z } from 'zod';
+import type { SafeParseError, SafeParseReturnType, z } from 'zod';
 import { background as backgroundsJSON } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { background as backgroundSchema } from 'pf2ools-schema';
 
@@ -32,16 +32,20 @@ function partitionArray<T>(arr: T[], predicate: (item: T) => boolean): [T[], T[]
 type backgroundData = z.infer<typeof backgroundSchema>;
 
 class Backgrounds {
-	public data: backgroundData[];
-	public errors: SafeParseError<backgroundData>[];
+	public core: {
+		data: backgroundData[];
+		errors: SafeParseError<backgroundData>[];
+	}
+
 	constructor() {
-		[this.data, this.errors] = partitionArray(
+		// @ts-expect-error - Its filled in the next line
+		this.core = {};
+		[this.core.data, this.core.errors] = partitionArray(
 			backgroundsJSON.map(validateObj),
-			(item) => item.success === true
-		).map((arr) => arr.map((item) => (item.success ? item.data : item))) as [
-			backgroundData[],
-			SafeParseError<backgroundData>[],
-		];
+			(item: SafeParseReturnType<backgroundData, backgroundData>) => item.success
+		).map((arr) =>
+			arr.map((item: SafeParseReturnType<backgroundData, backgroundData>) => (item.success ? item.data : item))
+		) as [backgroundData[], SafeParseError<backgroundData>[]];
 	}
 }
 
