@@ -107,7 +107,7 @@
 
 <AppBar shadow="shadow-2xl" gap="gap-8" padding="px-8" spacing="">
 	<svelte:fragment slot="lead">
-		<div class="absolute py-5 hidden sm:flex">
+		<div class="absolute py-5 hidden lg:flex">
 			<img src="icons/source/pf2e.svg" alt="pf2ools logo" class="w-8 scale-200" />
 			<a href="/" class="ml-8 py-1">pf2ools</a>
 		</div>
