@@ -131,7 +131,7 @@
 		<p class="inline">A suite of tools and information for Pathfinder 2nd Edition.</p>
 	</div>
 	<div class="ml-auto py-1">
-		<a class="chip variant-soft hover:variant-filled" href="https://github.com/Pf2ools/pf2ools-app">
+		<a class="chip variant-soft hover:variant-filled" href="https://github.com/Pf2ools">
 			<iconify-icon icon="mdi:github" class="text-xl" />
 			<span>Github</span>
 		</a>
