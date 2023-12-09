@@ -1,22 +1,24 @@
 <script lang="ts">
+	import { settings } from '$lib';
 	import { page } from '$app/stores';
-	import { AppBar, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
+	import { AppBar, LightSwitch, TabAnchor, TabGroup, popup } from '@skeletonlabs/skeleton';
 	import { get } from 'svelte/store';
 
 	type anchor = {
 		name: string;
-		pages?: anchor[];
+		pages: { name: string; href: string }[];
 		href?: string;
 		search?: true;
 		settings?: true;
-		active?: boolean;
 	};
 	const anchors: anchor[] = [
 		{
+			name: 'Home',
+			href: '/',
+			pages: [],
+		},
+		{
 			name: 'Rules',
-			get active() {
-				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
-			},
 			pages: [
 				{ name: 'Quick Reference', href: '/quickref' },
 				{ name: 'Variant Rules', href: '/variant-rules' },
@@ -25,9 +27,6 @@
 		},
 		{
 			name: 'Character',
-			get active() {
-				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
-			},
 			pages: [
 				{ name: 'Ancestries', href: '/ancestries' },
 				{ name: 'Backgrounds', href: '/backgrounds' },
@@ -40,9 +39,6 @@
 		},
 		{
 			name: 'Game Master',
-			get active() {
-				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
-			},
 			pages: [
 				{ name: 'GM Screen', href: '/gm-screen' },
 				{ name: 'Events', href: '/events ' },
@@ -50,12 +46,8 @@
 				{ name: 'Relic Gifts', href: '/relic-gifts' },
 			],
 		},
-		{ name: 'Search', search: true },
 		{
 			name: 'References',
-			get active() {
-				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
-			},
 			pages: [
 				{ name: 'Actions', href: '/actions' },
 				{ name: 'Bestiary', href: '/bestiary' },
@@ -76,19 +68,19 @@
 		},
 		{
 			name: 'Utilities',
-			get active() {
-				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
-			},
 			pages: [
-				{ name: 'Homebrew Manager', href: '/homebrew-manager' },
+				{ name: 'Homebrew Management', href: '/homebrew' },
 				{ name: 'Renderer Demo', href: '/renderer-demo' },
-				{ name: 'Homebrew Maker', href: '/homebrew-maker' },
 				{ name: 'Changelog', href: '/changelog' },
 				{ name: 'Privacy Policy', href: '/privacy-policy' },
 				{ name: 'Licenses', href: '/licenses' },
 			],
 		},
-		{ name: 'Settings', href: '/settings' },
+		{
+			name: 'Settings',
+			href: '/settings',
+			pages: [],
+		},
 	] as const;
 
 	let headline: anchor = anchors[3];
@@ -125,9 +117,14 @@
 	}
 </script>
 
-<div class="hidden lg:flex w-full h-10 px-8 p-1 bg-surface-100-800-token flex-row" id="title">
+<div
+	class="hidden lg:flex w-full h-10 px-8 p-1 bg-surface-100-800-token flex-row underline underline-offset-1 decoration-primary-500-400-token"
+	id="title"
+>
 	<div class="">
-		<h2 class="h2 inline leading-snug"><span class="text-primary-400">pf2</span>ools.</h2>
+		<h2 class="h2 inline leading-snug">
+			<span class="text-primary-400">pf2</span>ools.
+		</h2>
 		<p class="inline">A suite of tools and information for Pathfinder 2nd Edition.</p>
 	</div>
 	<div class="ml-auto py-1">
@@ -140,35 +137,72 @@
 
 <AppBar
 	shadow="shadow-2xl"
-	gap="gap-8"
 	padding="px-8 p-1"
 	spacing=""
 	gridColumns=""
 	class="hidden sm:block w-full h-10"
-	slotDefault="place-self-center"
+	slotDefault="place-self-center relative w-full flex"
 >
 	<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
 
-	<TabGroup
-		active="variant-filled-primary"
-		hover="hover:variant-soft-primary"
-		rounded=""
-		border=""
-		class="bg-surface-100-800-token"
-	>
-		{#each anchors as anchor}
-			<TabAnchor class="border-next text-sm {anchor.search ? 'hidden lg:block' : ''}">
-				<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
-				<span>{anchor.name}</span>
-			</TabAnchor>
-		{/each}
-	</TabGroup>
+	<div class="mx-auto space-y-4">
+		<div class="flex overflow-x-auto hide-scrollbar justify-start">
+			{#each anchors as anchor}
+				<a
+					class="border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
+					href={anchor.href || ''}
+					class:variant-filled-primary={$page.url.pathname === anchor.href ||
+						anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
+					use:popup={{
+						event: 'click',
+						placement: 'bottom-start',
+						target: anchor.name,
+						middleware: { offset: 0 },
+					}}
+				>
+					{#if anchor.href === '/settings'}
+						<iconify-icon icon="mdi:cog" class="block md:hidden text-xl" />
+						<span class="hidden md:block">{anchor.name}</span>
+					{:else if anchor.href === '/'}
+						<iconify-icon icon="mdi:home" class="block md:hidden text-xl" />
+						<span class="hidden md:block">{anchor.name}</span>
+					{:else}
+						<span>{anchor.name}</span>
+					{/if}
+				</a>
+				{#if !anchor.href}
+					<div data-popup={anchor.name}>
+						<div class="card flex flex-col rounded-tl-none">
+							{#each anchor.pages as subAnchor}
+								<a
+									class="text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
+									href={subAnchor.href || ''}
+									class:variant-filled-primary={$page.url.pathname === subAnchor.href}
+									use:popup={{
+										event: 'click',
+										placement: 'bottom-start',
+										target: subAnchor.name,
+										middleware: { offset: 0 },
+									}}
+								>
+									<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
+									<span>{subAnchor.name}</span>
+								</a>
+							{/each}
+						</div>
+					</div>
+				{/if}
+			{/each}
+		</div>
+	</div>
+
+	<LightSwitch class="absolute right-0 top-0 mt-1 hidden md:block" />
 
 	<svelte:fragment slot="headline">
-		<TabAnchor id={`tab-Search`} class="border-next text-sm lg:hidden">
+		<div class="text-sm flex">
 			<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
-			<span>Search</span>
-		</TabAnchor>
+			<span class="mx-auto p-1 bg-surface-200-700-token">Search Bar Here >:(</span>
+		</div>
 	</svelte:fragment>
 </AppBar>
 

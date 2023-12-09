@@ -15,6 +15,9 @@ export const settings = {
 	setSetting(value: typeof defaults) {
 		this.set({ ...get(this), ...value });
 	},
+	default() {
+		this.set(defaults);
+	},
 };
 
 window.settings = settings;

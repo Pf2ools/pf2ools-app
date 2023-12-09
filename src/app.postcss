@@ -12,7 +12,12 @@ body {
 }
 
 @layer utilities {
-	.border-next:has(+ .border-next) {
+	.border-next:has(~ .border-next) {
 		@apply border-r border-surface-500 border-dashed;
 	}
+}
+
+#title + .app-bar,
+#title:has(+ .app-bar) {
+	@apply bg-gradient-to-l dark:bg-blend-color dark:from-surface-800 dark:to-primary-500/20 bg-surface-300/75 dark:bg-surface-100-800-token;
 }
