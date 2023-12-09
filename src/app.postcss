@@ -10,3 +10,9 @@ html,
 body {
 	@apply h-full overflow-hidden;
 }
+
+@layer utilities {
+	.border-next:has(+ .border-next) {
+		@apply border-r border-surface-500 border-dashed;
+	}
+}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { AppBar, TabAnchor, TabGroup } from '@skeletonlabs/skeleton';
-	import { slide } from 'svelte/transition';
+	import { get } from 'svelte/store';
 
 	type anchor = {
 		name: string;
@@ -9,10 +9,14 @@
 		href?: string;
 		search?: true;
 		settings?: true;
+		active?: boolean;
 	};
 	const anchors: anchor[] = [
 		{
 			name: 'Rules',
+			get active() {
+				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
+			},
 			pages: [
 				{ name: 'Quick Reference', href: '/quickref' },
 				{ name: 'Variant Rules', href: '/variant-rules' },
@@ -21,6 +25,9 @@
 		},
 		{
 			name: 'Character',
+			get active() {
+				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
+			},
 			pages: [
 				{ name: 'Ancestries', href: '/ancestries' },
 				{ name: 'Backgrounds', href: '/backgrounds' },
@@ -33,6 +40,9 @@
 		},
 		{
 			name: 'Game Master',
+			get active() {
+				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
+			},
 			pages: [
 				{ name: 'GM Screen', href: '/gm-screen' },
 				{ name: 'Events', href: '/events ' },
@@ -43,6 +53,9 @@
 		{ name: 'Search', search: true },
 		{
 			name: 'References',
+			get active() {
+				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
+			},
 			pages: [
 				{ name: 'Actions', href: '/actions' },
 				{ name: 'Bestiary', href: '/bestiary' },
@@ -63,6 +76,9 @@
 		},
 		{
 			name: 'Utilities',
+			get active() {
+				return this.pages?.some((anchor) => anchor.href === get(page).url.pathname) || false;
+			},
 			pages: [
 				{ name: 'Homebrew Manager', href: '/homebrew-manager' },
 				{ name: 'Renderer Demo', href: '/renderer-demo' },
@@ -72,7 +88,7 @@
 				{ name: 'Licenses', href: '/licenses' },
 			],
 		},
-		{ name: 'Settings', settings: true },
+		{ name: 'Settings', href: '/settings' },
 	] as const;
 
 	let headline: anchor = anchors[3];
@@ -122,9 +138,38 @@
 	</div>
 </div>
 
-<AppBar shadow="shadow-2xl" gap="gap-8" padding="px-8 p-1" spacing="" class="hidden sm:block">
-	<svelte:fragment slot="lead"></svelte:fragment>
-	<svelte:fragment slot="headline"></svelte:fragment>
+<AppBar
+	shadow="shadow-2xl"
+	gap="gap-8"
+	padding="px-8 p-1"
+	spacing=""
+	gridColumns=""
+	class="hidden sm:block w-full h-10"
+	slotDefault="place-self-center"
+>
+	<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
+
+	<TabGroup
+		active="variant-filled-primary"
+		hover="hover:variant-soft-primary"
+		rounded=""
+		border=""
+		class="bg-surface-100-800-token"
+	>
+		{#each anchors as anchor}
+			<TabAnchor class="border-next text-sm {anchor.search ? 'hidden lg:block' : ''}">
+				<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
+				<span>{anchor.name}</span>
+			</TabAnchor>
+		{/each}
+	</TabGroup>
+
+	<svelte:fragment slot="headline">
+		<TabAnchor id={`tab-Search`} class="border-next text-sm lg:hidden">
+			<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
+			<span>Search</span>
+		</TabAnchor>
+	</svelte:fragment>
 </AppBar>
 
 <button
