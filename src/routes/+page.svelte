@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>pf2ools</title>
+</svelte:head>
+
 <div class="container flex justify-center h-full">
 	<div class="space-y-5">
 		<h1 class="h1">Dorime 😑</h1>

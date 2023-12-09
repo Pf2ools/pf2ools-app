@@ -43,6 +43,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@floating-ui/dom": "1.5.3"
+		"@floating-ui/dom": "1.5.3",
+		"iconify-icon": "^1.0.8"
 	}
 }

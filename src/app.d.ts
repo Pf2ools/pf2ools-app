@@ -1,3 +1,5 @@
+import type { settings } from '$lib';
+
 declare global {
 	// preserve any customizations you have here
 	namespace App {
@@ -5,6 +7,10 @@ declare global {
 		// interface Locals {}
 		// interface PageData {}
 		// interface Platform {}
+	}
+
+	interface Window {
+		settings: settings;
 	}
 
 	// add these lines
