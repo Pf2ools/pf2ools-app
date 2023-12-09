@@ -1,15 +1,14 @@
 <script lang="ts">
 	import '../app.postcss';
+	import Navigation from '$lib/layout/Navigation.svelte';
+	import { onNavigate } from '$app/navigation';
+	import { settings } from '$lib';
+	import 'iconify-icon';
 
 	// Floating UI for Popups
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 	import { AppShell, storePopup } from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
-
-	import Navigation from '$lib/layout/Navigation.svelte';
-	import { onNavigate } from '$app/navigation';
-	import { settings } from '$lib';
-	import 'iconify-icon';
 
 	onNavigate((navigation) => {
 		if (!document.startViewTransition || navigation?.from?.route.id === navigation?.to?.route.id)

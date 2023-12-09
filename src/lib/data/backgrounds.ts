@@ -35,7 +35,7 @@ class Backgrounds {
 	public core: {
 		data: backgroundData[];
 		errors: SafeParseError<backgroundData>[];
-	}
+	};
 
 	constructor() {
 		// @ts-expect-error - Its filled in the next line
@@ -44,7 +44,9 @@ class Backgrounds {
 			backgroundsJSON.map(validateObj),
 			(item: SafeParseReturnType<backgroundData, backgroundData>) => item.success
 		).map((arr) =>
-			arr.map((item: SafeParseReturnType<backgroundData, backgroundData>) => (item.success ? item.data : item))
+			arr.map((item: SafeParseReturnType<backgroundData, backgroundData>) =>
+				item.success ? item.data : item
+			)
 		) as [backgroundData[], SafeParseError<backgroundData>[]];
 	}
 }
