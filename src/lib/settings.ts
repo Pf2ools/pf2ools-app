@@ -5,6 +5,7 @@ const defaults = {
 	debug: {
 		borders: false,
 	},
+	clearFooter: false,
 };
 
 export const settings = {
