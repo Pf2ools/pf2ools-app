@@ -4,9 +4,11 @@
 	import { AppBar, LightSwitch, TabAnchor, TabGroup, popup } from '@skeletonlabs/skeleton';
 	import { get } from 'svelte/store';
 
+	// TODO: Remove disabled as things become available
 	type anchor = {
+		disabled: true | false;
 		name: string;
-		pages: { name: string; href: string }[];
+		pages: { name: string; href: string; disabled?: true | false }[];
 		href?: string;
 		search?: true;
 		settings?: true;
@@ -14,11 +16,13 @@
 	const anchors: anchor[] = [
 		{
 			name: 'Home',
+			disabled: false,
 			href: '/',
 			pages: [],
 		},
 		{
 			name: 'Rules',
+			disabled: true,
 			pages: [
 				{ name: 'Quick Reference', href: '/quickref' },
 				{ name: 'Variant Rules', href: '/variant-rules' },
@@ -26,91 +30,62 @@
 			],
 		},
 		{
-			name: 'Character',
+			name: 'Player',
+			disabled: false,
 			pages: [
-				{ name: 'Ancestries', href: '/ancestries' },
-				{ name: 'Backgrounds', href: '/backgrounds' },
-				{ name: 'Classes', href: '/classes' },
-				{ name: 'Archetypes', href: '/archetypes' },
-				{ name: 'Feats', href: '/feats' },
-				{ name: 'Companions', href: '/companions' },
-				{ name: 'Optional Features', href: '/optional-features' },
+				{ disabled: true, name: 'Ancestries', href: '/ancestries' },
+				{ disabled: false, name: 'Backgrounds', href: '/backgrounds' },
+				{ disabled: true, name: 'Classes', href: '/classes' },
+				{ disabled: true, name: 'Archetypes', href: '/archetypes' },
+				{ disabled: true, name: 'Feats', href: '/feats' },
+				{ disabled: true, name: 'Companions', href: '/companions' },
+				{ disabled: true, name: 'Optional Features', href: '/optional-features' },
 			],
 		},
 		{
 			name: 'Game Master',
+			disabled: true,
 			pages: [
-				{ name: 'GM Screen', href: '/gm-screen' },
-				{ name: 'Events', href: '/events ' },
-				{ name: 'Hazards', href: '/hazards' },
-				{ name: 'Relic Gifts', href: '/relic-gifts' },
+				{ disabled: true, name: 'GM Screen', href: '/gm-screen' },
+				{ disabled: true, name: 'Afflictions', href: '/afflictions' },
+				{ disabled: true, name: 'Events', href: '/events ' },
+				{ disabled: true, name: 'Hazards', href: '/hazards' },
+				{ disabled: true, name: 'Relic Gifts', href: '/relic-gifts' },
+				{ disabled: true, name: 'Creature Abilities', href: '/creature-abilities' },
+				{ disabled: true, name: 'Creature Templates', href: '/creature-templates' },
 			],
 		},
 		{
+			disabled: true,
 			name: 'References',
 			pages: [
-				{ name: 'Actions', href: '/actions' },
-				{ name: 'Bestiary', href: '/bestiary' },
-				{ name: 'Conditions', href: '/conditions' },
-				{ name: 'Items', href: '/items' },
-				{ name: 'Spells', href: '/spells' },
-				{ name: 'Afflictions', href: '/afflictions' },
-				{ name: 'Rituals', href: '/rituals' },
-				{ name: 'Vehicles', href: '/vehicles' },
-				{ name: 'Deities', href: '/deities' },
-				{ name: 'Languages', href: '/languages' },
-				{ name: 'Places', href: '/places' },
-				{ name: 'Organizations', href: '/organizations' },
-				{ name: 'Creature Abilities', href: '/creature-abilities' },
-				{ name: 'Creature Templates', href: '/creature-templates' },
-				{ name: 'Traits', href: '/traits' },
+				{ disabled: true, name: 'Actions', href: '/actions' },
+				{ disabled: true, name: 'Bestiary', href: '/bestiary' },
+				{ disabled: true, name: 'Conditions', href: '/conditions' },
+				{ disabled: true, name: 'Items', href: '/items' },
+				{ disabled: true, name: 'Spells', href: '/spells' },
+				{ disabled: true, name: 'Rituals', href: '/rituals' },
+				{ disabled: true, name: 'Vehicles', href: '/vehicles' },
+				{ disabled: true, name: 'Deities', href: '/deities' },
+				{ disabled: true, name: 'Languages', href: '/languages' },
+				{ disabled: true, name: 'Places', href: '/places' },
+				{ disabled: true, name: 'Organizations', href: '/organizations' },
+				{ disabled: true, name: 'Traits', href: '/traits' },
 			],
 		},
 		{
+			disabled: true,
 			name: 'Utilities',
 			pages: [
-				{ name: 'Homebrew Management', href: '/homebrew' },
-				{ name: 'Renderer Demo', href: '/renderer-demo' },
-				{ name: 'Changelog', href: '/changelog' },
-				{ name: 'Privacy Policy', href: '/privacy-policy' },
-				{ name: 'Licenses', href: '/licenses' },
+				{ disabled: true, name: 'Homebrew Management', href: '/homebrew' },
+				{ disabled: true, name: 'Renderer Demo', href: '/renderer-demo' },
+				{ disabled: true, name: 'Changelog', href: '/changelog' },
+				{ disabled: true, name: 'Privacy Policy', href: '/privacy-policy' },
+				{ disabled: true, name: 'Licenses', href: '/licenses' },
 			],
 		},
-		{
-			name: 'Settings',
-			href: '/settings',
-			pages: [],
-		},
+		{ disabled: false, name: 'Settings', href: '/settings', pages: [] },
 	] as const;
-
-	let headline: anchor = anchors[3];
-
-	let timer: NodeJS.Timeout | undefined;
-	const debounce = (value: any, event: Event) => {
-		clearTimeout(timer);
-		timer = setTimeout(() => {
-			headline = value;
-		}, 50);
-	};
-
-	function moveFocus(e: KeyboardEvent, group?: string) {
-		if (e.key === 'ArrowDown' || e.key === 'Enter') {
-			e.preventDefault();
-			(document.querySelector('#headline')?.firstChild?.firstChild as HTMLElement)?.focus?.();
-		}
-		if (group && (e.key === 'ArrowUp' || e.key === 'Backspace')) {
-			e.preventDefault();
-			(document.getElementById(`tab-${group}`) as HTMLElement)?.focus?.();
-		}
-		if (e.key === 'ArrowLeft') {
-			e.preventDefault();
-			((e.target as HTMLElement).previousElementSibling as HTMLElement)?.focus?.();
-		}
-		if (e.key === 'ArrowRight') {
-			e.preventDefault();
-			((e.target as HTMLElement).nextElementSibling as HTMLElement)?.focus?.();
-		}
-	}
 
 	function openSideBar() {
 		console.log('open');
@@ -146,37 +121,37 @@
 	<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
 
 	<div class="mx-auto space-y-4">
-		<div class="flex overflow-x-auto hide-scrollbar justify-start">
+		<div class="flex flex-row overflow-x-auto hide-scrollbar justify-start">
 			{#each anchors as anchor}
-				<a
-					class="border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
-					href={anchor.href || ''}
-					class:variant-filled-primary={$page.url.pathname === anchor.href ||
-						anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
-					use:popup={{
-						event: 'click',
-						placement: 'bottom-start',
-						target: anchor.name,
-						middleware: { offset: 0 },
-					}}
-				>
-					{#if anchor.href === '/settings'}
-						<iconify-icon icon="mdi:cog" class="block md:hidden text-xl" />
-						<span class="hidden md:block">{anchor.name}</span>
-					{:else if anchor.href === '/'}
-						<iconify-icon icon="mdi:home" class="block md:hidden text-xl" />
-						<span class="hidden md:block">{anchor.name}</span>
-					{:else}
-						<span>{anchor.name}</span>
-					{/if}
-				</a>
 				{#if !anchor.href}
+					<button
+						class="btn border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
+						class:variant-filled-primary={$page.url.pathname === anchor.href ||
+							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
+						disabled={anchor.disabled}
+						use:popup={{
+							event: 'click',
+							placement: 'bottom-start',
+							target: anchor.name,
+							middleware: { offset: 0 },
+						}}
+					>
+						{#if anchor.href === '/settings'}
+							<iconify-icon icon="mdi:cog" class="block md:hidden text-xl" />
+							<span class="hidden md:block">{anchor.name}</span>
+						{:else if anchor.href === '/'}
+							<iconify-icon icon="mdi:home" class="block md:hidden text-xl" />
+							<span class="hidden md:block">{anchor.name}</span>
+						{:else}
+							<span>{anchor.name}</span>
+						{/if}
+					</button>
 					<div data-popup={anchor.name}>
-						<div class="card flex flex-col rounded-tl-none">
-							{#each anchor.pages as subAnchor}
+						<div class="card flex flex-col rounded-tl-none [&_a:not(:last-child)]:border-b">
+							{#each anchor.pages.filter((x) => !x.disabled) as subAnchor}
 								<a
-									class="text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
-									href={subAnchor.href || ''}
+									class="border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
+									href={subAnchor.href}
 									class:variant-filled-primary={$page.url.pathname === subAnchor.href}
 									use:popup={{
 										event: 'click',
@@ -191,19 +166,37 @@
 							{/each}
 						</div>
 					</div>
+				{:else}
+					<a
+						class="border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
+						class:variant-filled-primary={$page.url.pathname === anchor.href ||
+							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
+						href={anchor.href ?? undefined}
+					>
+						{#if anchor.href === '/settings'}
+							<iconify-icon icon="mdi:cog" class="block md:hidden text-xl" />
+							<span class="hidden md:block">{anchor.name}</span>
+						{:else if anchor.href === '/'}
+							<iconify-icon icon="mdi:home" class="block md:hidden text-xl" />
+							<span class="hidden md:block">{anchor.name}</span>
+						{:else}
+							<span>{anchor.name}</span>
+						{/if}
+					</a>
 				{/if}
 			{/each}
+			<div
+				class="input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none"
+			>
+				<input type="text" placeholder="Search..." />
+				<a class="btn rounded-none variant-filled-surface" href="/search">
+					<iconify-icon icon="mdi:search" class="text-2xl" />
+				</a>
+			</div>
 		</div>
 	</div>
 
 	<LightSwitch class="absolute right-0 top-0 mt-1 hidden md:block" />
-
-	<svelte:fragment slot="headline">
-		<div class="text-sm flex">
-			<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
-			<span class="mx-auto p-1 bg-surface-200-700-token">Search Bar Here >:(</span>
-		</div>
-	</svelte:fragment>
 </AppBar>
 
 <button
