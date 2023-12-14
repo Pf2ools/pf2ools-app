@@ -21,22 +21,49 @@
 			});
 		});
 	});
+
+	let headerElement: number = 0;
+	let footerElement: number = 0;
+	let windowHeight: number = 0;
+	let slotHeight = windowHeight - headerElement - footerElement;
+
+	$: slotHeight = windowHeight - headerElement - footerElement;
 </script>
+
+<svelte:window bind:innerHeight={windowHeight} />
 
 <AppShell>
 	<svelte:fragment slot="header">
-		<Navigation />
+		<div bind:clientHeight={headerElement}>
+			<Navigation />
+		</div>
 	</svelte:fragment>
 	<!-- (sidebarLeft) -->
 	<!-- (sidebarRight) -->
 	<!-- (pageHeader) -->
 
 	<!-- Router Slot -->
-	<div class="pt-4 lg:pt-6" class:[&_*]:border={$settings.debug.borders}>
+	<div
+		class="pb-1 pt-4 lg:pt-6 h-full"
+		class:[&_*]:border={$settings.debug.borders}
+		style="--slotHeight:calc({slotHeight}px - 1.75rem);"
+	>
 		<slot />
 	</div>
 	<!-- ---- / ---- -->
 
 	<!-- (pageFooter) -->
-	<!-- (footer) -->
+	<svelte:fragment slot="footer">
+		<div bind:clientHeight={footerElement}>
+			<div class="hidden md:flex justify-center items-center pb-1">
+				<p class="text-gray-500 text-xs">
+					<span class="text-gray-400">©</span>
+					{new Date().getFullYear()} pf2ools |
+					<a href="/licenses" class="anchor !text-gray-500 underline-offset-auto">
+						pf2ools is not affiliated with or endorsed by Paizo, see Licenses for more information
+					</a>
+				</p>
+			</div>
+		</div>
+	</svelte:fragment>
 </AppShell>

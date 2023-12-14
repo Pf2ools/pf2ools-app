@@ -8,6 +8,7 @@
 	type anchor = {
 		disabled: true | false;
 		name: string;
+		icon: string;
 		pages: { name: string; href: string; disabled?: true | false }[];
 		href?: string;
 		search?: true;
@@ -16,12 +17,14 @@
 	const anchors: anchor[] = [
 		{
 			name: 'Home',
+			icon: 'mdi:home',
 			disabled: false,
 			href: '/',
 			pages: [],
 		},
 		{
 			name: 'Rules',
+			icon: 'mdi:book-alphabet',
 			disabled: true,
 			pages: [
 				{ name: 'Quick Reference', href: '/quickref' },
@@ -31,6 +34,7 @@
 		},
 		{
 			name: 'Player',
+			icon: 'mdi:account',
 			disabled: false,
 			pages: [
 				{ disabled: true, name: 'Ancestries', href: '/ancestries' },
@@ -44,6 +48,7 @@
 		},
 		{
 			name: 'Game Master',
+			icon: 'mdi:notebook',
 			disabled: true,
 			pages: [
 				{ disabled: true, name: 'GM Screen', href: '/gm-screen' },
@@ -58,6 +63,7 @@
 		{
 			disabled: true,
 			name: 'References',
+			icon: 'mdi:book-open-page-variant',
 			pages: [
 				{ disabled: true, name: 'Actions', href: '/actions' },
 				{ disabled: true, name: 'Bestiary', href: '/bestiary' },
@@ -74,17 +80,18 @@
 			],
 		},
 		{
-			disabled: true,
+			disabled: false,
 			name: 'Utilities',
+			icon: 'mdi:tools',
 			pages: [
-				{ disabled: true, name: 'Homebrew Management', href: '/homebrew' },
+				{ disabled: false, name: 'Homebrew Management', href: '/homebrew' },
 				{ disabled: true, name: 'Renderer Demo', href: '/renderer-demo' },
 				{ disabled: true, name: 'Changelog', href: '/changelog' },
 				{ disabled: true, name: 'Privacy Policy', href: '/privacy-policy' },
 				{ disabled: true, name: 'Licenses', href: '/licenses' },
 			],
 		},
-		{ disabled: false, name: 'Settings', href: '/settings', pages: [] },
+		{ disabled: false, name: 'Settings', icon: 'mdi:cog', href: '/settings', pages: [] },
 	] as const;
 
 	function openSideBar() {
@@ -125,7 +132,7 @@
 			{#each anchors as anchor}
 				{#if !anchor.href}
 					<button
-						class="btn border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
+						class="generic-disabled border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						disabled={anchor.disabled}
@@ -136,21 +143,16 @@
 							middleware: { offset: 0 },
 						}}
 					>
-						{#if anchor.href === '/settings'}
-							<iconify-icon icon="mdi:cog" class="block md:hidden text-xl" />
-							<span class="hidden md:block">{anchor.name}</span>
-						{:else if anchor.href === '/'}
-							<iconify-icon icon="mdi:home" class="block md:hidden text-xl" />
-							<span class="hidden md:block">{anchor.name}</span>
-						{:else}
-							<span>{anchor.name}</span>
-						{/if}
+						<iconify-icon icon={anchor.icon} class="block md:hidden text-xl" />
+						<span class="hidden md:block">{anchor.name}</span>
 					</button>
 					<div data-popup={anchor.name}>
-						<div class="card flex flex-col rounded-tl-none [&_a:not(:last-child)]:border-b">
+						<div
+							class="card flex flex-col rounded-tl-none [&_a:first-child]:rounded-tl-none [&_a:not(:last-child)]:border-b"
+						>
 							{#each anchor.pages.filter((x) => !x.disabled) as subAnchor}
 								<a
-									class="border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
+									class="rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
 									href={subAnchor.href}
 									class:variant-filled-primary={$page.url.pathname === subAnchor.href}
 									use:popup={{
@@ -168,20 +170,13 @@
 					</div>
 				{:else}
 					<a
-						class="border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
+						class="border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						href={anchor.href ?? undefined}
 					>
-						{#if anchor.href === '/settings'}
-							<iconify-icon icon="mdi:cog" class="block md:hidden text-xl" />
-							<span class="hidden md:block">{anchor.name}</span>
-						{:else if anchor.href === '/'}
-							<iconify-icon icon="mdi:home" class="block md:hidden text-xl" />
-							<span class="hidden md:block">{anchor.name}</span>
-						{:else}
-							<span>{anchor.name}</span>
-						{/if}
+						<iconify-icon icon={anchor.icon} class="block md:hidden text-xl" />
+						<span class="hidden md:block">{anchor.name}</span>
 					</a>
 				{/if}
 			{/each}
@@ -189,14 +184,14 @@
 				class="input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none"
 			>
 				<input type="text" placeholder="Search..." />
-				<a class="btn rounded-none variant-filled-surface" href="/search">
+				<a class="rounded-none variant-filled-surface !p-2" href="/search">
 					<iconify-icon icon="mdi:search" class="text-2xl" />
 				</a>
 			</div>
 		</div>
 	</div>
 
-	<LightSwitch class="absolute right-0 top-0 mt-1 hidden md:block" />
+	<LightSwitch class="absolute right-0 top-0 mt-1 hidden lg:block" />
 </AppBar>
 
 <button
@@ -204,5 +199,5 @@
 	class="absolute bottom-0 leading-none sm:hidden bg-primary-200-700-token rounded-tr-md w-12 btn-icon-sm"
 	on:click={openSideBar}
 >
-	<iconify-icon icon="pajamas:hamburger" class="text-4xl px-1" />
+	<iconify-icon icon="mdi:menu" class="text-4xl px-1" />
 </button>

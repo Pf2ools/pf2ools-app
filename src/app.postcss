@@ -15,6 +15,12 @@ body {
 	.border-next:has(~ .border-next) {
 		@apply border-r border-surface-500 border-dashed;
 	}
+
+	.generic-disabled:disabled,
+	.generic-disabled:disabled > * {
+		cursor: not-allowed !important;
+		opacity: 0.5 !important;
+	}
 }
 
 #title + .app-bar,

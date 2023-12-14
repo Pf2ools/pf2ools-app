@@ -18,6 +18,7 @@ export default {
 				'175': '1.75',
 			},
 			spacing: {
+				slot: 'var(--slotHeight)',
 				'1/10': '10%',
 				'2/10': '20%',
 				'3/10': '30%',
