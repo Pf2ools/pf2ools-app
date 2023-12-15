@@ -67,7 +67,7 @@
 	class:px-2={$settings.wideMode}
 >
 	<div class="text-center w-full h-slot grid grid-cols-2 gap-2">
-		<div class="overflow-y-scroll">
+		<div class="overflow-y-scroll overflow-x-clip">
 			<ItemList bind:selected items={$backgrounds} {columns} />
 		</div>
 		<div class="overflow-y-scroll">

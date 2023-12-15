@@ -1,22 +1,26 @@
 import { localStorageStore } from '@skeletonlabs/skeleton';
-import { background as backgroundSchema } from 'pf2ools-schema';
-import { derived, get, type Readable, type Writable } from 'svelte/store';
+import { background as backgroundSchema, source as sourceSchema } from 'pf2ools-schema';
+import { derived, get, type Writable } from 'svelte/store';
 import type { z } from 'zod';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
+import { source as sourceData } from './pf2ools-data/bundles/byDatatype/core/source.json' assert { type: 'json' };
 
 export interface dataTypes {
 	homebrew: { [key: string]: unknown };
 	background: z.infer<typeof backgroundSchema>;
+	source: z.infer<typeof sourceSchema>;
 }
 
 class ContentManager {
 	public homebrew: Writable<dataTypes['homebrew'][]>;
 	public core: {
 		background: dataTypes['background'][];
+		source: dataTypes['source'][];
 	};
 	constructor() {
 		this.core = Object.freeze({
 			background: Object.freeze(backgroundData) as unknown as dataTypes['background'][],
+			source: Object.freeze(sourceData) as unknown as dataTypes['source'][],
 		});
 
 		this.homebrew = localStorageStore(
@@ -32,10 +36,52 @@ class ContentManager {
 	}
 
 	//#region Background
+	static bgHelpers(bg: dataTypes['background']) {
+		const obj = {
+			...bg,
+			source: {
+				...bg.source,
+				get data() {
+					const source = contentManager.core.source.find((src) => src.ID === bg.source.ID);
+					if (!source) throw Error(`Can't find source for ${bg.name.primary}!`);
+					return source;
+				},
+				get full(): string {
+					return this.data.title.full;
+				},
+				get short(): string {
+					return this.data.title.short;
+				},
+			},
+			name: {
+				...bg.name,
+				get fullName() {
+					return bg.name.primary + (bg.name.specifier ? ` (${bg.name.specifier})` : '');
+				},
+			},
+		};
+
+		/*
+		if (obj.tags?.abilityBoosts && !obj.tags.abilityBoosts.toArray) {
+			Object.defineProperty(obj.tags.abilityBoosts, 'toArray', {
+				get: function () {
+					return Object.keys(bg!.tags!.abilityBoosts!.abilities).filter(
+						(value) =>
+							bg!.tags!.abilityBoosts!.abilities[
+								value as keyof typeof bg.tags!.abilityBoosts!.abilities
+							]
+					);
+				},
+			});
+		}
+		*/
+
+		return obj;
+	}
 	get _background() {
 		return get(this.background);
 	}
-	get background(): Readable<dataTypes['background'][]> {
+	get background() {
 		return derived(this.homebrew, ($homebrew) => {
 			const homebrewBackgrounds = $homebrew.filter((data) => data.background !== undefined);
 			const backgrounds = homebrewBackgrounds.map((data) => data.background).flat();
@@ -71,7 +117,9 @@ class ContentManager {
 				});
 			}
 
-			return [...this.core.background, ...safeBackgrounds] as dataTypes['background'][];
+			return ([...this.core.background, ...safeBackgrounds] as dataTypes['background'][]).map(
+				(bg) => ContentManager.bgHelpers(bg)
+			);
 		});
 	}
 	//#endregion
