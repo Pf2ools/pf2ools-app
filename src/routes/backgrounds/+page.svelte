@@ -11,12 +11,12 @@
 </svelte:head>
 
 <div class="container flex justify-center h-full">
-	<div class="text-center border w-full h-slot grid grid-cols-2">
+	<div class="text-center w-full h-slot grid grid-cols-2 gap-2">
 		<div class="overflow-y-scroll">
 			<ItemList bind:selected items={$backgrounds} />
 		</div>
 		<div class="overflow-y-scroll">
-			<div class="pt-2">
+			<div class="p-3 card">
 				{#if selected}
 					<h1 class="h2">{selected.name.primary}</h1>
 					<p>Source: {selected.source.ID}</p>
