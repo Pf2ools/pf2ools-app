@@ -27,7 +27,7 @@
 			sortable: (a: bg, b: bg) => a.source.ID.localeCompare(b.source.ID),
 			parser: (item: bg) => item.source.ID,
 			classes: 'text-center',
-			span: 2,
+			span: 1,
 		},
 		// Custom
 		{
@@ -53,6 +53,8 @@
 			span: 5,
 		},
 	];
+
+	$: console.log(selected);
 </script>
 
 <svelte:head>
