@@ -2,22 +2,22 @@ import { localStorageStore } from '@skeletonlabs/skeleton';
 import { background as backgroundSchema } from 'pf2ools-schema';
 import { derived, get, type Readable, type Writable } from 'svelte/store';
 import type { z } from 'zod';
-import { background as backgrounds } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
+import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 
 interface dataTypes {
 	homebrew: { [key: string]: unknown };
-	backgrounds: z.infer<typeof backgroundSchema>;
+	background: z.infer<typeof backgroundSchema>;
 }
 
 class ContentManager {
 	public homebrew: Writable<dataTypes['homebrew'][]>;
 	public core: {
-		backgrounds: dataTypes['backgrounds'][];
+		background: dataTypes['background'][];
 	};
 	constructor() {
-		this.core = {
-			backgrounds: backgrounds as unknown as dataTypes['backgrounds'][],
-		};
+		this.core = Object.freeze({
+			background: Object.freeze(backgroundData) as unknown as dataTypes['background'][],
+		});
 
 		this.homebrew = localStorageStore('homebrew', []);
 	}
@@ -25,15 +25,17 @@ class ContentManager {
 	get _homebrew() {
 		return get(this.homebrew);
 	}
-	get _backgrounds() {
-		return get(this.backgrounds);
+
+	//#region Background
+	get _background() {
+		return get(this.background);
 	}
-	get backgrounds(): Readable<dataTypes['backgrounds'][]> {
+	get background(): Readable<dataTypes['background'][]> {
 		return derived(this.homebrew, ($homebrew) => {
 			const homebrewBackgrounds = $homebrew.filter((data) => data.background !== undefined);
 			const backgrounds = homebrewBackgrounds.map((data) => data.background).flat();
 
-			type error = { data: dataTypes['backgrounds']; success: false; zodErrors: z.ZodIssue[] };
+			type error = { data: dataTypes['background']; success: false; zodErrors: z.ZodIssue[] };
 
 			const parsedBackgrounds = backgrounds.map((bg) => {
 				const parsed = backgroundSchema.safeParse(bg);
@@ -64,9 +66,12 @@ class ContentManager {
 				});
 			}
 
-			return [...this.core.backgrounds, ...safeBackgrounds] as dataTypes['backgrounds'][];
+			return [...this.core.background, ...safeBackgrounds] as dataTypes['background'][];
 		});
 	}
+	//#endregion
 }
 
-export default new ContentManager();
+const contentManager = new ContentManager();
+window.contentManager = contentManager;
+export default contentManager;

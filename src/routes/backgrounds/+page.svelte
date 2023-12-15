@@ -1,6 +1,6 @@
 <script lang="ts">
 	import cm from '$lib/data/contentManager';
-	const { backgrounds } = cm;
+	const { background: backgrounds } = cm;
 
 	let selected = $backgrounds[0];
 </script>

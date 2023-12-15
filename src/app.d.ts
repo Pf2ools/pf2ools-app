@@ -1,4 +1,5 @@
 import type { settings } from '$lib';
+import type contentManager from '$lib';
 
 declare global {
 	// preserve any customizations you have here
@@ -11,6 +12,7 @@ declare global {
 
 	interface Window {
 		settings: settings;
+		contentManager: contentManager;
 	}
 
 	// add these lines
