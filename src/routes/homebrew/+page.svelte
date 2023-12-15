@@ -1,9 +1,9 @@
 <script lang="ts">
 	import cm from '$lib/data/contentManager';
-	const { homebrew, backgrounds } = cm;
+	const { homebrew, background } = cm;
 	$: {
 		console.log(cm);
-		console.log($backgrounds);
+		console.log($background);
 	}
 
 	let homebrewString = JSON.stringify($homebrew, null, 2);
@@ -11,8 +11,8 @@
 	$: {
 		try {
 			$homebrew = JSON.parse(homebrewString);
-		} catch (e) {
-			console.error(e);
+		} catch (err) {
+			console.error(err);
 		}
 	}
 </script>
@@ -29,7 +29,7 @@
 					"{homebrews?.source?.ID}" homebrew with {homebrews?.background?.length} background(s)
 				</p>
 			{/each}
-			<p>All in addition to the {cm.core.backgrounds.length} backgrounds from Core sources</p>
+			<p>All in addition to the {cm.core.background.length} backgrounds from Core sources</p>
 		</div>
 		<textarea class="textarea" bind:value={homebrewString}></textarea>
 	</div>

@@ -1,5 +1,4 @@
-import type { settings } from '$lib';
-import type contentManager from '$lib';
+import type { settings, contentManager } from '$lib';
 
 declare global {
 	// preserve any customizations you have here
@@ -11,11 +10,10 @@ declare global {
 	}
 
 	interface Window {
-		settings: settings;
-		contentManager: contentManager;
+		settings: typeof settings;
+		contentManager: typeof contentManager;
 	}
 
-	// add these lines
 	interface ViewTransition {
 		updateCallbackDone: Promise<void>;
 		ready: Promise<void>;

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { settings } from '$lib';
 	import { page } from '$app/stores';
-	import { AppBar, LightSwitch, TabAnchor, TabGroup, popup } from '@skeletonlabs/skeleton';
+	import { AppBar, LightSwitch, popup } from '@skeletonlabs/skeleton';
 	import { get } from 'svelte/store';
 
 	// TODO: Remove disabled as things become available
@@ -150,7 +149,7 @@
 						<div
 							class="card flex flex-col rounded-tl-none [&_a:first-child]:rounded-tl-none [&_a:not(:last-child)]:border-b"
 						>
-							{#each anchor.pages.filter((x) => !x.disabled) as subAnchor}
+							{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
 								<a
 									class="rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
 									href={subAnchor.href}
