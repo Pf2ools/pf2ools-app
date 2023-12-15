@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { settings } from '$lib';
 	import ItemList from '$lib/components/ItemList.svelte';
 	import cm, { type dataTypes } from '$lib/data/contentManager';
 	import { objBoolsToArray } from '$lib/utils';
@@ -58,7 +59,11 @@
 	<title>Backgrounds - pf2ools</title>
 </svelte:head>
 
-<div class="container flex justify-center h-full">
+<div
+	class="flex justify-center h-full"
+	class:container={!$settings.wideMode}
+	class:px-2={$settings.wideMode}
+>
 	<div class="text-center w-full h-slot grid grid-cols-2 gap-2">
 		<div class="overflow-y-scroll">
 			<ItemList bind:selected items={$backgrounds} {columns} />

@@ -6,6 +6,7 @@ const defaults = {
 		borders: false,
 	},
 	clearFooter: false,
+	wideMode: false,
 };
 
 export const settings = {
