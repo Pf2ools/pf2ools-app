@@ -4,7 +4,7 @@ import { derived, get, type Readable, type Writable } from 'svelte/store';
 import type { z } from 'zod';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 
-interface dataTypes {
+export interface dataTypes {
 	homebrew: { [key: string]: unknown };
 	background: z.infer<typeof backgroundSchema>;
 }

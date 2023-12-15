@@ -12,8 +12,11 @@ body {
 }
 
 @layer utilities {
-	.border-next:has(~ .border-next) {
+	.border-r-next:has(~ .border-r-next) {
 		@apply border-r border-surface-500 border-dashed;
+	}
+	.border-b-next:has(~ .border-b-next) {
+		@apply border-b border-surface-500 border-dashed;
 	}
 
 	.generic-disabled:disabled,

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.postcss';
 	import 'iconify-icon';
-	import Navigation from '$lib/layout/Navigation.svelte';
+	import Navigation from '$lib/components/Navigation.svelte';
 	import { onNavigate } from '$app/navigation';
 	import { settings } from '$lib';
 	import { slide } from 'svelte/transition';

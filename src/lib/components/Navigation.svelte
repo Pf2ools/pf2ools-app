@@ -131,7 +131,7 @@
 			{#each anchors as anchor}
 				{#if !anchor.href}
 					<button
-						class="generic-disabled border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
+						class="generic-disabled border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						disabled={anchor.disabled}
@@ -169,7 +169,7 @@
 					</div>
 				{:else}
 					<a
-						class="border-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm"
+						class="border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						href={anchor.href ?? undefined}
