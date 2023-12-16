@@ -11,6 +11,10 @@ body {
 	@apply h-full overflow-hidden;
 }
 
+* {
+	@apply tabular-nums;
+}
+
 @layer utilities {
 	.border-r-next:has(~ .border-r-next) {
 		@apply border-r border-surface-500 border-dashed;
