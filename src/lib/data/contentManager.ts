@@ -61,20 +61,17 @@ class ContentManager {
 			},
 		};
 
-		/*
-		if (obj.tags?.abilityBoosts && !obj.tags.abilityBoosts.toArray) {
+		if (obj.tags?.abilityBoosts && !('toArray' in obj.tags.abilityBoosts)) {
 			Object.defineProperty(obj.tags.abilityBoosts, 'toArray', {
 				get: function () {
-					return Object.keys(bg!.tags!.abilityBoosts!.abilities).filter(
-						(value) =>
-							bg!.tags!.abilityBoosts!.abilities[
-								value as keyof typeof bg.tags!.abilityBoosts!.abilities
-							]
+					const abilities = obj.tags!.abilityBoosts!.abilities;
+					if (!abilities) return [];
+					return Object.keys(abilities).filter(
+						(value) => abilities[value as keyof typeof abilities]
 					);
 				},
 			});
 		}
-		*/
 
 		return obj;
 	}
