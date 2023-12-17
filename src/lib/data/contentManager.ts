@@ -4,6 +4,7 @@ import { derived, get, type Writable } from 'svelte/store';
 import type { z } from 'zod';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { source as sourceData } from './pf2ools-data/bundles/byDatatype/core/source.json' assert { type: 'json' };
+import deepmerge from 'deepmerge';
 
 export interface dataTypes {
 	homebrew: { [key: string]: unknown };
@@ -37,14 +38,12 @@ class ContentManager {
 
 	//#region Background
 	static bgHelpers(bg: dataTypes['background']) {
-		const obj = {
-			...bg,
+		const obj = deepmerge(bg, {
 			source: {
-				...bg.source,
 				get data() {
-					const source = contentManager.core.source.find((src) => src.ID === bg.source.ID);
-					if (!source) throw Error(`Can't find source for ${bg.name.primary}!`);
-					return source;
+					const source = contentManager._source.find((src) => src.ID === bg.source.ID);
+					if (!source) console.warn(`Can't find source for ${bg?.name?.primary}!`);
+					return source ?? { ID: 'unknown', title: { full: 'Unknown', short: 'UNK' } };
 				},
 				get full(): string {
 					return this.data.title.full;
@@ -54,12 +53,11 @@ class ContentManager {
 				},
 			},
 			name: {
-				...bg.name,
 				get fullName() {
 					return bg.name.primary + (bg.name.specifier ? ` (${bg.name.specifier})` : '');
 				},
 			},
-		};
+		});
 
 		if (obj.tags?.abilityBoosts && !('toArray' in obj.tags.abilityBoosts)) {
 			Object.defineProperty(obj.tags.abilityBoosts, 'toArray', {
@@ -117,6 +115,49 @@ class ContentManager {
 			return ([...this.core.background, ...safeBackgrounds] as dataTypes['background'][]).map(
 				(bg) => ContentManager.bgHelpers(bg)
 			);
+		});
+	}
+	//#endregion
+
+	//#region Source
+	get _source() {
+		return get(this.source);
+	}
+	get source() {
+		return derived(this.homebrew, ($homebrew) => {
+			const homebrewsources = $homebrew.filter((data) => data.source !== undefined);
+			const sources = homebrewsources.map((data) => data.source).flat();
+
+			type error = { data: dataTypes['source']; success: false; zodErrors: z.ZodIssue[] };
+
+			const parsedsources = sources.map((src) => {
+				const parsed = sourceSchema.safeParse(src);
+				if (parsed.success) {
+					return parsed;
+				} else {
+					return {
+						data: src,
+						success: false,
+						zodErrors: parsed.error.errors,
+					};
+				}
+			});
+
+			const safesources = parsedsources.filter((src) => src.success).map((src) => src.data);
+			const unsafesources = parsedsources.filter((src) => !src.success) as error[];
+
+			if (unsafesources.length > 0) {
+				console.warn('Some sources have failed validation!', unsafesources);
+				unsafesources.forEach((src) => {
+					console.warn(
+						`The ${src.data.type} "${src.data.title.full}" failed schema validation!${src.zodErrors
+							.map((err) => `\n\t"${err.message}" at ${err.path.join('.')}`)
+							.join('')}`
+					);
+				});
+			}
+
+			return [...this.core.source, ...safesources] as dataTypes['source'][];
 		});
 	}
 	//#endregion
