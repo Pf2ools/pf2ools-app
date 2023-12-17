@@ -13,6 +13,12 @@ export default {
 	],
 	theme: {
 		extend: {
+			gridTemplateColumns: {
+				'24': 'repeat(24, minmax(0, 1fr))',
+			},
+			gridColumn: {
+				'span-var': 'span var(--span) / span var(--span);',
+			},
 			scale: {
 				'200': '2',
 				'175': '1.75',

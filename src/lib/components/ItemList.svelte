@@ -17,7 +17,8 @@
 		span: number;
 	};
 
-	columns ??= [
+	/*
+	[
 		{
 			enabled: true,
 			order: 1,
@@ -36,32 +37,62 @@
 			sortable: (a: itemType, b: itemType) => a.source.ID.localeCompare(b.source.ID),
 			parser: (item: itemType) => item.source.ID,
 			classes: 'text-center',
-			span: 1,
+			span: 2,
 		},
 	];
+	*/
 
 	let remainingSpan = Math.max(
 		1,
-		columns.filter((col) => col.enabled).reduce((a, b) => Math.max(a, 0) - Math.max(b.span, 0), 12)
+		columns.filter((col) => col.enabled).reduce((a, b) => Math.max(a, 0) - Math.max(b.span, 0), 24)
 	);
+
+	let search = '';
+
+	let filteredItems = items;
+	$: {
+		console.log('search', search);
+		filteredItems = items.filter((item) => {
+			return search
+				.toLowerCase()
+				.split(',')
+				.map((term) => term.trim())
+				.every((term) => {
+					return item.name.primary.toLowerCase().includes(term);
+				});
+		});
+	}
 </script>
 
-<div class="card flex flex-col pt-1">
-	<div class="pl-1 pb-0.5 grid grid-cols-12 w-full text-sm border-b border-surface-500">
+<div class="card flex flex-col">
+	<div class="w-full">
+		<div class="input-group input-group-divider flex flex-row rounded-b-none">
+			<div class="input-group-shim !p-0">
+				<button class="btn p-0">Filters</button>
+			</div>
+			<input
+				class="input rounded-b-none rounded-l-none p-1"
+				type="text"
+				placeholder="Search..."
+				bind:value={search}
+			/>
+		</div>
+	</div>
+	<div class="pl-1 pb-0.5 grid grid-cols-24 w-full text-sm border-b border-surface-500">
 		{#each columns
 			.filter((col) => col.enabled)
 			.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { label, classes, span }}
 			<div
-				class="border-r-next px-1 span-var h-full {classes}"
+				class="border-r-next px-1 col-span-var h-full {classes}"
 				style="--span: {span === -1 ? remainingSpan : span}"
 			>
 				{label}
 			</div>
 		{/each}
 	</div>
-	{#each items as item}
+	{#each filteredItems as item}
 		<button
-			class="pl-1 border-b-next grid grid-cols-12 w-full {$settings.listSize}"
+			class="pl-1 border-b-next grid grid-cols-24 w-full {$settings.listSize} hover:variant-ghost-primary focus:variant-ghost-primary"
 			class:variant-soft-primary={selected === item}
 			on:click={() => (selected = item)}
 		>
@@ -69,7 +100,7 @@
 				.filter((col) => col.enabled)
 				.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { classes, span, parser }}
 				<div
-					class="border-r-next px-1 span-var h-full {classes}"
+					class="border-r-next px-1 col-span-var h-full {classes}"
 					style="--span: {span === -1 ? remainingSpan : span}"
 				>
 					{parser(item)}
@@ -78,9 +109,3 @@
 		</button>
 	{/each}
 </div>
-
-<style>
-	.span-var {
-		grid-column: span var(--span) / span var(--span);
-	}
-</style>

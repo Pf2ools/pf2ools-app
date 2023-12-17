@@ -27,9 +27,8 @@
 			sortable: (a: bg, b: bg) => a.source.ID.localeCompare(b.source.ID),
 			parser: (item: bg) => item.source.ID,
 			classes: 'text-center',
-			span: 1,
+			span: 3,
 		},
-		// Custom
 		{
 			enabled: true,
 			order: 2,
@@ -39,7 +38,7 @@
 				(a?.tags?.abilityBoosts?.count ?? 0) - (b?.tags?.abilityBoosts?.count ?? 0),
 			parser: (item: bg) => item?.tags?.abilityBoosts?.count ?? 0,
 			classes: 'text-center',
-			span: 1,
+			span: 2,
 		},
 		{
 			enabled: true,
@@ -50,7 +49,7 @@
 			sortable: (a: bg, b: bg) =>
 				(a?.tags?.abilityBoosts?.count ?? 0) - (b?.tags?.abilityBoosts?.count ?? 0),
 			classes: 'text-left',
-			span: 5,
+			span: 10,
 		},
 	];
 
@@ -67,10 +66,10 @@
 	class:px-2={$settings.wideMode}
 >
 	<div class="text-center w-full h-slot grid grid-cols-2 gap-2">
-		<div class="overflow-y-scroll overflow-x-clip">
+		<div class="overflow-y-scroll overflow-x-clip scroll-stable scroll-thin">
 			<ItemList bind:selected items={$backgrounds} {columns} />
 		</div>
-		<div class="overflow-y-scroll">
+		<div class="overflow-y-scroll scroll-stable scroll-thin">
 			<div class="p-3 card">
 				{#if selected}
 					<h1 class="h2">{selected.name.primary}</h1>

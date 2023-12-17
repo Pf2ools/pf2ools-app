@@ -182,7 +182,7 @@
 			<div
 				class="input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none"
 			>
-				<input type="text" placeholder="Search..." />
+				<input type="text" placeholder="Search Anything..." />
 				<a class="rounded-none variant-filled-surface !p-2" href="/search">
 					<iconify-icon icon="mdi:search" class="text-2xl" />
 				</a>

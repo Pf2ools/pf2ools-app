@@ -24,8 +24,8 @@
 			<input class="checkbox" type="checkbox" id="wideMode" bind:checked={$settings.wideMode} />
 		</div>
 
-		<div class="card flex-row space-x-2 p-2">
-			<label class="text-center" for="listSize">Size of Lists</label>
+		<div class="card flex-row space-y-2 p-2">
+			<div class="text-center border-b border-surface-500 border-dashed pb-1">Size of Lists</div>
 			<ListBox labelledby="listSize" active="variant-soft-primary">
 				<ListBoxItem bind:group={$settings.listSize} name="listSize" value="text-xs">
 					Tiny
