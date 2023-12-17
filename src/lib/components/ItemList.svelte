@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { dataTypes } from '$lib';
+	import { settings, type dataTypes } from '$lib';
 	// TODO: replace background with "content" type
 	export let items: dataTypes['background'][] = [];
 	type itemType = dataTypes['background'];
@@ -47,16 +47,31 @@
 </script>
 
 <div class="card flex flex-col pt-1">
+	<div class="pl-1 pb-0.5 grid grid-cols-12 w-full text-sm border-b border-surface-500">
+		{#each columns
+			.filter((col) => col.enabled)
+			.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { label, classes, span }}
+			<div
+				class="border-r-next px-1 span-var h-full {classes}"
+				style="--span: {span === -1 ? remainingSpan : span}"
+			>
+				{label}
+			</div>
+		{/each}
+	</div>
 	{#each items as item}
 		<button
-			class="px-2 border-b-next gap-x-1 grid grid-cols-12 w-full text-sm"
+			class="pl-1 border-b-next grid grid-cols-12 w-full {$settings.listSize}"
 			class:variant-soft-primary={selected === item}
 			on:click={() => (selected = item)}
 		>
 			{#each columns
 				.filter((col) => col.enabled)
 				.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { classes, span, parser }}
-				<div class="span-var {classes}" style="--span: {span === -1 ? remainingSpan : span}">
+				<div
+					class="border-r-next px-1 span-var h-full {classes}"
+					style="--span: {span === -1 ? remainingSpan : span}"
+				>
 					{parser(item)}
 				</div>
 			{/each}

@@ -7,6 +7,7 @@ const defaults = {
 	},
 	clearFooter: false,
 	wideMode: false,
+	listSize: 'text-sm' as 'text-xs' | 'text-sm' | 'text-base' | 'text-lg',
 };
 
 export const settings = {

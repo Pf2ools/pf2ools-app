@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { LightSwitch } from '@skeletonlabs/skeleton';
+	import { LightSwitch, ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
 	import { settings } from '$lib';
 </script>
 
@@ -8,9 +8,9 @@
 </svelte:head>
 
 <div class="container flex justify-center h-full">
-	<div class="space-y-5">
+	<div class="space-y-1">
 		<LightSwitch />
-		<div class="flex items-center space-x-2">
+		<div class="card p-2 flex items-center space-x-2">
 			<label class="" for="clearFooter">Hide Footer</label>
 			<input
 				class="checkbox"
@@ -19,9 +19,27 @@
 				bind:checked={$settings.clearFooter}
 			/>
 		</div>
-		<div class="flex items-center space-x-2">
+		<div class="card p-2 flex items-center space-x-2">
 			<label class="" for="wideMode">Wide Mode</label>
 			<input class="checkbox" type="checkbox" id="wideMode" bind:checked={$settings.wideMode} />
+		</div>
+
+		<div class="card flex-row space-x-2 p-2">
+			<label class="text-center" for="listSize">Size of Lists</label>
+			<ListBox labelledby="listSize" active="variant-soft-primary">
+				<ListBoxItem bind:group={$settings.listSize} name="listSize" value="text-xs">
+					Tiny
+				</ListBoxItem>
+				<ListBoxItem bind:group={$settings.listSize} name="listSize" value="text-sm">
+					Small
+				</ListBoxItem>
+				<ListBoxItem bind:group={$settings.listSize} name="listSize" value="text-base">
+					Medium
+				</ListBoxItem>
+				<ListBoxItem bind:group={$settings.listSize} name="listSize" value="text-lg">
+					Large
+				</ListBoxItem>
+			</ListBox>
 		</div>
 	</div>
 </div>

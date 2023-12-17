@@ -23,7 +23,7 @@
 			enabled: true,
 			order: -1,
 			label: 'Source',
-			key: 'source.ID',
+			key: 'source.short',
 			sortable: (a: bg, b: bg) => a.source.ID.localeCompare(b.source.ID),
 			parser: (item: bg) => item.source.ID,
 			classes: 'text-center',
@@ -33,12 +33,12 @@
 		{
 			enabled: true,
 			order: 2,
-			label: 'AB Count',
+			label: 'Count',
 			key: 'tags.abilityBoosts.count',
 			sortable: (a: bg, b: bg) =>
 				(a?.tags?.abilityBoosts?.count ?? 0) - (b?.tags?.abilityBoosts?.count ?? 0),
 			parser: (item: bg) => item?.tags?.abilityBoosts?.count ?? 0,
-			classes: 'text-left',
+			classes: 'text-center',
 			span: 1,
 		},
 		{
