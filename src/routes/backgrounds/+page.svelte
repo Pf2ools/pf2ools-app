@@ -73,7 +73,7 @@
 			<div class="p-3 card">
 				{#if selected}
 					<h1 class="h2">{selected.name.primary}</h1>
-					<p>Source: {selected.source.ID}</p>
+					<p>Source: {selected.sourceFull}</p>
 					<div>
 						{#each selected.data.entries as entry}
 							<p>{entry}</p>

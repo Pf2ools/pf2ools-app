@@ -4,7 +4,7 @@ import { derived, get, type Writable } from 'svelte/store';
 import type { z } from 'zod';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { source as sourceData } from './pf2ools-data/bundles/byDatatype/core/source.json' assert { type: 'json' };
-import deepmerge from 'deepmerge';
+import BackgroundClass from './backgroundClass';
 
 export interface dataTypes {
 	homebrew: { [key: string]: unknown };
@@ -37,42 +37,8 @@ class ContentManager {
 	}
 
 	//#region Background
-	static bgHelpers(bg: dataTypes['background']) {
-		const obj = deepmerge(bg, {
-			source: {
-				get data() {
-					const source = contentManager._source.find((src) => src.ID === bg.source.ID);
-					if (!source) console.warn(`Can't find source for ${bg?.name?.primary}!`);
-					return source ?? { ID: 'unknown', title: { full: 'Unknown', short: 'UNK' } };
-				},
-				get full(): string {
-					return this.data.title.full;
-				},
-				get short(): string {
-					return this.data.title.short;
-				},
-			},
-			name: {
-				get fullName() {
-					return bg.name.primary + (bg.name.specifier ? ` (${bg.name.specifier})` : '');
-				},
-			},
-		});
+	static backgroundClass = BackgroundClass;
 
-		if (obj.tags?.abilityBoosts && !('toArray' in obj.tags.abilityBoosts)) {
-			Object.defineProperty(obj.tags.abilityBoosts, 'toArray', {
-				get: function () {
-					const abilities = obj.tags!.abilityBoosts!.abilities;
-					if (!abilities) return [];
-					return Object.keys(abilities).filter(
-						(value) => abilities[value as keyof typeof abilities]
-					);
-				},
-			});
-		}
-
-		return obj;
-	}
 	get _background() {
 		return get(this.background);
 	}
@@ -113,7 +79,7 @@ class ContentManager {
 			}
 
 			return ([...this.core.background, ...safeBackgrounds] as dataTypes['background'][]).map(
-				(bg) => ContentManager.bgHelpers(bg)
+				(bg) => new ContentManager.backgroundClass(bg)
 			);
 		});
 	}
