@@ -39,6 +39,13 @@ hr {
 	.scroll-stable {
 		scrollbar-gutter: stable;
 	}
+
+	.offset-scroll {
+		margin-right: calc(-1 * var(--scrollbar-width, 8px));
+		::-webkit-scrollbar {
+			width: var(--scrollbar-width, 8px);
+		}
+	}
 }
 
 #title + .app-bar,

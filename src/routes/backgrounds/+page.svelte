@@ -66,10 +66,8 @@
 	class:px-2={$settings.wideMode}
 >
 	<div class="w-full h-slot grid grid-cols-2 gap-2">
-		<div class="overflow-y-scroll overflow-x-clip scroll-stable scroll-thin">
-			<ItemList bind:selected items={$backgrounds} {columns} />
-		</div>
-		<div class="overflow-y-scroll scroll-stable scroll-thin [&_p]:-indent-5 [&_p]:ml-5">
+		<ItemList bind:selected items={$backgrounds} {columns} />
+		<div class="[&_p]:-indent-5 [&_p]:ml-5">
 			<div class="p-3 pb-1.5 card">
 				{#if selected}
 					<h1 class="h2">{selected.title}</h1>

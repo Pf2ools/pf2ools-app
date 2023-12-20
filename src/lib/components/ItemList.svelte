@@ -65,14 +65,14 @@
 </script>
 
 <div class="card flex flex-col">
-	<div class="sticky top-0">
+	<div class="sticky top-0 h-14 mb-0.5">
 		<div>
 			<div class="input-group input-group-divider flex flex-row rounded-b-none">
 				<div class="input-group-shim !p-0">
 					<button class="btn p-0">Filters</button>
 				</div>
 				<input
-					class="input rounded-b-none rounded-l-none p-1"
+					class="input rounded-b-none rounded-l-none p-1 pl-2"
 					type="text"
 					placeholder="Search..."
 					bind:value={search}
@@ -80,7 +80,7 @@
 			</div>
 		</div>
 		<div
-			class="pl-1 pb-0.5 grid grid-cols-24 bg-surface-100-800-token w-full text-sm border-b border-x border-surface-500"
+			class="pl-1 pb-0.5 grid grid-cols-24 bg-surface-100-800-token text-sm border-b border-surface-500"
 		>
 			{#each columns
 				.filter((col) => col.enabled)
@@ -94,22 +94,24 @@
 			{/each}
 		</div>
 	</div>
-	{#each filteredItems as item}
-		<button
-			class="pl-1 border-b-next grid grid-cols-24 w-full {$settings.listSize} hover:variant-ghost-primary focus:variant-ghost-primary"
-			class:variant-soft-primary={selected === item}
-			on:click={() => (selected = item)}
-		>
-			{#each columns
-				.filter((col) => col.enabled)
-				.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { classes, span, parser }}
-				<div
-					class="border-r-next px-1 col-span-var h-full {classes}"
-					style="--span: {span === -1 ? remainingSpan : span}"
-				>
-					{parser(item)}
-				</div>
-			{/each}
-		</button>
-	{/each}
+	<div class="h-[calc(var(--slotHeight)_-_3.625rem)] overflow-y-scroll offset-scroll">
+		{#each filteredItems as item}
+			<button
+				class="pl-1 border-b-next grid grid-cols-24 w-full {$settings.listSize} hover:variant-ghost-primary focus:variant-ghost-primary"
+				class:variant-soft-primary={selected === item}
+				on:click={() => (selected = item)}
+			>
+				{#each columns
+					.filter((col) => col.enabled)
+					.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { classes, span, parser }}
+					<div
+						class="border-r-next px-1 col-span-var h-full {classes}"
+						style="--span: {span === -1 ? remainingSpan : span}"
+					>
+						{parser(item)}
+					</div>
+				{/each}
+			</button>
+		{/each}
+	</div>
 </div>
