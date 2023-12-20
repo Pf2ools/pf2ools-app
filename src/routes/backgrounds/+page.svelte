@@ -65,7 +65,7 @@
 	class:container={!$settings.wideMode}
 	class:px-2={$settings.wideMode}
 >
-	<div class="w-full h-slot grid grid-cols-2 gap-2">
+	<div class="w-full h-slot grid grid-cols-2 gap-4">
 		<ItemList bind:selected items={$backgrounds} {columns} />
 		<div class="[&_p]:-indent-5 [&_p]:ml-5">
 			<div class="p-3 pb-1.5 card">
