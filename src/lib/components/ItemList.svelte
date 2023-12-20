@@ -66,14 +66,15 @@
 	function move(event: KeyboardEvent) {
 		if ((event.key === 'j' || event.key === 'k') && document?.activeElement?.tagName !== 'INPUT') {
 			event.preventDefault();
-			// Find the current selected row with id="row" and variant-soft-primary
+			// Find the current selected row with id="row" and variant-soft-primary (which indicates its the one selected)
 			const current = document.querySelector('#row.variant-soft-primary');
 			// Grab the next or previous row
 			const next = (
 				event.key === 'j' ? current?.nextElementSibling : current?.previousElementSibling
 			) as HTMLElement | null | undefined;
-			// Grab the HTMLElement and its a tag and click it
+			// Grab the button and click it
 			next?.click();
+			next?.focus();
 			// Scroll to this element
 			next?.scrollIntoView({ block: 'center' });
 		}
