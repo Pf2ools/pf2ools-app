@@ -62,7 +62,25 @@
 				});
 		});
 	}
+
+	function move(event: KeyboardEvent) {
+		if ((event.key === 'j' || event.key === 'k') && document?.activeElement?.tagName !== 'INPUT') {
+			event.preventDefault();
+			// Find the current selected row with id="row" and variant-soft-primary
+			const current = document.querySelector('#row.variant-soft-primary');
+			// Grab the next or previous row
+			const next = (
+				event.key === 'j' ? current?.nextElementSibling : current?.previousElementSibling
+			) as HTMLElement | null | undefined;
+			// Grab the HTMLElement and its a tag and click it
+			next?.click();
+			// Scroll to this element
+			next?.scrollIntoView({ block: 'center' });
+		}
+	}
 </script>
+
+<svelte:window on:keydown={move} />
 
 <div class="card flex flex-col">
 	<div class="sticky top-0 h-14 mb-0.5">
@@ -97,6 +115,7 @@
 	<div class="h-[calc(var(--slotHeight)_-_3.625rem)] overflow-y-scroll offset-scroll">
 		{#each filteredItems as item}
 			<button
+				id="row"
 				class="pl-1 border-b-next grid grid-cols-24 w-full {$settings.listSize} hover:variant-ghost-primary focus:variant-ghost-primary"
 				class:variant-soft-primary={selected === item}
 				on:click={() => (selected = item)}
