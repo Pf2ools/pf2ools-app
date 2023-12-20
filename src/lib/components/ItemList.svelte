@@ -84,7 +84,7 @@
 <svelte:window on:keydown={move} />
 
 <div class="card flex flex-col">
-	<div class="sticky top-0 h-14 mb-0.5">
+	<div class="sticky top-0 h-14">
 		<div>
 			<div class="input-group input-group-divider flex flex-row rounded-b-none">
 				<div class="input-group-shim !p-0">
