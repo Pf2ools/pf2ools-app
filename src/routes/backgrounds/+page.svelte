@@ -1,10 +1,10 @@
 <script lang="ts">
+	import type bg from '$lib/data/backgroundClass';
 	import { settings } from '$lib';
 	import ItemList from '$lib/components/ItemList.svelte';
-	import cm, { type dataTypes } from '$lib/data/contentManager';
+	import cm from '$lib/data/contentManager';
 	import { objBoolsToArray } from '$lib/utils';
 	const { background: backgrounds } = cm;
-	type bg = dataTypes['background'];
 
 	let selected = $backgrounds[0];
 
@@ -23,9 +23,9 @@
 			enabled: true,
 			order: -1,
 			label: 'Source',
-			key: 'source.short',
-			sortable: (a: bg, b: bg) => a.source.ID.localeCompare(b.source.ID),
-			parser: (item: bg) => item.source.ID,
+			key: 'sourceShort',
+			sortable: (a: bg, b: bg) => a.sourceShort.localeCompare(b.sourceShort),
+			parser: (item: bg) => item.sourceShort,
 			classes: 'text-center',
 			span: 3,
 		},
@@ -57,7 +57,7 @@
 </script>
 
 <svelte:head>
-	<title>Backgrounds - pf2ools</title>
+	<title>{selected ? selected.title : 'Backgrounds'} - pf2ools</title>
 </svelte:head>
 
 <div
@@ -65,20 +65,22 @@
 	class:container={!$settings.wideMode}
 	class:px-2={$settings.wideMode}
 >
-	<div class="text-center w-full h-slot grid grid-cols-2 gap-2">
+	<div class="w-full h-slot grid grid-cols-2 gap-2">
 		<div class="overflow-y-scroll overflow-x-clip scroll-stable scroll-thin">
 			<ItemList bind:selected items={$backgrounds} {columns} />
 		</div>
-		<div class="overflow-y-scroll scroll-stable scroll-thin">
-			<div class="p-3 card">
+		<div class="overflow-y-scroll scroll-stable scroll-thin [&_p]:-indent-5 [&_p]:ml-5">
+			<div class="p-3 pb-1.5 card">
 				{#if selected}
-					<h1 class="h2">{selected.name.primary}</h1>
-					<p>Source: {selected.sourceFull}</p>
+					<h1 class="h2">{selected.title}</h1>
+					<hr />
 					<div>
 						{#each selected.data.entries as entry}
 							<p>{entry}</p>
 						{/each}
 					</div>
+					<hr />
+					<p class="text-right"><b>Source:</b> {selected.sourceFull}</p>
 				{/if}
 			</div>
 		</div>

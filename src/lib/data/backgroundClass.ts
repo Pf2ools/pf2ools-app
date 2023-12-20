@@ -17,6 +17,10 @@ class Background {
 		this.type = background.type;
 	}
 
+	get title(): string {
+		return this.name.primary + (this.name.specifier ? ` (${this.name.specifier})` : '');
+	}
+
 	get sourceData(): dataTypes['source'] {
 		return (contentManager._source.find((src) => src.ID === this.source.ID) ?? {
 			ID: 'unknown',
