@@ -38,7 +38,7 @@
 				(a?.tags?.abilityBoosts?.count ?? 0) - (b?.tags?.abilityBoosts?.count ?? 0),
 			parser: (item: bg) => item?.tags?.abilityBoosts?.count ?? 0,
 			classes: 'text-center',
-			span: 2,
+			span: 3,
 		},
 		{
 			enabled: true,
