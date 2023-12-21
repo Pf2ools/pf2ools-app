@@ -18,7 +18,7 @@ class Background {
 	}
 
 	get title(): string {
-		return this.name.primary + (this.name.specifier ? ` (${this.name.specifier})` : '');
+		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
 	}
 
 	get sourceData(): dataTypes['source'] {

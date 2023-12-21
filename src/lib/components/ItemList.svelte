@@ -10,8 +10,10 @@
 		enabled: boolean;
 		order: number;
 		label: string;
+		hover: string;
 		key: string;
 		sortable: (a: unknown, b: unknown) => number;
+		sorted: 0 | 1 | -1;
 		parser: (item: unknown) => string;
 		classes: string;
 		span: number;
@@ -60,6 +62,13 @@
 					return item.name.primary.toLowerCase().includes(term);
 				});
 		});
+		columns.forEach((col) => {
+			if (col.sorted !== 0) {
+				filteredItems.sort((a, b) => {
+					return col.sorted * col.sortable(a, b);
+				});
+			}
+		});
 	}
 
 	function move(event: KeyboardEvent) {
@@ -104,13 +113,31 @@
 		>
 			{#each columns
 				.filter((col) => col.enabled)
-				.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { label, classes, span }}
-				<div
-					class="border-r-next px-1 col-span-var h-full {classes} {$settings.listSize}"
+				.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { label, classes, span, sorted, hover }}
+				<button
+					title={hover}
+					class="border-r-next px-1 col-span-var h-full {classes} {$settings.listSize} relative"
 					style="--span: {span === -1 ? remainingSpan : span}"
+					on:click={() => {
+						switch (sorted) {
+							default:
+							case 0:
+								sorted = 1;
+								break;
+							case 1:
+								sorted = -1;
+								break;
+							case -1:
+								sorted = 0;
+								break;
+						}
+					}}
 				>
 					{label}
-				</div>
+					<span class="absolute right-1">
+						{sorted === 1 ? '▲' : sorted === -1 ? '▼' : ''}
+					</span>
+				</button>
 			{/each}
 		</div>
 	</div>
