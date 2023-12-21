@@ -118,7 +118,7 @@
 {#if mobileSearch}
 	<div
 		transition:slide
-		class="mx-auto w-64 input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none sm:hidden"
+		class="mx-auto w-64 input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none sm:hidden absolute bottom-9 right-0"
 	>
 		<input type="text" placeholder="Search Anything..." />
 		<a class="rounded-none variant-filled-surface" href="/search">
