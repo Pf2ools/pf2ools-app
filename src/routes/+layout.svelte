@@ -25,19 +25,22 @@
 
 	let headerElement: number = 0;
 	let footerElement: number = 0;
+	let windowWidth: number = 0;
 	let windowHeight: number = 0;
 	let slotHeight = windowHeight - headerElement - footerElement;
 
 	$: slotHeight = windowHeight - headerElement - footerElement;
 </script>
 
-<svelte:window bind:innerHeight={windowHeight} />
+<svelte:window bind:innerHeight={windowHeight} bind:innerWidth={windowWidth} />
 
 <AppShell>
 	<svelte:fragment slot="header">
-		<div bind:clientHeight={headerElement}>
-			<Navigation />
-		</div>
+		{#if windowWidth >= 640}
+			<div bind:clientHeight={headerElement}>
+				<Navigation />
+			</div>
+		{/if}
 	</svelte:fragment>
 	<!-- (sidebarLeft) -->
 	<!-- (sidebarRight) -->
@@ -72,6 +75,11 @@
 						I understand. <iconify-icon icon="mdi:arrow-down" class="text-sm align-top" />
 					</button>
 				</div>
+			</div>
+		{/if}
+		{#if windowWidth <= 640}
+			<div bind:clientHeight={headerElement}>
+				<Navigation />
 			</div>
 		{/if}
 	</svelte:fragment>

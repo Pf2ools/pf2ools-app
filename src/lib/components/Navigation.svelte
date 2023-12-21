@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { AppBar, LightSwitch, popup } from '@skeletonlabs/skeleton';
 	import { get } from 'svelte/store';
@@ -92,6 +93,8 @@
 		},
 		{ disabled: false, name: 'Settings', icon: 'mdi:cog', href: '/settings', pages: [] },
 	] as const;
+
+	let mobileSearch = false;
 </script>
 
 <div
@@ -112,12 +115,24 @@
 	</div>
 </div>
 
+{#if mobileSearch}
+	<div
+		transition:slide
+		class="mx-auto w-64 input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none sm:hidden"
+	>
+		<input type="text" placeholder="Search Anything..." />
+		<a class="rounded-none variant-filled-surface" href="/search">
+			<iconify-icon icon="mdi:search" class="text-2xl" />
+		</a>
+	</div>
+{/if}
+
 <AppBar
 	shadow="shadow-2xl"
-	padding="px-8 p-1"
+	padding=""
 	spacing=""
 	gridColumns=""
-	class="hidden sm:block w-full h-10"
+	class="w-full"
 	slotDefault="place-self-center relative w-full flex"
 >
 	<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
@@ -135,7 +150,7 @@
 							event: 'click',
 							placement: 'bottom-start',
 							target: anchor.name,
-							middleware: { offset: 0 },
+							middleware: { offset: 0, flip: {} },
 						}}
 					>
 						<iconify-icon icon={anchor.icon} class="block md:hidden text-xl" />
@@ -143,7 +158,10 @@
 					</button>
 					<div data-popup={anchor.name}>
 						<div
-							class="card flex flex-col rounded-tl-none [&_a:first-child]:rounded-tl-none [&_a:not(:last-child)]:border-b"
+							class="card flex flex-col
+							rounded-bl-none [&_a:first-child]:rounded-bl-none
+							sm:rounded-tl-none [&_a:first-child]:sm:rounded-tl-none sm:rounded-bl-token
+							[&_a:not(:last-child)]:border-b"
 						>
 							{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
 								<a
@@ -154,7 +172,7 @@
 										event: 'click',
 										placement: 'bottom-start',
 										target: subAnchor.name,
-										middleware: { offset: 0 },
+										middleware: { offset: 0, flip: { mainAxis: 'y' } },
 									}}
 								>
 									<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
@@ -176,13 +194,19 @@
 				{/if}
 			{/each}
 			<div
-				class="input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none"
+				class="input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none hidden sm:flex"
 			>
 				<input type="text" placeholder="Search Anything..." />
 				<a class="rounded-none variant-filled-surface !p-2" href="/search">
 					<iconify-icon icon="mdi:search" class="text-2xl" />
 				</a>
 			</div>
+			<button
+				class="generic-disabled border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
+				on:click={() => (mobileSearch = !mobileSearch)}
+			>
+				<iconify-icon icon="mdi:search" class="text-xl block" />
+			</button>
 		</div>
 	</div>
 

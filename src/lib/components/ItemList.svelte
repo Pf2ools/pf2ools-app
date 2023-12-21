@@ -4,15 +4,15 @@
 	export let items: dataTypes['background'][] = [];
 	type itemType = dataTypes['background'];
 	export let selected = items[0];
-	export let columns: columnType<itemType>[] = [];
+	export let columns: columnType[] = [];
 
-	type columnType<T> = {
+	type columnType = {
 		enabled: boolean;
 		order: number;
 		label: string;
 		key: string;
-		sortable: (a: T, b: T) => number;
-		parser: (item: T) => string;
+		sortable: (a: unknown, b: unknown) => number;
+		parser: (item: unknown) => string;
 		classes: string;
 		span: number;
 	};
