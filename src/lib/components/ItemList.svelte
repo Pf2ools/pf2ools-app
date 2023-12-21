@@ -113,7 +113,7 @@
 			{/each}
 		</div>
 	</div>
-	<div class="h-[calc(var(--slotHeight)_-_3.625rem)] overflow-y-scroll offset-scroll">
+	<div class="h-[calc(var(--slotHeight)_-_3.625rem)] overflow-y-scroll offset-scroll scroll-thin">
 		{#each filteredItems as item}
 			<button
 				id="row"
