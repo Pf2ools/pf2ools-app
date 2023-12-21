@@ -92,10 +92,6 @@
 		},
 		{ disabled: false, name: 'Settings', icon: 'mdi:cog', href: '/settings', pages: [] },
 	] as const;
-
-	function openSideBar() {
-		console.log('open');
-	}
 </script>
 
 <div
@@ -192,11 +188,3 @@
 
 	<LightSwitch class="absolute right-0 top-0 mt-1 hidden lg:block" />
 </AppBar>
-
-<button
-	id="mobile-sidebar-button"
-	class="absolute bottom-0 leading-none sm:hidden bg-primary-200-700-token rounded-tr-md w-12 btn-icon-sm"
-	on:click={openSideBar}
->
-	<iconify-icon icon="mdi:menu" class="text-4xl px-1" />
-</button>

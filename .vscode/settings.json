@@ -1,5 +1,6 @@
 {
 	"editor.formatOnSave": true,
+	"explorer.excludeGitIgnore": true,
 	"prettier.documentSelectors": ["**/*.svelte"],
 	"tailwindCSS.classAttributes": [
 		"class",

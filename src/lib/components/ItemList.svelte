@@ -51,7 +51,6 @@
 
 	let filteredItems = items;
 	$: {
-		console.log('search', search);
 		filteredItems = items.filter((item) => {
 			return search
 				.toLowerCase()
@@ -80,7 +79,7 @@
 		}
 	}
 
-	let headerHeight = 0;
+	let headerHeight = 50;
 </script>
 
 <svelte:window on:keydown={move} />

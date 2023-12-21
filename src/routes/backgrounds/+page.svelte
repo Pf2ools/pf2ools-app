@@ -5,6 +5,7 @@
 	import cm from '$lib/data/contentManager';
 	import { objBoolsToArray } from '$lib/utils';
 	const { background: backgrounds } = cm;
+	import { dev } from '$app/environment';
 
 	let selected = $backgrounds[0];
 
@@ -53,7 +54,7 @@
 		},
 	];
 
-	$: console.log(selected);
+	$: if (dev) console.log(selected);
 </script>
 
 <svelte:head>

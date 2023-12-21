@@ -1,6 +1,5 @@
 <script lang="ts">
 	// import background from '$lib/data/backgrounds';
-	// console.log(background);
 </script>
 
 <svelte:head>

@@ -1,10 +1,6 @@
 <script lang="ts">
 	import cm from '$lib/data/contentManager';
 	const { homebrew, background } = cm;
-	$: {
-		console.log(cm);
-		console.log($background);
-	}
 
 	let homebrewString = JSON.stringify($homebrew, null, 2);
 
