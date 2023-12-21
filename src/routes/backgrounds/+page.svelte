@@ -50,8 +50,25 @@
 			hover: 'Ability Boosts',
 			key: 'abilityBoosts.array',
 			parser: (item: bg) => item.abilityBoosts.array.join(', '),
-			sortable: (a: bg, b: bg) =>
-				a.abilityBoosts.array.join(', ').localeCompare(b.abilityBoosts.array.join(', ')),
+			sortable: (a: bg, b: bg) => {
+				// sort an array of strings including Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma, and Free in that order
+				const order = [
+					'Strength',
+					'Dexterity',
+					'Constitution',
+					'Intelligence',
+					'Wisdom',
+					'Charisma',
+					'Free',
+				];
+				const aBoosts = a.abilityBoosts.array;
+				const bBoosts = b.abilityBoosts.array;
+				for (let i = 0; i < Math.min(aBoosts.length, bBoosts.length); i++) {
+					const aIndex = order.indexOf(aBoosts[i]);
+					const bIndex = order.indexOf(bBoosts[i]);
+					if (aIndex !== bIndex) return aIndex - bIndex;
+				}
+			},
 			classes: 'text-left',
 			span: 10,
 		},
