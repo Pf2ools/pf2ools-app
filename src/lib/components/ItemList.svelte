@@ -79,12 +79,14 @@
 			next?.scrollIntoView({ block: 'center' });
 		}
 	}
+
+	let headerHeight = 0;
 </script>
 
 <svelte:window on:keydown={move} />
 
-<div class="card flex flex-col">
-	<div class="sticky top-0 h-14">
+<div class="card flex flex-col" style="--headerHeight: {headerHeight}px">
+	<div class="sticky top-0" bind:clientHeight={headerHeight}>
 		<div>
 			<div class="input-group input-group-divider flex flex-row rounded-b-none">
 				<div class="input-group-shim !p-0">
@@ -114,7 +116,7 @@
 		</div>
 	</div>
 	<div
-		class="h-[calc(var(--slotHeight)_-_3.625rem)] overflow-y-scroll offset-scroll scroll-thin
+		class="h-[calc(var(--slotHeight)_-_var(--headerHeight))] overflow-y-scroll offset-scroll scroll-thin
 		[&_button:nth-child(odd)]:bg-surface-200/50 dark:[&_button:nth-child(odd)]:bg-surface-700/50"
 	>
 		{#each filteredItems as item}
