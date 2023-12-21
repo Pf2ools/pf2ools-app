@@ -1,23 +1,24 @@
-<script lang="ts">
-	import { settings, type dataTypes } from '$lib';
-	// TODO: replace background with "content" type
-	export let items: dataTypes['background'][] = [];
-	type itemType = dataTypes['background'];
-	export let selected = items[0];
-	export let columns: columnType[] = [];
-
-	type columnType = {
+<script context="module" lang="ts">
+	export type columnType<T> = {
 		enabled: boolean;
 		order: number;
 		label: string;
 		hover: string;
 		key: string;
-		sortable: (a: unknown, b: unknown) => number;
-		sorted: 0 | 1 | -1;
-		parser: (item: unknown) => string;
+		sortable: (a: T, b: T) => number;
+		parser: (item: T) => string;
 		classes: string;
 		span: number;
+		sorted?: 0 | 1 | -1;
 	};
+</script>
+
+<script lang="ts">
+	import { settings, type dataTypes } from '$lib';
+	// TODO: replace background with "content" type
+	export let items: dataTypes['background'][] = [];
+	export let selected = items[0];
+	export let columns: columnType<any>[];
 
 	/*
 	[
@@ -65,7 +66,7 @@
 		columns.forEach((col) => {
 			if (col.sorted !== 0) {
 				filteredItems.sort((a, b) => {
-					return col.sorted * col.sortable(a, b);
+					return col.sorted ?? 0 * col.sortable(a, b);
 				});
 			}
 		});

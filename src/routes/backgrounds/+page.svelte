@@ -3,7 +3,7 @@
 	import { settings } from '$lib';
 	import ItemList from '$lib/components/ItemList.svelte';
 	import cm from '$lib/data/contentManager';
-	import { objBoolsToArray } from '$lib/utils';
+	import type { columnType } from '$lib/components/ItemList.svelte';
 	const { background: backgrounds } = cm;
 	import { dev } from '$app/environment';
 
@@ -72,7 +72,7 @@
 			classes: 'text-left',
 			span: 10,
 		},
-	];
+	] as columnType<bg>[];
 
 	$: if (dev) console.log(selected);
 </script>
