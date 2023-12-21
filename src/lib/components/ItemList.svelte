@@ -66,7 +66,7 @@
 		columns.forEach((col) => {
 			if (col.sorted !== 0) {
 				filteredItems.sort((a, b) => {
-					return col.sorted ?? 0 * col.sortable(a, b);
+					return (col.sorted || 0) * col.sortable(a, b);
 				});
 			}
 		});
