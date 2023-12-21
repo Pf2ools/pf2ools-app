@@ -5,6 +5,7 @@ import type { z } from 'zod';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { source as sourceData } from './pf2ools-data/bundles/byDatatype/core/source.json' assert { type: 'json' };
 import BackgroundClass from './backgroundClass';
+import { dev } from '$app/environment';
 
 export interface dataTypes {
 	homebrew: { [key: string]: unknown };
@@ -13,6 +14,7 @@ export interface dataTypes {
 }
 
 class ContentManager {
+	public homebrewIndex: Writable<string>;
 	public homebrew: Writable<dataTypes['homebrew'][]>;
 	public core: {
 		background: dataTypes['background'][];
@@ -24,12 +26,23 @@ class ContentManager {
 			source: Object.freeze(sourceData) as unknown as dataTypes['source'][],
 		});
 
-		this.homebrew = localStorageStore(
-			'homebrew',
-			JSON.parse(
-				`[{"source":{"type":"source","ID":"Spappz","title":{"full":"Spappz's Public Assortment of Miscellany","short":"SPAM"},"data":{"released":"2023-09-17","added":"2023-09-17","modified":"2023-09-17","url":"https://github.com/pf2ools/pf2ools-data","copyright":["{@b {@i Pathfinder Core Rulebook (Second Edition)}} © 2019, Paizo Inc.; Authors: Logan Bonner, Jason Bulmahn, Stephen Radney-MacFarland, and Mark Seifter.","{@b {@i Spappz's Public Assortment of Miscellany}} © 2023, Spappz; Authors: Spappz."],"license":"OGLv1-0a","authors":["Spappz"]},"tags":{"misc":{"Playtest":true}}},"background":[{"type":"background","name":{"primary":"Exorcist"},"source":{"ID":"Spappz"},"data":{"traits":[{"trait":"rare"}],"entries":["You are a specialist in sending the restless dead on their way. You may travel from place to place, either wandering the road or on commission for someone interested in your services, or you might be able to ply your craft regularly in someplace notorious for its haunts.","Choose two ability boosts. One must be to Intelligence or Charisma, and one is a free ability boost.","You're trained in your choice of {@skill Occultism} or {@skill Religion}, as well as the {@skill Lore||Spirit Lore} skill. You can cast {@spell spirit sense} as an innate spell once per week. The spell is {@trait occult} if you chose {@skill Occultism}, and {@trait divine if you chose {@skill Religion}."]},"tags":{"abilityBoosts":{"count":2,"abilities":{"Intelligence":true,"Charisma":true,"Free":true}},"trainedSkills":{"count":2,"skills":{"Occultism":true,"Religion":true,"Lore":true}},"gainedSpells":{"count":1,"options":[{"name":"Spirit Sense","sourceID":"APG"}]}}}]}]`
-			)
+		this.homebrew = localStorageStore('homebrew', []);
+		this.homebrewIndex = localStorageStore(
+			'homebrewIndex',
+			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master/indexes/homebrewSources.json'
 		);
+
+		if (dev) console.log(this);
+	}
+
+	async fetchHomebrew() {
+		const response = await fetch(get(this.homebrewIndex));
+		if (response.ok) {
+			// TODO: Proper types
+			return (await response.json()) as dataTypes['homebrew'][];
+		} else {
+			throw new Error(`${response.status} ${response.statusText}`);
+		}
 	}
 
 	get _homebrew() {
