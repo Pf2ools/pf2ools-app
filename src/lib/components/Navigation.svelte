@@ -95,6 +95,7 @@
 	] as const;
 
 	let mobileSearch = false;
+	let searchElement: HTMLDivElement;
 </script>
 
 <div
@@ -117,7 +118,8 @@
 
 {#if mobileSearch}
 	<div
-		transition:slide
+		bind:this={searchElement}
+		transition:slide={{ duration: 200 }}
 		class="mx-auto w-64 input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none sm:hidden absolute bottom-9 right-0"
 	>
 		<input type="text" placeholder="Search Anything..." />
@@ -203,7 +205,12 @@
 			</div>
 			<button
 				class="generic-disabled border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
-				on:click={() => (mobileSearch = !mobileSearch)}
+				on:click={() => {
+					mobileSearch = !mobileSearch;
+					if (mobileSearch) {
+						setTimeout(() => searchElement.querySelector('input').focus(), 250);
+					}
+				}}
 			>
 				<iconify-icon icon="mdi:search" class="text-xl block" />
 			</button>
