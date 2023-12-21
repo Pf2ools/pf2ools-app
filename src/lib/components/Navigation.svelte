@@ -1,11 +1,6 @@
-<script lang="ts">
-	import { slide } from 'svelte/transition';
-	import { page } from '$app/stores';
-	import { AppBar, LightSwitch, popup } from '@skeletonlabs/skeleton';
-	import { get } from 'svelte/store';
-
+<script lang="ts" context="module">
 	// TODO: Remove disabled as things become available
-	type anchor = {
+	export type anchor = {
 		disabled: true | false;
 		name: string;
 		icon: string;
@@ -14,7 +9,7 @@
 		search?: true;
 		settings?: true;
 	};
-	const anchors: anchor[] = [
+	export const anchors: anchor[] = [
 		{
 			name: 'Home',
 			icon: 'mdi:home',
@@ -93,6 +88,13 @@
 		},
 		{ disabled: false, name: 'Settings', icon: 'mdi:cog', href: '/settings', pages: [] },
 	] as const;
+</script>
+
+<script lang="ts">
+	import { slide } from 'svelte/transition';
+	import { page } from '$app/stores';
+	import { AppBar, LightSwitch, popup } from '@skeletonlabs/skeleton';
+	import { get } from 'svelte/store';
 
 	let mobileSearch = false;
 	let searchElement: HTMLDivElement;
