@@ -204,7 +204,7 @@
 				</a>
 			</div>
 			<button
-				class="generic-disabled border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
+				class="generic-disabled border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none sm:hidden"
 				on:click={() => {
 					mobileSearch = !mobileSearch;
 					if (mobileSearch) {
