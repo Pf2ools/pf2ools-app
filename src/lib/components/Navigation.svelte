@@ -208,7 +208,7 @@
 				on:click={() => {
 					mobileSearch = !mobileSearch;
 					if (mobileSearch) {
-						setTimeout(() => searchElement.querySelector('input').focus(), 250);
+						setTimeout(() => searchElement.querySelector('input')?.focus(), 250);
 					}
 				}}
 			>
