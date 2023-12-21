@@ -106,7 +106,7 @@
 				.filter((col) => col.enabled)
 				.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { label, classes, span }}
 				<div
-					class="border-r-next px-1 col-span-var h-full {classes}"
+					class="border-r-next px-1 col-span-var h-full {classes} {$settings.listSize}"
 					style="--span: {span === -1 ? remainingSpan : span}"
 				>
 					{label}
