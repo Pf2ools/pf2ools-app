@@ -113,12 +113,15 @@
 			{/each}
 		</div>
 	</div>
-	<div class="h-[calc(var(--slotHeight)_-_3.625rem)] overflow-y-scroll offset-scroll scroll-thin">
+	<div
+		class="h-[calc(var(--slotHeight)_-_3.625rem)] overflow-y-scroll offset-scroll scroll-thin
+		[&_button:nth-child(odd)]:bg-surface-200/50 dark:[&_button:nth-child(odd)]:bg-surface-700/50"
+	>
 		{#each filteredItems as item}
 			<button
 				id="row"
-				class="pl-1 border-b-next grid grid-cols-24 w-full {$settings.listSize} hover:variant-ghost-primary focus:variant-ghost-primary"
-				class:variant-soft-primary={selected === item}
+				class="pl-1 grid grid-cols-24 w-full {$settings.listSize} hover:variant-ghost-primary focus:variant-ghost-primary"
+				class:!variant-soft-primary={selected === item}
 				on:click={() => (selected = item)}
 			>
 				{#each columns
