@@ -14,7 +14,7 @@ export interface dataTypes {
 }
 
 class ContentManager {
-	public homebrewIndex: Writable<string>;
+	public homebrewIndex: Writable<string[]>;
 	public homebrew: Writable<dataTypes['homebrew'][]>;
 	public core: {
 		background: dataTypes['background'][];
@@ -27,22 +27,25 @@ class ContentManager {
 		});
 
 		this.homebrew = localStorageStore('homebrew', []);
-		this.homebrewIndex = localStorageStore(
-			'homebrewIndex',
-			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master/indexes/homebrewSources.json'
-		);
+		this.homebrewIndex = localStorageStore('homebrewIndex', [
+			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master/indexes/homebrewSources.json',
+		]);
 
 		if (dev) console.log(this);
 	}
 
 	async fetchHomebrew() {
-		const response = await fetch(get(this.homebrewIndex));
-		if (response.ok) {
-			// TODO: Proper types
-			return (await response.json()) as dataTypes['homebrew'][];
-		} else {
-			throw new Error(`${response.status} ${response.statusText}`);
-		}
+		return await Promise.all(
+			get(this.homebrewIndex).map(async (url) => {
+				const response = await fetch(url);
+				if (response.ok) {
+					// TODO: Proper types
+					return (await response.json()) as dataTypes['homebrew'][];
+				} else {
+					throw new Error(`${response.status} ${response.statusText}`);
+				}
+			})
+		);
 	}
 
 	get _homebrew() {

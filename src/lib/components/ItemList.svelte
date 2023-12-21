@@ -65,8 +65,8 @@
 	function move(event: KeyboardEvent) {
 		if ((event.key === 'j' || event.key === 'k') && document?.activeElement?.tagName !== 'INPUT') {
 			event.preventDefault();
-			// Find the current selected row with id="row" and variant-soft-primary (which indicates its the one selected)
-			const current = document.querySelector('#row.variant-soft-primary');
+			// Find the current selected row with #row and .active
+			const current = document.querySelector('#row.active');
 			// Grab the next or previous row
 			const next = (
 				event.key === 'j' ? current?.nextElementSibling : current?.previousElementSibling
@@ -123,6 +123,7 @@
 				id="row"
 				class="pl-1 grid grid-cols-24 w-full {$settings.listSize} hover:!variant-ghost-primary focus:!variant-ghost-primary"
 				class:!variant-soft-primary={selected === item}
+				class:active={selected === item}
 				on:click={() => (selected = item)}
 			>
 				{#each columns
