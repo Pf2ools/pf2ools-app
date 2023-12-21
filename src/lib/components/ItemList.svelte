@@ -120,7 +120,7 @@
 		{#each filteredItems as item}
 			<button
 				id="row"
-				class="pl-1 grid grid-cols-24 w-full {$settings.listSize} hover:variant-ghost-primary focus:variant-ghost-primary"
+				class="pl-1 grid grid-cols-24 w-full {$settings.listSize} hover:!variant-ghost-primary focus:!variant-ghost-primary"
 				class:!variant-soft-primary={selected === item}
 				on:click={() => (selected = item)}
 			>
