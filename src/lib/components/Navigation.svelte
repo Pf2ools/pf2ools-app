@@ -167,7 +167,7 @@
 						>
 							{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
 								<a
-									class="rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 hover:variant-ghost-primary text-sm"
+									class="hover:variant-ghost-primary rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 text-sm"
 									href={subAnchor.href}
 									class:variant-filled-primary={$page.url.pathname === subAnchor.href}
 									use:popup={{
