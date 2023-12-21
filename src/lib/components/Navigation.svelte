@@ -99,7 +99,7 @@
 </script>
 
 <div
-	class="hidden lg:flex w-full h-10 px-8 p-1 bg-surface-100-800-token flex-row underline underline-offset-1 decoration-primary-500-400-token"
+	class="hidden lg:flex w-full h-12 px-8 p-1 bg-surface-100-800-token flex-row underline underline-offset-1 decoration-primary-500-400-token"
 	id="title"
 >
 	<div class="">
