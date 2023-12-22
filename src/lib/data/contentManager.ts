@@ -31,6 +31,17 @@ export interface dataTypes {
 	skill: z.infer<typeof skillSchema>;
 }
 
+export interface classTypes {
+	background: BackgroundClass;
+	source: z.infer<typeof sourceSchema>;
+}
+
+/*
+	TODO: Make a unified "derivedContent" store so I don't have to copy paste the derived thing over and over
+ 	Its justs a massive headache TypeScript-wise. It needs to take in an array of core content and the homebrew content, and optionally a class to .map() the content to, which returns either the mapped object or just the data itself.
+	I could also just, make classes required, but that's also another kind of hassle where I make a bunch of classes that are just wrappers for the data.
+*/
+
 class ContentManager {
 	public homebrewIndex: Writable<string[]>;
 	public homebrew: Writable<dataTypes['homebrew'][]>;

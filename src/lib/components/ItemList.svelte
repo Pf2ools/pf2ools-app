@@ -14,9 +14,8 @@
 </script>
 
 <script lang="ts">
-	import { settings, type dataTypes } from '$lib';
-	// TODO: replace background with "content" type
-	export let items: dataTypes['background'][] = [];
+	import { settings, type classTypes } from '$lib';
+	export let items: classTypes[keyof classTypes][] = [];
 	export let selected = items[0];
 	export let columns: columnType<any>[];
 
@@ -60,7 +59,9 @@
 				.split(',')
 				.map((term) => term.trim())
 				.every((term) => {
-					return item.name.primary.toLowerCase().includes(term);
+					return (typeof item.title === 'string' ? item.title : item.title.full)
+						.toLowerCase()
+						.includes(term);
 				});
 		});
 		columns.forEach((col) => {
