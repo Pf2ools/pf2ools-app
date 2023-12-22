@@ -1,6 +1,8 @@
 {
 	"name": "PF2ools",
 	"short_name": "PF2ools",
+	"start_url": "/",
+	"description": "A suite of tools and information for Pathfinder 2nd Edition.",
 	"icons": [
 		{
 			"src": "/icons/android-chrome-192x192.png",
@@ -14,6 +16,6 @@
 		}
 	],
 	"theme_color": "#6f1d17",
-	"background_color": "#6f1d17",
+	"background_color": "#333333",
 	"display": "standalone"
 }
