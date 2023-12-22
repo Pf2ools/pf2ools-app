@@ -7,7 +7,9 @@ export default defineConfig({
 		rollupOptions: {
 			output: {
 				manualChunks(id: string) {
-					if (id.includes('pf2ools-data')) return 'pf2ools-data';
+					if (id.includes('pf2ools-data')) {
+						return 'data-' + id.split('/').slice(-1)[0].split('.')[0];
+					}
 				},
 			},
 		},
