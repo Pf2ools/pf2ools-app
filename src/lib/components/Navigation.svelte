@@ -219,5 +219,5 @@
 		</div>
 	</div>
 
-	<LightSwitch class="absolute right-0 top-0 mt-1 hidden lg:block" />
+	<LightSwitch class="absolute right-4 top-0 mt-1 hidden lg:block" />
 </AppBar>
