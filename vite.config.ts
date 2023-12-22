@@ -1,6 +1,6 @@
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
 export default defineConfig({
 	build: {
@@ -11,5 +11,5 @@ export default defineConfig({
 			},
 		},
 	},
-	plugins: [sveltekit(), purgeCss()],
+	plugins: [sveltekit(), purgeCss(), splitVendorChunkPlugin()],
 });
