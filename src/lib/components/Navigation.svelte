@@ -96,6 +96,15 @@
 	import { get } from 'svelte/store';
 </script>
 
+<div data-popup="search">
+	<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] rounded-none">
+		<input class="" type="text" placeholder="Search Anything..." id="searchInput" />
+		<a class="rounded-none variant-filled-surface" href="/search">
+			<iconify-icon icon="mdi:search" class="text-2xl" />
+		</a>
+	</div>
+</div>
+
 <div
 	class="hidden lg:flex w-full h-12 px-8 p-1 bg-surface-100-800-token flex-row underline underline-offset-1 decoration-primary-500-400-token"
 	id="title"
@@ -110,15 +119,6 @@
 		<a class="chip variant-soft hover:variant-filled" href="https://github.com/Pf2ools">
 			<iconify-icon icon="mdi:github" class="text-xl" />
 			<span>Github</span>
-		</a>
-	</div>
-</div>
-
-<div data-popup="search">
-	<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] rounded-none">
-		<input class="" type="text" placeholder="Search Anything..." id="searchInput" />
-		<a class="rounded-none variant-filled-surface" href="/search">
-			<iconify-icon icon="mdi:search" class="text-2xl" />
 		</a>
 	</div>
 </div>
