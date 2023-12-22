@@ -20,10 +20,10 @@ hr {
 }
 
 @layer utilities {
-	.border-r-next:has(~ .border-r-next:not(:last-child)) {
+	.border-r-next:has(~ .border-r-next) {
 		@apply border-r border-surface-500 border-dashed;
 	}
-	.border-b-next:has(~ .border-b-next:not(:last-child)) {
+	.border-b-next:has(~ .border-b-next) {
 		@apply border-b border-surface-500 border-dashed;
 	}
 

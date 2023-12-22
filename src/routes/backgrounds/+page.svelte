@@ -24,13 +24,13 @@
 		{
 			enabled: true,
 			order: -1,
-			label: 'Source',
+			label: 'Src.',
 			hover: 'Source',
 			key: 'sourceShort',
 			sortable: (a: bg, b: bg) => a.sourceShort.localeCompare(b.sourceShort),
 			parser: (item: bg) => item.sourceShort,
 			classes: 'text-center',
-			span: 3,
+			span: 2,
 		},
 		{
 			enabled: true,

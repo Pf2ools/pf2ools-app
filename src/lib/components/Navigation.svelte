@@ -91,13 +91,9 @@
 </script>
 
 <script lang="ts">
-	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { AppBar, LightSwitch, popup } from '@skeletonlabs/skeleton';
 	import { get } from 'svelte/store';
-
-	let mobileSearch = false;
-	let searchElement: HTMLDivElement;
 </script>
 
 <div
@@ -118,18 +114,14 @@
 	</div>
 </div>
 
-{#if mobileSearch}
-	<div
-		bind:this={searchElement}
-		transition:slide={{ duration: 200 }}
-		class="mx-auto w-64 input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none sm:hidden absolute bottom-9 right-0"
-	>
-		<input type="text" placeholder="Search Anything..." />
+<div data-popup="search">
+	<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] rounded-none">
+		<input class="" type="text" placeholder="Search Anything..." id="searchInput" />
 		<a class="rounded-none variant-filled-surface" href="/search">
 			<iconify-icon icon="mdi:search" class="text-2xl" />
 		</a>
 	</div>
-{/if}
+</div>
 
 <AppBar
 	shadow="shadow-2xl"
@@ -146,7 +138,7 @@
 			{#each anchors as anchor}
 				{#if !anchor.href}
 					<button
-						class="generic-disabled border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
+						class="generic-disabled border-r-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						disabled={anchor.disabled}
@@ -157,7 +149,7 @@
 							middleware: { offset: 0, flip: {} },
 						}}
 					>
-						<iconify-icon icon={anchor.icon} class="block md:hidden text-xl" />
+						<iconify-icon icon={anchor.icon} class="block md:hidden text-3xl" />
 						<span class="hidden md:block">{anchor.name}</span>
 					</button>
 					<div data-popup={anchor.name}>
@@ -169,7 +161,7 @@
 						>
 							{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
 								<a
-									class="hover:variant-ghost-primary rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 text-sm"
+									class="hover:variant-ghost-primary rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 text-md sm:text-sm"
 									href={subAnchor.href}
 									class:variant-filled-primary={$page.url.pathname === subAnchor.href}
 									use:popup={{
@@ -187,12 +179,12 @@
 					</div>
 				{:else}
 					<a
-						class="border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm"
+						class="border-r-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm items-start"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						href={anchor.href ?? undefined}
 					>
-						<iconify-icon icon={anchor.icon} class="block md:hidden text-xl" />
+						<iconify-icon icon={anchor.icon} class="block md:hidden text-3xl" />
 						<span class="hidden md:block">{anchor.name}</span>
 					</a>
 				{/if}
@@ -207,14 +199,20 @@
 			</div>
 			<button
 				class="generic-disabled border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none sm:hidden"
-				on:click={() => {
-					mobileSearch = !mobileSearch;
-					if (mobileSearch) {
-						setTimeout(() => searchElement.querySelector('input')?.focus(), 250);
-					}
+				use:popup={{
+					event: 'click',
+					placement: 'top',
+					target: 'search',
+					state: ({ state }) => {
+						if (state) {
+							console.log(document.querySelector('#searchInput'));
+							setTimeout(() => document.querySelector('#searchInput')?.focus(), 100);
+						}
+					},
+					middleware: { offset: 0 },
 				}}
 			>
-				<iconify-icon icon="mdi:search" class="text-xl block" />
+				<iconify-icon icon="mdi:search" class="text-3xl block" />
 			</button>
 		</div>
 	</div>
