@@ -1,24 +1,24 @@
+import { dev } from '$app/environment';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import {
 	background as backgroundSchema,
-	source as sourceSchema,
 	condition as conditionSchema,
 	divineIntercession as divineIntercessionSchema,
 	event as eventSchema,
 	relicGift as relicGiftSchema,
 	skill as skillSchema,
+	source as sourceSchema,
 } from 'pf2ools-schema';
 import { derived, get, type Writable } from 'svelte/store';
 import type { z } from 'zod';
+import BackgroundClass from './backgroundClass';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
-import { source as sourceData } from './pf2ools-data/bundles/byDatatype/core/source.json' assert { type: 'json' };
 import { condition as conditionData } from './pf2ools-data/bundles/byDatatype/core/condition.json' assert { type: 'json' };
 import { divineIntercession as divineIntercessionData } from './pf2ools-data/bundles/byDatatype/core/divineIntercession.json' assert { type: 'json' };
 import { event as eventData } from './pf2ools-data/bundles/byDatatype/core/event.json' assert { type: 'json' };
 import { relicGift as relicGiftData } from './pf2ools-data/bundles/byDatatype/core/relicGift.json' assert { type: 'json' };
 import { skill as skillData } from './pf2ools-data/bundles/byDatatype/core/skill.json' assert { type: 'json' };
-import BackgroundClass from './backgroundClass';
-import { dev } from '$app/environment';
+import { source as sourceData } from './pf2ools-data/bundles/byDatatype/core/source.json' assert { type: 'json' };
 
 export interface dataTypes {
 	homebrew: { [key: string]: unknown };
