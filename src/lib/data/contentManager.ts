@@ -1,9 +1,22 @@
 import { localStorageStore } from '@skeletonlabs/skeleton';
-import { background as backgroundSchema, source as sourceSchema } from 'pf2ools-schema';
+import {
+	background as backgroundSchema,
+	source as sourceSchema,
+	condition as conditionSchema,
+	divineIntercession as divineIntercessionSchema,
+	event as eventSchema,
+	relicGift as relicGiftSchema,
+	skill as skillSchema,
+} from 'pf2ools-schema';
 import { derived, get, type Writable } from 'svelte/store';
 import type { z } from 'zod';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { source as sourceData } from './pf2ools-data/bundles/byDatatype/core/source.json' assert { type: 'json' };
+import { condition as conditionData } from './pf2ools-data/bundles/byDatatype/core/condition.json' assert { type: 'json' };
+import { divineIntercession as divineIntercessionData } from './pf2ools-data/bundles/byDatatype/core/divineIntercession.json' assert { type: 'json' };
+import { event as eventData } from './pf2ools-data/bundles/byDatatype/core/event.json' assert { type: 'json' };
+import { relicGift as relicGiftData } from './pf2ools-data/bundles/byDatatype/core/relicGift.json' assert { type: 'json' };
+import { skill as skillData } from './pf2ools-data/bundles/byDatatype/core/skill.json' assert { type: 'json' };
 import BackgroundClass from './backgroundClass';
 import { dev } from '$app/environment';
 
@@ -11,6 +24,11 @@ export interface dataTypes {
 	homebrew: { [key: string]: unknown };
 	background: z.infer<typeof backgroundSchema>;
 	source: z.infer<typeof sourceSchema>;
+	condition: z.infer<typeof conditionSchema>;
+	divineIntercession: z.infer<typeof divineIntercessionSchema>;
+	event: z.infer<typeof eventSchema>;
+	relicGift: z.infer<typeof relicGiftSchema>;
+	skill: z.infer<typeof skillSchema>;
 }
 
 class ContentManager {
@@ -19,11 +37,23 @@ class ContentManager {
 	public core: {
 		background: dataTypes['background'][];
 		source: dataTypes['source'][];
+		condition: dataTypes['condition'][];
+		divineIntercession: dataTypes['divineIntercession'][];
+		event: dataTypes['event'][];
+		relicGift: dataTypes['relicGift'][];
+		skill: dataTypes['skill'][];
 	};
 	constructor() {
 		this.core = Object.freeze({
 			background: Object.freeze(backgroundData) as unknown as dataTypes['background'][],
 			source: Object.freeze(sourceData) as unknown as dataTypes['source'][],
+			condition: Object.freeze(conditionData) as unknown as dataTypes['condition'][],
+			divineIntercession: Object.freeze(
+				divineIntercessionData
+			) as unknown as dataTypes['divineIntercession'][],
+			event: Object.freeze(eventData) as unknown as dataTypes['event'][],
+			relicGift: Object.freeze(relicGiftData) as unknown as dataTypes['relicGift'][],
+			skill: Object.freeze(skillData) as unknown as dataTypes['skill'][],
 		});
 
 		this.homebrew = localStorageStore('homebrew', []);
