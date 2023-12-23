@@ -15,6 +15,10 @@ class Skill {
 		this.source = skill.source;
 		this.tags = skill.tags;
 	}
+
+	get title(): string {
+		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
+	}
 }
 
 export default Skill;

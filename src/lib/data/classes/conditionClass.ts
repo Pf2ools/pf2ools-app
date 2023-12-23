@@ -15,6 +15,10 @@ class Condition {
 		this.source = condition.source;
 		this.tags = condition.tags;
 	}
+
+	get title(): string {
+		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
+	}
 }
 
 export default Condition;

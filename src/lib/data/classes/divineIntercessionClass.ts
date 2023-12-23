@@ -15,6 +15,10 @@ class DivineIntercession {
 		this.source = divineIntercession.source;
 		this.tags = divineIntercession.tags;
 	}
+
+	get title(): string {
+		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
+	}
 }
 
 export default DivineIntercession;

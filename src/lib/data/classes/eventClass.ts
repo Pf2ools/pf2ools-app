@@ -15,6 +15,10 @@ class Event {
 		this.source = event.source;
 		this.tags = event.tags;
 	}
+
+	get title(): string {
+		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
+	}
 }
 
 export default Event;

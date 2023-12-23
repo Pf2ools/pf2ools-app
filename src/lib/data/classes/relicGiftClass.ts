@@ -15,6 +15,10 @@ class RelicGift {
 		this.source = relicGift.source;
 		this.tags = relicGift.tags;
 	}
+
+	get title(): string {
+		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
+	}
 }
 
 export default RelicGift;
