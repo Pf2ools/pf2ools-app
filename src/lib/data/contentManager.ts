@@ -11,8 +11,6 @@ import {
 } from 'pf2ools-schema';
 import { derived, get, type Readable, type Writable } from 'svelte/store';
 import type { z } from 'zod';
-import BackgroundClass from './classes/backgroundClass';
-import SourceClass from './classes/sourceClass';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { condition as conditionData } from './pf2ools-data/bundles/byDatatype/core/condition.json' assert { type: 'json' };
 import { divineIntercession as divineIntercessionData } from './pf2ools-data/bundles/byDatatype/core/divineIntercession.json' assert { type: 'json' };
@@ -20,6 +18,14 @@ import { event as eventData } from './pf2ools-data/bundles/byDatatype/core/event
 import { relicGift as relicGiftData } from './pf2ools-data/bundles/byDatatype/core/relicGift.json' assert { type: 'json' };
 import { skill as skillData } from './pf2ools-data/bundles/byDatatype/core/skill.json' assert { type: 'json' };
 import { source as sourceData } from './pf2ools-data/bundles/byDatatype/core/source.json' assert { type: 'json' };
+
+import BackgroundClass from './classes/backgroundClass';
+import SourceClass from './classes/sourceClass';
+import ConditionClass from './classes/conditionClass';
+import DivineIntercessionClass from './classes/divineIntercessionClass';
+import EventClass from './classes/eventClass';
+import RelicGiftClass from './classes/relicGiftClass';
+import SkillClass from './classes/skillClass';
 
 export interface dataTypes {
 	homebrew: { [key: string]: unknown };
@@ -119,6 +125,87 @@ class ContentManager {
 			classTypes['source'][]
 		>;
 	}
+	//#endregion
+
+	//#region Condition
+	static conditionClass = ConditionClass;
+
+	get _condition() {
+		return get(this.condition);
+	}
+
+	get condition() {
+		return derivedContent(
+			this.core.condition,
+			conditionSchema,
+			ContentManager.conditionClass
+		) as Readable<classTypes['condition'][]>;
+	}
+
+	//#endregion
+
+	//#region Divine Intercession
+	static divineIntercessionClass = DivineIntercessionClass;
+
+	get _divineIntercession() {
+		return get(this.divineIntercession);
+	}
+
+	get divineIntercession() {
+		return derivedContent(
+			this.core.divineIntercession,
+			divineIntercessionSchema,
+			ContentManager.divineIntercessionClass
+		) as Readable<classTypes['divineIntercession'][]>;
+	}
+
+	//#endregion
+
+	//#region Event
+	static eventClass = EventClass;
+
+	get _event() {
+		return get(this.event);
+	}
+
+	get event() {
+		return derivedContent(this.core.event, eventSchema, ContentManager.eventClass) as Readable<
+			classTypes['event'][]
+		>;
+	}
+
+	//#endregion
+
+	//#region Relic Gift
+	static relicGiftClass = RelicGiftClass;
+
+	get _relicGift() {
+		return get(this.relicGift);
+	}
+
+	get relicGift() {
+		return derivedContent(
+			this.core.relicGift,
+			relicGiftSchema,
+			ContentManager.relicGiftClass
+		) as Readable<classTypes['relicGift'][]>;
+	}
+
+	//#endregion
+
+	//#region Skill
+	static skillClass = SkillClass;
+
+	get _skill() {
+		return get(this.skill);
+	}
+
+	get skill() {
+		return derivedContent(this.core.skill, skillSchema, ContentManager.skillClass) as Readable<
+			classTypes['skill'][]
+		>;
+	}
+
 	//#endregion
 }
 

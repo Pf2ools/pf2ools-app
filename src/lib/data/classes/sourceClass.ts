@@ -1,5 +1,4 @@
-import type { dataTypes } from '../contentManager';
-// import contentManager from './contentManager';
+import { /*contentManager,*/ type dataTypes } from '$lib';
 
 class Source {
 	private _document: dataTypes['source'];
