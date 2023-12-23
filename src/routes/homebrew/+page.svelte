@@ -13,6 +13,7 @@
 
 	function flatFetchHomebrew() {
 		return fetchHomebrew().then((index) => {
+			console.log('Original Index', index);
 			// turn an array of objects into an object with same keys as its sub-objects
 			const obj = {};
 
@@ -59,17 +60,23 @@
 </svelte:head>
 
 <div
-	class="container flex justify-center h-full"
+	class="container flex justify-center h-full flex-col"
 	class:container={!$settings.wideMode}
 	class:px-2={$settings.wideMode}
 >
-	<div class="w-full h-slot grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-none gap-2">
-		<div>
+	<div class="w-full mb-1">
+		<button class="btn py-2 border-token">buttons</button>
+		<button class="btn py-2 border-token">go</button>
+		<button class="btn py-2 border-token">here</button>
+	</div>
+	<div
+		class="w-full h-[calc(var(--slotHeight)_-_2.75rem)] grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-none gap-2"
+	>
+		<div style="--listHeight: calc(var(--slotHeight) - 2.75rem)">
 			{#await flatFetchHomebrew()}
 				<p>Loading Homebrew Indexes...</p>
-			{:then index}
-				{(console.log(index), '')}
-				<ItemList bind:selected items={index} {columns} />
+			{:then items}
+				<ItemList bind:selected {items} {columns} />
 			{/await}
 		</div>
 		<div class="[&_p]:-indent-5 [&_p]:ml-5">

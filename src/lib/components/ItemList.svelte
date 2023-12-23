@@ -144,7 +144,7 @@
 		</div>
 	</div>
 	<div
-		class="h-[calc(var(--slotHeight)_-_var(--headerHeight))] overflow-y-scroll overflow-x-hidden offset-scroll scroll-thin
+		class="h-[calc(var(--listHeight,--slotHeight)_-_var(--headerHeight))] overflow-y-scroll overflow-x-hidden offset-scroll scroll-thin
 		[&_button:nth-child(odd)]:bg-surface-200/50 dark:[&_button:nth-child(odd)]:bg-surface-700/50"
 	>
 		{#each filteredItems as item}
