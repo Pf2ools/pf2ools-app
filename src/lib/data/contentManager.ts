@@ -9,9 +9,10 @@ import {
 	skill as skillSchema,
 	source as sourceSchema,
 } from 'pf2ools-schema';
-import { derived, get, type Writable } from 'svelte/store';
+import { derived, get, type Readable, type Writable } from 'svelte/store';
 import type { z } from 'zod';
 import BackgroundClass from './backgroundClass';
+import SourceClass from './sourceClass';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { condition as conditionData } from './pf2ools-data/bundles/byDatatype/core/condition.json' assert { type: 'json' };
 import { divineIntercession as divineIntercessionData } from './pf2ools-data/bundles/byDatatype/core/divineIntercession.json' assert { type: 'json' };
@@ -33,7 +34,7 @@ export interface dataTypes {
 
 export interface classTypes {
 	background: BackgroundClass;
-	source: z.infer<typeof sourceSchema>;
+	source: SourceClass;
 }
 
 /*
@@ -99,7 +100,7 @@ class ContentManager {
 	get _background() {
 		return get(this.background);
 	}
-	get background() {
+	get background(): Readable<classTypes['background'][]> {
 		return derived(this.homebrew, ($homebrew) => {
 			const homebrewBackgrounds = $homebrew.filter((data) => data.background !== undefined);
 			const backgrounds = homebrewBackgrounds.map((data) => data.background).flat();
@@ -143,10 +144,12 @@ class ContentManager {
 	//#endregion
 
 	//#region Source
+	static sourceClass = SourceClass;
+
 	get _source() {
 		return get(this.source);
 	}
-	get source() {
+	get source(): Readable<classTypes['source'][]> {
 		return derived(this.homebrew, ($homebrew) => {
 			const homebrewsources = $homebrew.filter((data) => data.source !== undefined);
 			const sources = homebrewsources.map((data) => data.source).flat();
@@ -180,7 +183,9 @@ class ContentManager {
 				});
 			}
 
-			return [...this.core.source, ...safesources] as dataTypes['source'][];
+			return ([...this.core.source, ...safesources] as dataTypes['source'][]).map(
+				(src) => new ContentManager.sourceClass(src)
+			);
 		});
 	}
 	//#endregion
