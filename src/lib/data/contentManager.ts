@@ -41,11 +41,21 @@ export interface dataTypes {
 export interface classTypes {
 	background: BackgroundClass;
 	source: SourceClass;
+	condition: ConditionClass;
+	divineIntercession: DivineIntercessionClass;
+	event: EventClass;
+	relicGift: RelicGiftClass;
+	skill: SkillClass;
 }
 
 export interface classConstructorTypes {
 	background: typeof BackgroundClass;
 	source: typeof SourceClass;
+	condition: typeof ConditionClass;
+	divineIntercession: typeof DivineIntercessionClass;
+	event: typeof EventClass;
+	relicGift: typeof RelicGiftClass;
+	skill: typeof SkillClass;
 }
 
 class ContentManager {
