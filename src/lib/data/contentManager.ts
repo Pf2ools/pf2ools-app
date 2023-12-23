@@ -9,7 +9,7 @@ import {
 	skill as skillSchema,
 	source as sourceSchema,
 } from 'pf2ools-schema';
-import { derived, get, type Readable, type Writable } from 'svelte/store';
+import { derived, get, type Writable } from 'svelte/store';
 import type { z } from 'zod';
 import BackgroundClass from './backgroundClass';
 import SourceClass from './sourceClass';
@@ -37,11 +37,10 @@ export interface classTypes {
 	source: SourceClass;
 }
 
-/*
-	TODO: Make a unified "derivedContent" store so I don't have to copy paste the derived thing over and over
- 	Its justs a massive headache TypeScript-wise. It needs to take in an array of core content and the homebrew content, and optionally a class to .map() the content to, which returns either the mapped object or just the data itself.
-	I could also just, make classes required, but that's also another kind of hassle where I make a bunch of classes that are just wrappers for the data.
-*/
+export interface classConstructorTypes {
+	background: typeof BackgroundClass;
+	source: typeof SourceClass;
+}
 
 class ContentManager {
 	public homebrewIndex: Writable<string[]>;
@@ -100,46 +99,8 @@ class ContentManager {
 	get _background() {
 		return get(this.background);
 	}
-	get background(): Readable<classTypes['background'][]> {
-		return derived(this.homebrew, ($homebrew) => {
-			const homebrewBackgrounds = $homebrew.filter((data) => data.background !== undefined);
-			const backgrounds = homebrewBackgrounds.map((data) => data.background).flat();
-
-			type error = { data: dataTypes['background']; success: false; zodErrors: z.ZodIssue[] };
-
-			const parsedBackgrounds = backgrounds.map((bg) => {
-				const parsed = backgroundSchema.safeParse(bg);
-				if (parsed.success) {
-					return parsed;
-				} else {
-					return {
-						data: bg,
-						success: false,
-						zodErrors: parsed.error.errors,
-					};
-				}
-			});
-
-			const safeBackgrounds = parsedBackgrounds.filter((bg) => bg.success).map((bg) => bg.data);
-			const unsafeBackgrounds = parsedBackgrounds.filter((bg) => !bg.success) as error[];
-
-			if (unsafeBackgrounds.length > 0) {
-				console.warn('Some Backgrounds have failed validation!', unsafeBackgrounds);
-				unsafeBackgrounds.forEach((bg) => {
-					console.warn(
-						`The ${bg.data.type} "${bg.data.name.primary}" from "${
-							bg.data.source.ID
-						}" failed schema validation!${bg.zodErrors
-							.map((err) => `\n\t"${err.message}" at ${err.path.join('.')}`)
-							.join('')}`
-					);
-				});
-			}
-
-			return ([...this.core.background, ...safeBackgrounds] as dataTypes['background'][]).map(
-				(bg) => new ContentManager.backgroundClass(bg)
-			);
-		});
+	get background() {
+		return derivedContent(this.core.background, backgroundSchema, ContentManager.backgroundClass);
 	}
 	//#endregion
 
@@ -149,46 +110,56 @@ class ContentManager {
 	get _source() {
 		return get(this.source);
 	}
-	get source(): Readable<classTypes['source'][]> {
-		return derived(this.homebrew, ($homebrew) => {
-			const homebrewsources = $homebrew.filter((data) => data.source !== undefined);
-			const sources = homebrewsources.map((data) => data.source).flat();
-
-			type error = { data: dataTypes['source']; success: false; zodErrors: z.ZodIssue[] };
-
-			const parsedsources = sources.map((src) => {
-				const parsed = sourceSchema.safeParse(src);
-				if (parsed.success) {
-					return parsed;
-				} else {
-					return {
-						data: src,
-						success: false,
-						zodErrors: parsed.error.errors,
-					};
-				}
-			});
-
-			const safesources = parsedsources.filter((src) => src.success).map((src) => src.data);
-			const unsafesources = parsedsources.filter((src) => !src.success) as error[];
-
-			if (unsafesources.length > 0) {
-				console.warn('Some sources have failed validation!', unsafesources);
-				unsafesources.forEach((src) => {
-					console.warn(
-						`The ${src.data.type} "${src.data.title.full}" failed schema validation!${src.zodErrors
-							.map((err) => `\n\t"${err.message}" at ${err.path.join('.')}`)
-							.join('')}`
-					);
-				});
-			}
-
-			return ([...this.core.source, ...safesources] as dataTypes['source'][]).map(
-				(src) => new ContentManager.sourceClass(src)
-			);
-		});
+	get source() {
+		return derivedContent(this.core.source, sourceSchema, ContentManager.sourceClass);
 	}
 	//#endregion
+}
+
+function derivedContent<T extends keyof classTypes>(
+	content: dataTypes[T][],
+	schema: z.ZodSchema<unknown>,
+	contentClass: classConstructorTypes[T]
+) {
+	return derived(contentManager.homebrew, ($homebrew) => {
+		const homebrewsWithContent = $homebrew.filter((data) => data[content[0].type] !== undefined);
+		const homebrewContent = homebrewsWithContent.map((data) => data[content[0].type]).flat();
+
+		type error = { data: dataTypes[T]; success: false; zodErrors: z.ZodIssue[] };
+
+		const parsedContent = homebrewContent.map((bg) => {
+			const parsed = schema.safeParse(bg);
+			if (parsed.success) {
+				return parsed;
+			} else {
+				return {
+					data: bg,
+					success: false,
+					zodErrors: parsed.error.errors,
+				};
+			}
+		});
+
+		const safeHomebrewContent = parsedContent.filter((bg) => bg.success).map((bg) => bg.data);
+		const unsafeContent = parsedContent.filter((bg) => !bg.success) as error[];
+
+		if (unsafeContent.length > 0) {
+			console.warn('Some content have failed validation!', unsafeContent);
+			unsafeContent.forEach((bg) => {
+				console.warn(
+					`The following object failed schema validation!${bg.zodErrors
+						.map((err) => `\n\t"${err.message}" at ${err.path.join('.')}`)
+						.join('')}`,
+					unsafeContent
+				);
+			});
+		}
+
+		return ([...content, ...safeHomebrewContent] as dataTypes[T][]).map(
+			// @ts-expect-error TODO: I hate TypeScript I hate TypeScript I hate TypeScript
+			(bg) => new contentClass(bg)
+		);
+	});
 }
 
 const contentManager = new ContentManager();
