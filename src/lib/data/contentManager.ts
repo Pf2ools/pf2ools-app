@@ -85,7 +85,7 @@ class ContentManager {
 
 		this.homebrew = localStorageStore('homebrew', []);
 		this.homebrewIndex = localStorageStore('homebrewIndex', [
-			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master/indexes/homebrewSources.json',
+			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master',
 		]);
 
 		if (dev) console.log(this);
@@ -93,11 +93,11 @@ class ContentManager {
 
 	async fetchHomebrew() {
 		return await Promise.all(
-			get(this.homebrewIndex).map(async (url) => {
-				const response = await fetch(url);
+			get(contentManager.homebrewIndex).map(async (url) => {
+				const response = await fetch(`${url}/indexes/homebrewSources.json`);
 				if (response.ok) {
 					// TODO: Proper types
-					return (await response.json()) as dataTypes['homebrew'][];
+					return { ...(await response.json()), source: url } as dataTypes['homebrew'][];
 				} else {
 					throw new Error(`${response.status} ${response.statusText}`);
 				}
@@ -107,6 +107,10 @@ class ContentManager {
 
 	get _homebrew() {
 		return get(this.homebrew);
+	}
+
+	get _homebrewIndex() {
+		return get(this.homebrewIndex);
 	}
 
 	//#region Background
