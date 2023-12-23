@@ -1,14 +1,14 @@
 <script lang="ts">
-	import type bg from '$lib/data/backgroundClass';
 	import { settings } from '$lib';
 	import ItemList from '$lib/components/ItemList.svelte';
-	import cm from '$lib/data/contentManager';
+	import cm, { type classTypes } from '$lib/data/contentManager';
 	import type { columnType } from '$lib/components/ItemList.svelte';
 	const { background: backgrounds } = cm;
 	import { dev } from '$app/environment';
 
 	let selected = $backgrounds[0];
 
+	type bg = classTypes['background'];
 	const columns = [
 		{
 			enabled: true,

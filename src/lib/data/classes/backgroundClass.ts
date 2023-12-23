@@ -1,5 +1,5 @@
-import type { dataTypes } from './contentManager';
-import contentManager from './contentManager';
+import type { dataTypes } from '../contentManager';
+import contentManager from '../contentManager';
 
 class Background {
 	private _document: dataTypes['background'];

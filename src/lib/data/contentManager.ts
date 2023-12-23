@@ -9,10 +9,10 @@ import {
 	skill as skillSchema,
 	source as sourceSchema,
 } from 'pf2ools-schema';
-import { derived, get, type Writable } from 'svelte/store';
+import { derived, get, type Readable, type Writable } from 'svelte/store';
 import type { z } from 'zod';
-import BackgroundClass from './backgroundClass';
-import SourceClass from './sourceClass';
+import BackgroundClass from './classes/backgroundClass';
+import SourceClass from './classes/sourceClass';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { condition as conditionData } from './pf2ools-data/bundles/byDatatype/core/condition.json' assert { type: 'json' };
 import { divineIntercession as divineIntercessionData } from './pf2ools-data/bundles/byDatatype/core/divineIntercession.json' assert { type: 'json' };
@@ -100,7 +100,11 @@ class ContentManager {
 		return get(this.background);
 	}
 	get background() {
-		return derivedContent(this.core.background, backgroundSchema, ContentManager.backgroundClass);
+		return derivedContent(
+			this.core.background,
+			backgroundSchema,
+			ContentManager.backgroundClass
+		) as Readable<classTypes['background'][]>;
 	}
 	//#endregion
 
@@ -111,7 +115,9 @@ class ContentManager {
 		return get(this.source);
 	}
 	get source() {
-		return derivedContent(this.core.source, sourceSchema, ContentManager.sourceClass);
+		return derivedContent(this.core.source, sourceSchema, ContentManager.sourceClass) as Readable<
+			classTypes['source'][]
+		>;
 	}
 	//#endregion
 }
@@ -122,8 +128,8 @@ function derivedContent<T extends keyof classTypes>(
 	contentClass: classConstructorTypes[T]
 ) {
 	return derived(contentManager.homebrew, ($homebrew) => {
-		const homebrewsWithContent = $homebrew.filter((data) => data[content[0].type] !== undefined);
-		const homebrewContent = homebrewsWithContent.map((data) => data[content[0].type]).flat();
+		const homebrewWithContent = $homebrew.filter((data) => data[content[0].type] !== undefined);
+		const homebrewContent = homebrewWithContent.map((data) => data[content[0].type]).flat();
 
 		type error = { data: dataTypes[T]; success: false; zodErrors: z.ZodIssue[] };
 

@@ -1,4 +1,4 @@
-import type { dataTypes } from './contentManager';
+import type { dataTypes } from '../contentManager';
 // import contentManager from './contentManager';
 
 class Source {
