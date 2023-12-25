@@ -27,6 +27,10 @@ class HomebrewSource {
 	get title() {
 		return this.fullTitle;
 	}
+
+	get url() {
+		return this.sourceUrl + '/' + this.path;
+	}
 }
 
 export default HomebrewSource;

@@ -5,14 +5,6 @@
 	import { joinConjunct } from '$lib/utils';
 	const { homebrew, homebrewIndex, fetchHomebrew } = contentManager;
 
-	function URLtoTitle(url: string) {
-		return url
-			.replace(/http(s|):\/\//g, '')
-			.split('/')
-			.slice(1)
-			.join('/');
-	}
-
 	let selected: classTypes['homebrewSource'];
 
 	const columns = [
@@ -28,6 +20,19 @@
 			span: -1, // -1 = fill remaining space, split between all -1s
 		},
 	];
+
+	function addUrlToHomebrew(url: string) {
+		fetch(url).then((res) => {
+			res.json().then((data) => {
+				// TODO: Notify
+				// TODO: Parse with _statblock type
+				homebrew.update((hb) => {
+					hb.push(data);
+					return hb;
+				});
+			});
+		});
+	}
 </script>
 
 <svelte:head>
@@ -85,14 +90,17 @@
 						</p>
 					</div>
 					<div class="grid grid-cols-3 gap-1 text-center">
-						<button class="btn-sm rounded-token border-token border-surface-500-400-token">
+						<button
+							class="btn-sm rounded-token border-token border-surface-500-400-token"
+							on:click={() => addUrlToHomebrew(selected.url)}
+						>
 							Download
 						</button>
 						<button class="btn-sm rounded-token border-token border-surface-500-400-token">
-							Enable
+							Disable / Enable
 						</button>
 						<a
-							href={selected.sourceUrl + '/' + selected.path}
+							href={selected.url}
 							target="_blank"
 							class="btn-sm rounded-token border-token border-surface-500-400-token flex items-center justify-center"
 						>

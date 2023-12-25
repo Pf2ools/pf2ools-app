@@ -145,6 +145,7 @@ class ContentManager {
 				.filter((source) => Object.keys(source).length > 0) as classTypes['homebrewSource'][]
 		).map((source) => new HomebrewSourceClass(source));
 	}
+
 	get _homebrew() {
 		return get(this.homebrew);
 	}
