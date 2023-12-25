@@ -1,4 +1,4 @@
-import { /*contentManager,*/ type dataTypes } from '$lib';
+import { type dataTypes } from '$lib/data/contentManager';
 
 class RelicGift {
 	private _document: dataTypes['relicGift'];

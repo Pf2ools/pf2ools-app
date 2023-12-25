@@ -1,4 +1,4 @@
-import { contentManager, type dataTypes } from '$lib';
+import contentManager, { type dataTypes } from '$lib/data/contentManager';
 
 class Background {
 	private _document: dataTypes['background'];

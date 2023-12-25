@@ -1,4 +1,5 @@
-import type { settings, contentManager } from '$lib';
+import type { settings } from '$lib/settings';
+import type contentManager from '$lib/data/contentManager';
 
 declare global {
 	// preserve any customizations you have here

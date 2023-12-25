@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { contentManager, settings } from '$lib';
+	import { settings } from '$lib/settings';
+	import contentManager, { type classTypes } from '$lib/data/contentManager';
 	import ItemList from '$lib/components/ItemList.svelte';
 	const { homebrew, homebrewIndex, fetchHomebrew } = contentManager;
 

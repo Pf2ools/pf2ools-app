@@ -3,7 +3,7 @@
 	import 'iconify-icon';
 	import Navigation from '$lib/components/Navigation.svelte';
 	import { onNavigate } from '$app/navigation';
-	import { settings } from '$lib';
+	import { settings } from '$lib/settings';
 	import { slide } from 'svelte/transition';
 
 	// Floating UI for Popups

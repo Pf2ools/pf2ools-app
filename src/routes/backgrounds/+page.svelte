@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { settings } from '$lib';
+	import { settings } from '$lib/settings';
 	import ItemList from '$lib/components/ItemList.svelte';
 	import cm, { type classTypes } from '$lib/data/contentManager';
 	import type { columnType } from '$lib/components/ItemList.svelte';

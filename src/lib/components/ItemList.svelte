@@ -14,7 +14,8 @@
 </script>
 
 <script lang="ts">
-	import { settings, type classTypes } from '$lib';
+	import { settings } from '$lib/settings';
+	import type { classTypes } from '$lib/data/contentManager';
 	export let items: classTypes[keyof classTypes][] = [];
 	export let selected = items[0];
 	export let columns: columnType<any>[];

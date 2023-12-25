@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { LightSwitch, ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
-	import { settings } from '$lib';
+	import { settings } from '$lib/settings';
 </script>
 
 <svelte:head>

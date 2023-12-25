@@ -1,4 +1,4 @@
-import { /*contentManager,*/ type dataTypes } from '$lib';
+import { type dataTypes } from '$lib/data/contentManager';
 
 class Event {
 	private _document: dataTypes['event'];
