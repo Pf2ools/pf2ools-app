@@ -155,8 +155,10 @@
 					<div data-popup={anchor.name}>
 						<div
 							class="card flex flex-col
-							rounded-bl-none [&_a:first-child]:rounded-bl-none
-							sm:rounded-tl-none [&_a:first-child]:sm:rounded-tl-none sm:rounded-bl-token
+							sm:rounded-tl-none
+							sm:[&_a:first-child]:rounded-tl-none
+							rounded-bl-none
+							[&_a:first-child]:rounded-bl-none
 							[&_a:not(:last-child)]:border-b"
 						>
 							{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
