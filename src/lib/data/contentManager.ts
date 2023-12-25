@@ -8,11 +8,9 @@ import {
 	relicGift as relicGiftSchema,
 	skill as skillSchema,
 	source as sourceSchema,
-	license as licenseSchema,
-	sourceGroup as sourceGroupSchema,
-	bySource as bySourceSchema,
 	domain as domainSchema,
-	homebrewSources as homebrewSourcesSchema,
+	bySource as bySourceSchema,
+	homebrewSources as homebrewSourcesIndexSchema,
 } from 'pf2ools-schema';
 import { derived, get, type Readable, type Writable } from 'svelte/store';
 import type { z } from 'zod';
@@ -32,6 +30,7 @@ import EventClass from './classes/eventClass';
 import RelicGiftClass from './classes/relicGiftClass';
 import SkillClass from './classes/skillClass';
 import HomebrewSourceClass from './classes/homebrewSourceClass';
+import DomainClass from './classes/domainClass';
 
 export interface dataTypes {
 	background: z.infer<typeof backgroundSchema>;
@@ -41,11 +40,10 @@ export interface dataTypes {
 	event: z.infer<typeof eventSchema>;
 	relicGift: z.infer<typeof relicGiftSchema>;
 	skill: z.infer<typeof skillSchema>;
-	homebrewSource: z.infer<typeof homebrewSourcesSchema>;
-	license: z.infer<typeof licenseSchema>;
-	sourceGroup: z.infer<typeof sourceGroupSchema>;
-	bySource: z.infer<typeof bySourceSchema>;
 	domain: z.infer<typeof domainSchema>;
+	homebrewSourceIndex: z.infer<typeof homebrewSourcesIndexSchema>;
+	homebrewSource: Extract<z.infer<typeof homebrewSourcesIndexSchema>[string], unknown>;
+	bySource: z.infer<typeof bySourceSchema>;
 }
 
 export interface classTypes {
@@ -57,17 +55,10 @@ export interface classTypes {
 	relicGift: RelicGiftClass;
 	skill: SkillClass;
 	homebrewSource: HomebrewSourceClass;
+	domain: DomainClass;
 }
 
-export interface dataClassTypes {
-	background: classTypes['background'];
-	source: classTypes['source'];
-	condition: classTypes['condition'];
-	divineIntercession: classTypes['divineIntercession'];
-	event: classTypes['event'];
-	relicGift: classTypes['relicGift'];
-	skill: classTypes['skill'];
-}
+export type dataClassTypes = Omit<dataTypes, 'homebrewSourceIndex' | 'homebrewSource' | 'bySource'>;
 
 export interface classConstructorTypes {
 	background: typeof BackgroundClass;
@@ -78,7 +69,13 @@ export interface classConstructorTypes {
 	relicGift: typeof RelicGiftClass;
 	skill: typeof SkillClass;
 	homebrewSource: typeof HomebrewSourceClass;
+	domain: typeof DomainClass;
 }
+
+export type dataClassConstructorTypes = Omit<
+	classConstructorTypes,
+	'homebrewSourceIndex' | 'homebrewSource'
+>;
 
 class ContentManager {
 	public homebrewIndex: Writable<string[]>;
@@ -115,37 +112,38 @@ class ContentManager {
 
 	async fetchHomebrew(): Promise<classTypes['homebrewSource'][]> {
 		return (
-			await Promise.all(
-				get(contentManager.homebrewIndex).map(async (url) => {
-					const fullUrl = `${url}/indexes/homebrewSources.json`;
-					const response = await fetch(`${fullUrl}`);
-					if (response.ok) {
-						if (dev) console.log(`Fetching homebrew index from:\n${fullUrl}`);
-						const homebrewSources = await response.json();
-						const parsedHomebrewSources = homebrewSourcesSchema.safeParse(homebrewSources);
+			(
+				await Promise.all(
+					get(contentManager.homebrewIndex).map(async (url) => {
+						const fullUrl = `${url}/indexes/homebrewSources.json`;
+						const response = await fetch(`${fullUrl}`);
+						if (response.ok) {
+							if (dev) console.log(`Fetching homebrew index from:\n${fullUrl}`);
+							const homebrewSources = await response.json();
+							const parsedHomebrewSources = homebrewSourcesIndexSchema.safeParse(homebrewSources);
 
-						if (parsedHomebrewSources.success) {
-							return Object.keys(parsedHomebrewSources.data).map((key) => {
-								parsedHomebrewSources.data[key].sourceUrl ??= url;
-								return parsedHomebrewSources.data[key];
-							});
+							if (parsedHomebrewSources.success) {
+								return Object.keys(parsedHomebrewSources.data).map((key) => {
+									parsedHomebrewSources.data[key].sourceUrl ??= url;
+									return parsedHomebrewSources.data[key];
+								});
+							} else {
+								console.error(
+									`Homebrew index at ${fullUrl} failed validation!`,
+									parsedHomebrewSources.error
+								);
+								return {};
+							}
 						} else {
-							console.error(
-								`Homebrew index at ${fullUrl} failed validation!`,
-								parsedHomebrewSources.error
-							);
+							console.error(`${response.status} ${response.statusText}`);
 							return {};
 						}
-					} else {
-						console.error(`${response.status} ${response.statusText}`);
-						return {};
-					}
-				})
+					})
+				)
 			)
-		)
-			.flat()
-			.filter((source) => Object.keys(source).length > 0)
-			.map((source) => new HomebrewSourceClass(source));
+				.flat()
+				.filter((source) => Object.keys(source).length > 0) as classTypes['homebrewSource'][]
+		).map((source) => new HomebrewSourceClass(source));
 	}
 	get _homebrew() {
 		return get(this.homebrew);
@@ -268,7 +266,7 @@ class ContentManager {
 function derivedContent<T extends keyof dataClassTypes>(
 	content: dataTypes[T][],
 	schema: z.ZodSchema<unknown>,
-	contentClass: classConstructorTypes[T]
+	contentClass: dataClassConstructorTypes[T] // If this errors, its because you are missing a class version of some data format, ex. "domain" not having a class Domain {}
 ) {
 	return derived(contentManager.homebrew, ($homebrew) => {
 		const homebrewWithContent = $homebrew.filter((data) => data[content[0].type] !== undefined);
