@@ -12,34 +12,7 @@
 			.join('/');
 	}
 
-	function flatFetchHomebrew() {
-		return fetchHomebrew().then((index) => {
-			console.log('Original Index', index);
-			// turn an array of objects into an object with same keys as its sub-objects
-			const obj = {};
-
-			index.forEach((item) => {
-				Object.keys(item).forEach((key) => {
-					if (key === 'source') return;
-					obj[key] = { ...item[key], source: item.source };
-				});
-			});
-
-			const sources = [];
-			Object.keys(obj).forEach((homebrew) => {
-				sources.push({
-					type: 'homebrewSource',
-					id: homebrew,
-					title: obj[homebrew].fullTitle,
-					data: obj[homebrew],
-				});
-			});
-
-			return sources;
-		});
-	}
-
-	let selected = null;
+	let selected: classTypes['homebrewSource'];
 
 	const columns = [
 		{
@@ -74,7 +47,7 @@
 		class="w-full h-[calc(var(--slotHeight)_-_2.75rem)] grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-none gap-2"
 	>
 		<div style="--listHeight: calc(var(--slotHeight) - 2.75rem)">
-			{#await flatFetchHomebrew()}
+			{#await fetchHomebrew()}
 				<p>Loading Homebrew Indexes...</p>
 			{:then items}
 				<ItemList bind:selected {items} {columns} />
@@ -88,7 +61,7 @@
 					<div>aaaaaaaaaa</div>
 					<hr />
 					<p>
-						{JSON.stringify(selected.data)}
+						{JSON.stringify(selected, null, '\t')}
 					</p>
 				{/if}
 			</div>

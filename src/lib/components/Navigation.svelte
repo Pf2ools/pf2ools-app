@@ -154,12 +154,14 @@
 					</button>
 					<div data-popup={anchor.name}>
 						<div
-							class="card flex flex-col
+							class="card flex flex-col [&_a:not(:last-child)]:border-b
+							sm:rounded-bl-token
 							sm:rounded-tl-none
 							sm:[&_a:first-child]:rounded-tl-none
 							rounded-bl-none
+							rounded-tl-token
 							[&_a:first-child]:rounded-bl-none
-							[&_a:not(:last-child)]:border-b"
+							"
 						>
 							{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
 								<a
@@ -208,6 +210,7 @@
 					state: ({ state }) => {
 						if (state) {
 							console.log(document.querySelector('#searchInput'));
+							// @ts-expect-error - This is a valid element, but I cannot use TS inside of a Svelte component yet to tell so.
 							setTimeout(() => document.querySelector('#searchInput')?.focus(), 100);
 						}
 					},

@@ -1,4 +1,4 @@
-import contentManager, { type dataTypes } from '$lib/data/contentManager';
+import { type dataTypes } from '$lib/data/contentManager';
 
 class Condition {
 	private _document: dataTypes['condition'];
