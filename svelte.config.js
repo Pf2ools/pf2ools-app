@@ -4,7 +4,13 @@ import preprocess from 'svelte-preprocess';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte'],
+
+	compilerOptions: {
+		enableSourcemap: true,
+	},
+
 	preprocess: preprocess({
+		postcss: true,
 		sourceMap: true,
 		aliases: [],
 	}),
