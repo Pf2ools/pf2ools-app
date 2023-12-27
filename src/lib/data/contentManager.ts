@@ -149,7 +149,7 @@ class ContentManager {
 		return get(this.background);
 	}
 	get background() {
-		return derivedContent(this.core.background, ContentManager.backgroundClass);
+		return derivedContent('background', this.core.background, ContentManager.backgroundClass);
 	}
 	//#endregion
 
@@ -160,7 +160,7 @@ class ContentManager {
 		return get(this.source);
 	}
 	get source() {
-		return derivedContent(this.core.source, ContentManager.sourceClass);
+		return derivedContent('source', this.core.source, ContentManager.sourceClass);
 	}
 	//#endregion
 
@@ -172,7 +172,7 @@ class ContentManager {
 	}
 
 	get condition() {
-		return derivedContent(this.core.condition, ContentManager.conditionClass);
+		return derivedContent('condition', this.core.condition, ContentManager.conditionClass);
 	}
 
 	//#endregion
@@ -185,7 +185,11 @@ class ContentManager {
 	}
 
 	get divineIntercession() {
-		return derivedContent(this.core.divineIntercession, ContentManager.divineIntercessionClass);
+		return derivedContent(
+			'divineIntercession',
+			this.core.divineIntercession,
+			ContentManager.divineIntercessionClass
+		);
 	}
 
 	//#endregion
@@ -198,7 +202,7 @@ class ContentManager {
 	}
 
 	get event() {
-		return derivedContent(this.core.event, ContentManager.eventClass);
+		return derivedContent('event', this.core.event, ContentManager.eventClass);
 	}
 
 	//#endregion
@@ -211,7 +215,7 @@ class ContentManager {
 	}
 
 	get relicGift() {
-		return derivedContent(this.core.relicGift, ContentManager.relicGiftClass);
+		return derivedContent('relicGift', this.core.relicGift, ContentManager.relicGiftClass);
 	}
 
 	//#endregion
@@ -224,31 +228,34 @@ class ContentManager {
 	}
 
 	get skill() {
-		return derivedContent(this.core.skill, ContentManager.skillClass);
+		return derivedContent('skill', this.core.skill, ContentManager.skillClass);
 	}
 
 	//#endregion
 }
 
-// TODO: It would be nice if I didn't have to say "as classTypes[T][]" at the end of every getter.
-function derivedContent<T extends keyof dataTypes>(
+// TODO: Unfuck this, send help
+function derivedContent<T extends keyof classTypes>(
+	type: T,
 	content: dataTypes[T][],
-	contentClass: classConstructorTypes[T] // If this errors, it's because you are missing a class version of some data format, ex. "domain" not having a class Domain {}
+	contentClass: classConstructorTypes[T]
 ): Readable<classTypes[T][]> {
 	return derived(contentManager.homebrew, ($homebrew) => {
-		const homebrewSources = [...$homebrew.values()].filter(
-			(source) => source[content[0].type] !== undefined
-		);
-		const homebrewData = homebrewSources
-			.map((source) => source[content[0].type] ?? [])
-			.filter((statblock) => {
-				const parse = statblockSchema.safeParse(statblock);
-				if (!parse.success) console.error(parse.error);
-				return statblockSchema.safeParse(statblock).success;
-			}) as dataTypes[T][];
+		const homebrewSources = [...$homebrew.values()].filter((source) => source[type] !== undefined);
+		const homebrewData = homebrewSources.map(
+			(source) => source[type] ?? []
+		) as unknown as dataTypes[T][];
 
-		// @ts-expect-error - The dataTypes[T] are being reduced to "nothing" and I can't be bothered to fix it right now
-		return [...content, ...homebrewData].map((data) => new contentClass(data)) as classTypes[T][];
+		const parsed = homebrewData.filter((statblock) => {
+			const parse = statblockSchema.safeParse(statblock);
+			if (!parse.success) console.error(parse.error);
+			return statblockSchema.safeParse(statblock).success;
+		});
+
+		const homebrew = parsed.map((statblock) => new contentClass(statblock));
+		const core = content.map((statblock) => new contentClass(statblock));
+
+		return [...homebrew, ...core];
 	});
 }
 
