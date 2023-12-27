@@ -9,8 +9,8 @@ import {
 	skill as skillSchema,
 	source as sourceSchema,
 	domain as domainSchema,
-	bySource as bySourceSchema,
-	homebrewSources as homebrewSourcesIndexSchema,
+	statblock as statblockSchema,
+	bySource as contentWithSourceSchema,
 } from 'pf2ools-schema';
 import { derived, get, type Readable, type Writable } from 'svelte/store';
 import type { z } from 'zod';
@@ -29,7 +29,6 @@ import DivineIntercessionClass from './classes/divineIntercessionClass';
 import EventClass from './classes/eventClass';
 import RelicGiftClass from './classes/relicGiftClass';
 import SkillClass from './classes/skillClass';
-import HomebrewSourceClass from './classes/homebrewSourceClass';
 import DomainClass from './classes/domainClass';
 
 export interface dataTypes {
@@ -41,9 +40,6 @@ export interface dataTypes {
 	relicGift: z.infer<typeof relicGiftSchema>;
 	skill: z.infer<typeof skillSchema>;
 	domain: z.infer<typeof domainSchema>;
-	homebrewSourceIndex: z.infer<typeof homebrewSourcesIndexSchema>;
-	homebrewSource: Extract<z.infer<typeof homebrewSourcesIndexSchema>[string], unknown>;
-	bySource: z.infer<typeof bySourceSchema>;
 }
 
 export interface classTypes {
@@ -54,11 +50,8 @@ export interface classTypes {
 	event: EventClass;
 	relicGift: RelicGiftClass;
 	skill: SkillClass;
-	homebrewSource: HomebrewSourceClass;
 	domain: DomainClass;
 }
-
-export type dataClassTypes = Omit<dataTypes, 'homebrewSourceIndex' | 'homebrewSource' | 'bySource'>;
 
 export interface classConstructorTypes {
 	background: typeof BackgroundClass;
@@ -68,18 +61,12 @@ export interface classConstructorTypes {
 	event: typeof EventClass;
 	relicGift: typeof RelicGiftClass;
 	skill: typeof SkillClass;
-	homebrewSource: typeof HomebrewSourceClass;
 	domain: typeof DomainClass;
 }
 
-export type dataClassConstructorTypes = Omit<
-	classConstructorTypes,
-	'homebrewSourceIndex' | 'homebrewSource'
->;
-
 class ContentManager {
-	public homebrewIndex: Writable<string[]>;
-	public homebrew: Writable<dataTypes['bySource'][]>;
+	public homebrew: Writable<Map<string, z.infer<typeof contentWithSourceSchema>>>;
+	public homebrewIndexes: Writable<string[]>;
 	public core: {
 		background: dataTypes['background'][];
 		source: dataTypes['source'][];
@@ -102,15 +89,15 @@ class ContentManager {
 			skill: Object.freeze(skillData) as unknown as dataTypes['skill'][],
 		});
 
-		this.homebrew = localStorageStore('homebrew', []);
-		this.homebrewIndex = localStorageStore('homebrewIndex', [
+		this.homebrew = localStorageStore('homebrew', new Map());
+		this.homebrewIndexes = localStorageStore('homebrewIndex', [
 			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master',
 		]);
 
 		if (dev) console.log(this);
 	}
 
-	async fetchHomebrew(): Promise<classTypes['homebrewSource'][]> {
+	/* async fetchHomebrew(): Promise<classTypes['homebrewSource'][]> {
 		return (
 			(
 				await Promise.all(
@@ -124,7 +111,7 @@ class ContentManager {
 
 							if (parsedHomebrewSources.success) {
 								return Object.keys(parsedHomebrewSources.data).map((key) => {
-									parsedHomebrewSources.data[key].sourceUrl ??= url;
+									parsedHomebrewSources.data[key].sourceURL ??= url;
 									return parsedHomebrewSources.data[key];
 								});
 							} else {
@@ -145,13 +132,14 @@ class ContentManager {
 				.filter((source) => Object.keys(source).length > 0) as classTypes['homebrewSource'][]
 		).map((source) => new HomebrewSourceClass(source));
 	}
+ */
 
 	get _homebrew() {
 		return get(this.homebrew);
 	}
 
-	get _homebrewIndex() {
-		return get(this.homebrewIndex);
+	get _homebrewIndexes() {
+		return get(this.homebrewIndexes);
 	}
 
 	//#region Background
@@ -161,11 +149,7 @@ class ContentManager {
 		return get(this.background);
 	}
 	get background() {
-		return derivedContent(
-			this.core.background,
-			backgroundSchema,
-			ContentManager.backgroundClass
-		) as Readable<classTypes['background'][]>;
+		return derivedContent(this.core.background, ContentManager.backgroundClass);
 	}
 	//#endregion
 
@@ -176,9 +160,7 @@ class ContentManager {
 		return get(this.source);
 	}
 	get source() {
-		return derivedContent(this.core.source, sourceSchema, ContentManager.sourceClass) as Readable<
-			classTypes['source'][]
-		>;
+		return derivedContent(this.core.source, ContentManager.sourceClass);
 	}
 	//#endregion
 
@@ -190,11 +172,7 @@ class ContentManager {
 	}
 
 	get condition() {
-		return derivedContent(
-			this.core.condition,
-			conditionSchema,
-			ContentManager.conditionClass
-		) as Readable<classTypes['condition'][]>;
+		return derivedContent(this.core.condition, ContentManager.conditionClass);
 	}
 
 	//#endregion
@@ -207,11 +185,7 @@ class ContentManager {
 	}
 
 	get divineIntercession() {
-		return derivedContent(
-			this.core.divineIntercession,
-			divineIntercessionSchema,
-			ContentManager.divineIntercessionClass
-		) as Readable<classTypes['divineIntercession'][]>;
+		return derivedContent(this.core.divineIntercession, ContentManager.divineIntercessionClass);
 	}
 
 	//#endregion
@@ -224,9 +198,7 @@ class ContentManager {
 	}
 
 	get event() {
-		return derivedContent(this.core.event, eventSchema, ContentManager.eventClass) as Readable<
-			classTypes['event'][]
-		>;
+		return derivedContent(this.core.event, ContentManager.eventClass);
 	}
 
 	//#endregion
@@ -239,11 +211,7 @@ class ContentManager {
 	}
 
 	get relicGift() {
-		return derivedContent(
-			this.core.relicGift,
-			relicGiftSchema,
-			ContentManager.relicGiftClass
-		) as Readable<classTypes['relicGift'][]>;
+		return derivedContent(this.core.relicGift, ContentManager.relicGiftClass);
 	}
 
 	//#endregion
@@ -256,57 +224,31 @@ class ContentManager {
 	}
 
 	get skill() {
-		return derivedContent(this.core.skill, skillSchema, ContentManager.skillClass) as Readable<
-			classTypes['skill'][]
-		>;
+		return derivedContent(this.core.skill, ContentManager.skillClass);
 	}
 
 	//#endregion
 }
 
-function derivedContent<T extends keyof dataClassTypes>(
+// TODO: It would be nice if I didn't have to say "as classTypes[T][]" at the end of every getter.
+function derivedContent<T extends keyof dataTypes>(
 	content: dataTypes[T][],
-	schema: z.ZodSchema<unknown>,
-	contentClass: dataClassConstructorTypes[T] // If this errors, its because you are missing a class version of some data format, ex. "domain" not having a class Domain {}
-) {
+	contentClass: classConstructorTypes[T] // If this errors, it's because you are missing a class version of some data format, ex. "domain" not having a class Domain {}
+): Readable<classTypes[T][]> {
 	return derived(contentManager.homebrew, ($homebrew) => {
-		const homebrewWithContent = $homebrew.filter((data) => data[content[0].type] !== undefined);
-		const homebrewContent = homebrewWithContent.map((data) => data[content[0].type]).flat();
-
-		type error = { data: dataTypes[T]; success: false; zodErrors: z.ZodIssue[] };
-
-		const parsedContent = homebrewContent.map((bg) => {
-			const parsed = schema.safeParse(bg);
-			if (parsed.success) {
-				return parsed;
-			} else {
-				return {
-					data: bg,
-					success: false,
-					zodErrors: parsed.error.errors,
-				};
-			}
-		});
-
-		const safeHomebrewContent = parsedContent.filter((bg) => bg.success).map((bg) => bg.data);
-		const unsafeContent = parsedContent.filter((bg) => !bg.success) as unknown as error[];
-
-		if (unsafeContent.length > 0) {
-			console.warn('Some content have failed validation!', unsafeContent);
-			unsafeContent.forEach((bg) => {
-				console.warn(
-					`The following object failed schema validation!${bg.zodErrors
-						.map((err) => `\n\t"${err.message}" at ${err.path.join('.')}`)
-						.join('')}`,
-					unsafeContent
-				);
-			});
-		}
-
-		return ([...content, ...safeHomebrewContent] as dataTypes[T][]).map(
-			// @ts-expect-error TODO: I hate TypeScript I hate TypeScript I hate TypeScript
-			(bg) => new contentClass(bg)
+		const homebrewSources = [...$homebrew.values()].filter(
+			(source) => source[content[0].type] !== undefined
 		);
+		const homebrewData = homebrewSources
+			.map((source) => source[content[0].type] ?? [])
+			.filter((statblock) => {
+				const parse = statblockSchema.safeParse(statblock);
+				if (!parse.success) console.error(parse.error);
+				return statblockSchema.safeParse(statblock).success;
+			}) as dataTypes[T][];
+
+		// @ts-expect-error - The dataTypes[T] are being reduced to "nothing" and I can't be bothered to fix it right now
+		return [...content, ...homebrewData].map((data) => new contentClass(data)) as classTypes[T][];
 	});
 }
 
