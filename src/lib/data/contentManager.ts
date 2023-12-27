@@ -252,10 +252,7 @@ function derivedContent<T extends keyof classTypes>(
 			return statblockSchema.safeParse(statblock).success;
 		});
 
-		const homebrew = parsed.map((statblock) => new contentClass(statblock));
-		const core = content.map((statblock) => new contentClass(statblock));
-
-		return [...homebrew, ...core];
+		return [...parsed, ...content].map((statblock) => new contentClass(statblock));
 	});
 }
 
