@@ -242,9 +242,7 @@ function derivedContent<T extends keyof classTypes>(
 ): Readable<classTypes[T][]> {
 	return derived(contentManager.homebrew, ($homebrew) => {
 		const homebrewSources = [...$homebrew.values()].filter((source) => source[type] !== undefined);
-		const homebrewData = homebrewSources.map(
-			(source) => source[type] ?? []
-		) as unknown as dataTypes[T][];
+		const homebrewData = homebrewSources.map((source) => source[type]);
 
 		const parsed = homebrewData.filter((statblock) => {
 			const parse = statblockSchema.safeParse(statblock);
