@@ -5,6 +5,8 @@
 	import { onNavigate } from '$app/navigation';
 	import { settings } from '$lib/settings';
 	import { slide } from 'svelte/transition';
+	import contentManager from '$lib/data/contentManager';
+	contentManager; // For debugging, does nothing but adds the contentManager to the window object
 
 	// Floating UI for Popups
 	import { AppShell, storePopup } from '@skeletonlabs/skeleton';

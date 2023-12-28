@@ -9,10 +9,10 @@ import {
 	skill as skillSchema,
 	source as sourceSchema,
 	domain as domainSchema,
-	statblock as statblockSchema,
+	data as dataSchema,
 	bySource as contentWithSourceSchema,
 } from 'pf2ools-schema';
-import { derived, get, type Readable, type Writable } from 'svelte/store';
+import { derived, get, type Writable } from 'svelte/store';
 import type { z } from 'zod';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { condition as conditionData } from './pf2ools-data/bundles/byDatatype/core/condition.json' assert { type: 'json' };
@@ -142,6 +142,22 @@ class ContentManager {
 		return get(this.homebrewIndexes);
 	}
 
+	getHomebrewByType<T extends keyof dataTypes>(type: T, homebrew = this._homebrew) {
+		const homebrewSources = [...homebrew.values()].filter((source) => source[type] !== undefined);
+		const homebrewData = homebrewSources.map((source) => source[type]).flat();
+
+		const parsed = homebrewData.filter((statblock) => {
+			const parse = dataSchema.safeParse(statblock);
+			if (!parse.success) {
+				console.error(parse.error);
+				console.log(statblock);
+			}
+			return parse.success;
+		});
+
+		return parsed as dataTypes[T][];
+	}
+
 	//#region Background
 	static backgroundClass = BackgroundClass;
 
@@ -149,7 +165,11 @@ class ContentManager {
 		return get(this.background);
 	}
 	get background() {
-		return derivedContent('background', this.core.background, ContentManager.backgroundClass);
+		return derived(this.homebrew, ($homebrew) =>
+			[...this.getHomebrewByType('background', $homebrew), ...this.core.background].map(
+				(background) => new ContentManager.backgroundClass(background)
+			)
+		);
 	}
 	//#endregion
 
@@ -160,7 +180,11 @@ class ContentManager {
 		return get(this.source);
 	}
 	get source() {
-		return derivedContent('source', this.core.source, ContentManager.sourceClass);
+		return derived(this.homebrew, ($homebrew) =>
+			[...this.getHomebrewByType('source', $homebrew), ...this.core.source].map(
+				(source) => new ContentManager.sourceClass(source)
+			)
+		);
 	}
 	//#endregion
 
@@ -172,7 +196,11 @@ class ContentManager {
 	}
 
 	get condition() {
-		return derivedContent('condition', this.core.condition, ContentManager.conditionClass);
+		return derived(this.homebrew, ($homebrew) =>
+			[...this.getHomebrewByType('condition', $homebrew), ...this.core.condition].map(
+				(condition) => new ContentManager.conditionClass(condition)
+			)
+		);
 	}
 
 	//#endregion
@@ -185,10 +213,11 @@ class ContentManager {
 	}
 
 	get divineIntercession() {
-		return derivedContent(
-			'divineIntercession',
-			this.core.divineIntercession,
-			ContentManager.divineIntercessionClass
+		return derived(this.homebrew, ($homebrew) =>
+			[
+				...this.getHomebrewByType('divineIntercession', $homebrew),
+				...this.core.divineIntercession,
+			].map((divineIntercession) => new ContentManager.divineIntercessionClass(divineIntercession))
 		);
 	}
 
@@ -202,7 +231,11 @@ class ContentManager {
 	}
 
 	get event() {
-		return derivedContent('event', this.core.event, ContentManager.eventClass);
+		return derived(this.homebrew, ($homebrew) =>
+			[...this.getHomebrewByType('event', $homebrew), ...this.core.event].map(
+				(event) => new ContentManager.eventClass(event)
+			)
+		);
 	}
 
 	//#endregion
@@ -215,7 +248,11 @@ class ContentManager {
 	}
 
 	get relicGift() {
-		return derivedContent('relicGift', this.core.relicGift, ContentManager.relicGiftClass);
+		return derived(this.homebrew, ($homebrew) =>
+			[...this.getHomebrewByType('relicGift', $homebrew), ...this.core.relicGift].map(
+				(relicGift) => new ContentManager.relicGiftClass(relicGift)
+			)
+		);
 	}
 
 	//#endregion
@@ -228,30 +265,14 @@ class ContentManager {
 	}
 
 	get skill() {
-		return derivedContent('skill', this.core.skill, ContentManager.skillClass);
+		return derived(this.homebrew, ($homebrew) =>
+			[...this.getHomebrewByType('skill', $homebrew), ...this.core.skill].map(
+				(skill) => new ContentManager.skillClass(skill)
+			)
+		);
 	}
 
 	//#endregion
-}
-
-// TODO: Unfuck this, send help
-function derivedContent<T extends keyof classTypes>(
-	type: T,
-	content: dataTypes[T][],
-	contentClass: classConstructorTypes[T]
-): Readable<classTypes[T][]> {
-	return derived(contentManager.homebrew, ($homebrew) => {
-		const homebrewSources = [...$homebrew.values()].filter((source) => source[type] !== undefined);
-		const homebrewData = homebrewSources.map((source) => source[type]);
-
-		const parsed = homebrewData.filter((statblock) => {
-			const parse = statblockSchema.safeParse(statblock);
-			if (!parse.success) console.error(parse.error);
-			return statblockSchema.safeParse(statblock).success;
-		});
-
-		return [...parsed, ...content].map((statblock) => new contentClass(statblock));
-	});
 }
 
 const contentManager = new ContentManager();
