@@ -29,7 +29,7 @@
 			key: 'sourceShort',
 			sortable: (a: bg, b: bg) => a.sourceShort.localeCompare(b.sourceShort),
 			parser: (item: bg) => item.sourceShort,
-			classes: 'text-center',
+			classes: 'text-center text-xs pt-0.5',
 			span: 2,
 		},
 		{

@@ -112,7 +112,7 @@
 			</div>
 		</div>
 		<div
-			class="pl-1 pb-0.5 grid grid-cols-24 bg-surface-100-800-token text-sm border-b border-surface-500"
+			class="pl-0.5 pb-0.5 grid grid-cols-24 bg-surface-100-800-token text-sm border-b border-surface-500"
 		>
 			{#each columns
 				.filter((col) => col.enabled)
@@ -151,7 +151,7 @@
 		{#each filteredItems as item}
 			<button
 				id="row"
-				class="pl-1 grid grid-cols-24 w-full {$settings.listSize} hover:!variant-ghost-primary focus:!variant-ghost-primary"
+				class="pl-0.5 grid grid-cols-24 w-full {$settings.listSize} hover:!variant-ghost-primary focus:!variant-ghost-primary"
 				class:homebrew-shadow={!item?.official}
 				class:secondary-shadow={item?.secondaryContent}
 				class:!variant-soft-primary={selected === item}
