@@ -43,6 +43,8 @@
 	class:container={!$settings.wideMode}
 	class:px-2={$settings.wideMode}
 >
+	<!--
+
 	<div class="w-full mb-1">
 		<button class="btn py-2 border-token">buttons</button>
 		<button class="btn py-2 border-token">go</button>
@@ -57,12 +59,14 @@
 		<button class="btn py-2 border-token">be</button>
 		<button class="btn py-2 border-token">for</button>
 	</div>
-	<div
-		class="w-full h-[calc(var(--slotHeight)_-_2.75rem)] grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-none gap-2"
-	>
-		<div style="--listHeight: calc(var(--slotHeight) - 2.75rem)">
-			<ItemList bind:selected items={$homebrewSources} {columns} />
-		</div>
+
+		h-[calc(var(--slotHeight)_-_2.75rem)]
+	-->
+
+	<div class="w-full h-slot grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-none gap-2">
+		<!-- <div style="--listHeight: calc(var(--slotHeight) - 2.75rem)"> -->
+		<ItemList bind:selected items={$homebrewSources} {columns} />
+		<!-- </div> -->
 		<div>
 			<div class="p-3 pb-1.5 card space-y-1">
 				{#if selected}
