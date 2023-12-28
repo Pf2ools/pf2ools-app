@@ -68,9 +68,7 @@ export interface classConstructorTypes {
 class ContentManager {
 	public homebrew: Writable<z.infer<typeof contentWithSourceSchema>[]>;
 	public homebrewIndexes: Writable<string[]>;
-	public homebrewSources: Writable<
-		Extract<z.infer<typeof homebrewSourcesSchema>[string], unknown>[]
-	>;
+	public homebrewSources: Writable<z.infer<typeof homebrewSourcesSchema>>;
 	public core: {
 		background: dataTypes['background'][];
 		source: dataTypes['source'][];
@@ -99,20 +97,63 @@ class ContentManager {
 			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master',
 		]);
 
-		if (dev) {
-			console.log(this);
-			this.homebrew.subscribe((homebrew) => console.log('%cHomebrew:', 'color: yellow', homebrew));
-			this.homebrewIndexes.subscribe((homebrewIndexes) =>
-				console.log('%cHomebrewIndexes:', 'color: yellow', homebrewIndexes)
-			);
-			this.homebrewSources.subscribe((homebrewSources) =>
-				console.log('%cHomebrewSources:', 'color: yellow', homebrewSources)
-			);
-		}
+		if (dev) console.log(this);
 	}
 
-	//#region Homebrew
+	//#region Utils
 
+	get brewIDs() {
+		return [
+			...new Set(
+				this._homebrew
+					.map((content) => Object.values(content))
+					.flat(2)
+					.flatMap((content) => ('source' in content ? content?.source?.ID : content?.ID))
+			),
+		];
+	}
+
+	get sourceByID() {
+		return new Map(this._source.map((source) => [source.ID, source]));
+	}
+
+	removeID(ID: string) {
+		this.homebrew.update((homebrew) =>
+			homebrew
+				.map((content) => {
+					this.removeIDFromObj(ID, content as z.infer<typeof contentWithSourceSchema>);
+					return content;
+				})
+				.filter((content) => Object.values(content).flat(2).length > 0)
+		);
+	}
+
+	/**
+	 * Removes all instances of an ID from the object's key's arrays ({ [key]: [{ ID: "bad" }] })
+	 */
+	removeIDFromObj(ID: string, obj: z.infer<typeof contentWithSourceSchema>) {
+		type keys = keyof z.infer<typeof contentWithSourceSchema>;
+		const keys = Object.keys(obj) as keys[];
+		keys.forEach((key) => {
+			const keyProp = obj[key];
+			if (Array.isArray(keyProp)) {
+				const filtered = keyProp.filter((item) => {
+					if ('source' in item) {
+						return item.source.ID !== ID;
+					}
+					return item.ID !== ID;
+				});
+
+				// @ts-expect-error - I know what I'm doing
+				obj[key] = filtered;
+			}
+		});
+		return obj;
+	}
+
+	//#endregion
+
+	//#region Homebrew
 	get _homebrew() {
 		return get(this.homebrew);
 	}
@@ -125,9 +166,30 @@ class ContentManager {
 		return get(this.homebrewSources);
 	}
 
-	addHomebrewSource(content: z.infer<typeof contentWithSourceSchema>) {
-		const parse = contentWithSourceSchema.safeParse(content);
+	addHomebrewSource(unsafeContent: z.infer<typeof contentWithSourceSchema>) {
+		const parse = contentWithSourceSchema.safeParse(unsafeContent);
 		if (parse.success) {
+			const content = parse.data;
+			const tbdIDs = content.source.map((source) => source.ID);
+			const dateConv = (date: string) => new Date(date).getTime();
+
+			tbdIDs.forEach((ID) => {
+				if (this.brewIDs.includes(ID)) {
+					if (dev) console.warn(`Homebrew with ID ${ID} already exists!`);
+					const offender = content.source.find((source) => source.ID === ID);
+					if (
+						dateConv(this.sourceByID.get(ID)!.data.modified) < dateConv(offender!.data.modified)
+					) {
+						if (dev)
+							console.warn('The existing homebrew is newer, removing from the incoming homebrew.');
+						this.removeIDFromObj(ID, content);
+					} else {
+						if (dev) console.warn('The incoming homebrew is newer, replacing existing brew.');
+						this.removeID(ID);
+					}
+				}
+			});
+
 			this.homebrew.update((homebrew) => [...homebrew, content]);
 			console.log(`Added the following homebrew:\n`, parse.data);
 			return true;
@@ -135,6 +197,10 @@ class ContentManager {
 			console.error(parse.error);
 			return false;
 		}
+	}
+
+	async clearHomebrew() {
+		this.homebrew.set([]);
 	}
 
 	getHomebrewByType<T extends keyof dataTypes>(type: T, homebrew = this._homebrew) {
@@ -153,23 +219,21 @@ class ContentManager {
 		return parsed as dataTypes[T][];
 	}
 
+	/**
+	 * Fetches the homebrew index(es) and adds ALL homebrew from them.
+	 * You need to hit it twice. Works explosively. Don't use it.
+	 */
 	async unleashTheHomebrew() {
-		this.fetchHomebrewIndex().then(() => {
-			this._homebrewSources.forEach((source) => {
-				const fullUrl = `${source.sourceURL}/${source.path}`;
+		await this.fetchHomebrewIndex();
 
-				fetch(fullUrl)
-					.then((response) => response.json())
-					.then((data) => {
-						const parse = contentWithSourceSchema.safeParse(data);
-						if (parse.success) {
-							this.addHomebrewSource(parse.data);
-						} else {
-							console.error(parse.error);
-						}
-					});
-			});
-		});
+		const unsubscribe = this.homebrewSources.subscribe(async (src) =>
+			src.forEach(async (source) => {
+				const fullUrl = `${source.sourceURL}/${source.path}`;
+				await this.addHomebrewFromUrl(fullUrl);
+			})
+		);
+
+		unsubscribe();
 	}
 
 	async fetchHomebrewIndex() {
@@ -184,16 +248,13 @@ class ContentManager {
 				const parsedHomebrewSources = homebrewSourcesSchema.safeParse(homebrewJSON);
 
 				if (parsedHomebrewSources.success) {
-					Object.keys(parsedHomebrewSources.data).forEach((key) => {
-						parsedHomebrewSources.data[key].sourceURL ??= url;
-						parsedHomebrewSources.data[key].ID = key;
+					const homebrewSources = parsedHomebrewSources.data.map((src) => {
+						src.sourceURL ??= url;
+						return src;
 					});
 
-					const homebrewSources = Object.keys(parsedHomebrewSources.data).map(
-						(key) => parsedHomebrewSources.data[key]
-					);
-
 					this.homebrewSources.update((srcs) => [...srcs, ...homebrewSources]);
+					console.log(`Added the following homebrew sources:\n`, homebrewSources);
 				} else {
 					console.error(
 						`Homebrew index at ${fullUrl} failed validation!`,
