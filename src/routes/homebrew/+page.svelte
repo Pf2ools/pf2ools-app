@@ -25,7 +25,7 @@
 	];
 
 	onMount(async () => {
-		await contentManager.fetchHomebrewIndex();
+		if ($homebrewSources.length === 0) await contentManager.fetchHomebrewIndex();
 		selected = $homebrewSources[0];
 	});
 
@@ -64,7 +64,7 @@
 		<div>
 			<div class="p-3 pb-1.5 card space-y-1">
 				{#if selected}
-					<h1 class="h2">{selected.title}</h1>
+					<h3 class="h3">{selected.title}</h3>
 					<hr />
 					<div class="grid grid-cols-3 text-center">
 						<div class="border-r-next p-1"><b>Released:</b> {selected.released}</div>
@@ -93,7 +93,7 @@
 							class="btn-sm rounded-token border-token border-surface-500-400-token disabled:opacity-50"
 							disabled={!selected.isInstalled}
 							class:variant-soft-error={selected.isInstalled}
-							on:click={() => selected.deleteFromHomebrew()}
+							on:click={() => (selected = selected) && selected.deleteFromHomebrew()}
 						>
 							Delete
 						</button>
