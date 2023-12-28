@@ -179,7 +179,7 @@ class ContentManager {
 					if (dev) console.warn(`Homebrew with ID ${ID} already exists!`);
 					const offender = content.source.find((source) => source.ID === ID);
 					if (
-						dateConvert(this.sourceByID.get(ID)!.data.modified) <
+						dateConvert(this.sourceByID.get(ID)!.data.modified) >
 						dateConvert(offender!.data.modified)
 					) {
 						if (dev)
