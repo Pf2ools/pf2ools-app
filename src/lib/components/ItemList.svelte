@@ -153,6 +153,7 @@
 				id="row"
 				class="pl-1 grid grid-cols-24 w-full {$settings.listSize} hover:!variant-ghost-primary focus:!variant-ghost-primary"
 				class:homebrew-shadow={!item?.official}
+				class:secondary-shadow={item?.secondaryContent}
 				class:!variant-soft-primary={selected === item}
 				class:active={selected === item}
 				on:click={() => (selected !== item ? (selected = item) : null)}

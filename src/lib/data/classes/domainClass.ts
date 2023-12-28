@@ -19,11 +19,16 @@ class Domain {
 	get title(): string {
 		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
 	}
-	get sourceData(): dataTypes['source'] {
-		return (contentManager._source.find((src) => src.ID === this.source.ID) ?? {
-			ID: 'unknown',
-			title: { full: 'Unknown', short: 'UNK' },
-		}) as dataTypes['source'];
+
+	get sourceData() {
+		return (
+			contentManager._source.find((src) => src.ID === this.source.ID) ?? {
+				ID: 'unknown',
+				title: { full: 'Unknown', short: 'UNK' },
+				official: false,
+				secondaryContent: false,
+			}
+		);
 	}
 
 	get sourceFull(): string {
@@ -35,7 +40,11 @@ class Domain {
 	}
 
 	get official(): boolean {
-		return this.sourceData.tags?.misc?.Official ?? false;
+		return this.sourceData.official ?? false;
+	}
+
+	get secondaryContent(): boolean {
+		return this.sourceData.secondaryContent ?? false;
 	}
 }
 

@@ -15,7 +15,11 @@ class Source {
 	}
 
 	get official(): boolean {
-		return this.tags?.misc?.Official ?? false;
+		return this.tags?.misc?.Official || this.data.publisher?.includes('Paizo') || false;
+	}
+
+	get secondaryContent(): boolean {
+		return Object.keys(this.tags?.publicationType ?? {}).length > 0 && this.official;
 	}
 }
 
