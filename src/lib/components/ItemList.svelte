@@ -10,6 +10,7 @@
 		classes: string;
 		span: number;
 		sorted?: 0 | 1 | -1;
+		sortedHidden?: boolean;
 	};
 </script>
 
@@ -51,7 +52,6 @@
 	);
 
 	let search = '';
-	columns[0].sorted = 1;
 
 	let filteredItems = items;
 	$: {
@@ -117,12 +117,13 @@
 		>
 			{#each columns
 				.filter((col) => col.enabled)
-				.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { label, classes, span, sorted, hover }}
+				.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { label, classes, span, sorted, hover, sortedHidden }}
 				<button
 					title={hover}
 					class="border-r-next px-1 col-span-var h-full {classes} {$settings.listSize} relative"
 					style="--span: {span === -1 ? remainingSpan : span}"
 					on:click={() => {
+						if (sortedHidden) return;
 						switch (sorted) {
 							default:
 							case 0:
@@ -139,7 +140,7 @@
 				>
 					{label}
 					<span class="absolute right-1">
-						{sorted === 1 ? '▲' : sorted === -1 ? '▼' : ''}
+						{sortedHidden ? '' : sorted === 1 ? '▲' : sorted === -1 ? '▼' : ''}
 					</span>
 				</button>
 			{/each}

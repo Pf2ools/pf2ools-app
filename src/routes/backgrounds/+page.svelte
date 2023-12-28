@@ -20,6 +20,7 @@
 			parser: (item: bg) => item.title,
 			classes: 'text-left',
 			span: -1, // -1 = fill remaining space, split between all -1s
+			sorted: 1,
 		},
 		{
 			enabled: true,

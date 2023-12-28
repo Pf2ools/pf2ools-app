@@ -62,6 +62,10 @@ class HomebrewSource {
 		});
 	}
 
+	get updateAvailable() {
+		return this._isInstalled && this._isThereNewerVersion;
+	}
+
 	get _isThereNewerVersion(): boolean {
 		return get(this.isThereNewerVersion);
 	}
@@ -70,8 +74,8 @@ class HomebrewSource {
 		contentManager.removeID(this.ID);
 	}
 
-	addToHomebrew(): void {
-		contentManager.addHomebrewFromUrl(this.downloadURL);
+	async addToHomebrew() {
+		await contentManager.addHomebrewFromUrl(this.downloadURL);
 	}
 
 	get downloadURL(): string {

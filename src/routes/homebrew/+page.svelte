@@ -14,7 +14,7 @@
 	let isThereNewerVersion = readable(false);
 
 	type T = HomebrewSource;
-	const columns = [
+	let columns = [
 		{
 			enabled: true,
 			order: 1,
@@ -29,13 +29,40 @@
 		{
 			enabled: true,
 			order: 1,
-			label: 'Updated',
-			hover: 'Updated',
-			key: 'ID',
+			label: 'U.',
+			hover: 'Update Available',
+			key: 'updateAvailable',
+			sortable: (a: T, b: T) => Number(a.updateAvailable) - Number(b.updateAvailable),
+			parser: (item: T) => (item.updateAvailable ? '⚠️' : ''),
+			classes: 'text-center',
+			span: 1,
+			sorted: -1,
+			sortedHidden: true,
+		},
+		{
+			enabled: true,
+			order: 1,
+			label: 'I.',
+			hover: 'Installed',
+			key: 'isInstalled',
+			sortable: (a: T, b: T) => Number(a._isInstalled) - Number(b._isInstalled),
+			parser: (item: T) => (item._isInstalled ? '✅' : ''),
+			classes: 'text-center',
+			span: 1,
+			sorted: -1,
+			sortedHidden: true,
+		},
+		{
+			enabled: true,
+			order: 1,
+			label: 'Modified',
+			hover: 'Modified',
+			key: 'modifier',
 			sortable: (a: T, b: T) => dateConvert(a.modified) > dateConvert(b.modified),
 			parser: (item: T) => item.modified,
 			classes: 'text-center',
-			span: 5, // -1 = fill remaining space, split between all -1s
+			span: 5,
+			sorted: 1,
 		},
 		{
 			enabled: true,
@@ -46,7 +73,7 @@
 			sortable: (a: T, b: T) => a.ID.localeCompare(b.ID),
 			parser: (item: T) => item.ID,
 			classes: 'text-center',
-			span: 5, // -1 = fill remaining space, split between all -1s
+			span: 4,
 		},
 	] as columnType<T>[];
 
@@ -56,6 +83,7 @@
 
 	$: if (dev) console.log(selected);
 	$: if (selected) ({ isInstalled, isThereNewerVersion } = selected);
+	$: selected, (columns = columns);
 </script>
 
 <svelte:head>
@@ -115,7 +143,10 @@
 					<div class="grid grid-cols-3 gap-1 text-center">
 						<button
 							class="btn-sm rounded-token border-token border-surface-500-400-token generic-disabled"
-							on:click={() => selected.addToHomebrew()}
+							on:click={async () => {
+								await selected.addToHomebrew();
+								selected = selected;
+							}}
 							disabled={!$isThereNewerVersion}
 						>
 							<iconify-icon icon="mdi:download" class="text-lg align-text-bottom" />
