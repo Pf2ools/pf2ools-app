@@ -1,6 +1,7 @@
 import { homebrewSources as homebrewSourcesSchema } from 'pf2ools-schema';
 import type { z } from 'zod';
 import contentManager from '../contentManager';
+import { derived, get, type Readable } from 'svelte/store';
 
 export type homebrewSource = z.infer<typeof homebrewSourcesSchema>[number];
 
@@ -33,8 +34,12 @@ class HomebrewSource {
 		this.sourceURL = homebrewSource.sourceURL;
 	}
 
-	get isInstalled(): boolean {
-		return contentManager.brewIDs.includes(this.ID);
+	get isInstalled(): Readable<boolean> {
+		return derived(contentManager.homebrew, () => contentManager.brewIDs.includes(this.ID));
+	}
+
+	get _isInstalled(): boolean {
+		return get(this.isInstalled);
 	}
 
 	deleteFromHomebrew(): void {

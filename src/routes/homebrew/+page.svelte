@@ -6,9 +6,11 @@
 	import { onMount } from 'svelte';
 	import type HomebrewSource from '$lib/data/classes/homebrewSourceClass';
 	import { dev } from '$app/environment';
+	import { readable, type Readable } from 'svelte/store';
 	const { homebrew, homebrewSources } = contentManager;
 
 	let selected: HomebrewSource;
+	let isInstalled = readable(false);
 
 	const columns = [
 		{
@@ -26,10 +28,10 @@
 
 	onMount(async () => {
 		if ($homebrewSources.length === 0) await contentManager.fetchHomebrewIndex();
-		selected = $homebrewSources[0];
 	});
 
 	$: if (dev) console.log(selected);
+	$: if (selected) ({ isInstalled } = selected);
 </script>
 
 <svelte:head>
@@ -91,8 +93,8 @@
 						</button>
 						<button
 							class="btn-sm rounded-token border-token border-surface-500-400-token disabled:opacity-50"
-							disabled={!selected.isInstalled}
-							class:variant-soft-error={selected.isInstalled}
+							disabled={!$isInstalled}
+							class:variant-soft-error={$isInstalled}
 							on:click={() => (selected = selected) && selected.deleteFromHomebrew()}
 						>
 							Delete
