@@ -1,18 +1,19 @@
 <script lang="ts">
 	import { settings } from '$lib/settings';
 	import contentManager, { type classTypes } from '$lib/data/contentManager';
-	import ItemList from '$lib/components/ItemList.svelte';
-	import { joinConjunct } from '$lib/utils';
+	import ItemList, { type columnType } from '$lib/components/ItemList.svelte';
+	import { dateConvert, joinConjunct } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import type HomebrewSource from '$lib/data/classes/homebrewSourceClass';
 	import { dev } from '$app/environment';
-	import { readable, type Readable } from 'svelte/store';
+	import { readable } from 'svelte/store';
 	const { homebrew, homebrewSources } = contentManager;
 
 	let selected: HomebrewSource;
 	let isInstalled = readable(false);
 	let isThereNewerVersion = readable(false);
 
+	type T = HomebrewSource;
 	const columns = [
 		{
 			enabled: true,
@@ -20,12 +21,34 @@
 			label: 'Name',
 			hover: 'Name',
 			key: 'title',
-			sortable: (a: any, b: any) => a.title.localeCompare(b.title),
-			parser: (item: any) => item.title,
+			sortable: (a: T, b: T) => a.title.localeCompare(b.title),
+			parser: (item: T) => item.title,
 			classes: 'text-left',
 			span: -1, // -1 = fill remaining space, split between all -1s
 		},
-	];
+		{
+			enabled: true,
+			order: 1,
+			label: 'Updated',
+			hover: 'Updated',
+			key: 'ID',
+			sortable: (a: T, b: T) => dateConvert(a.modified) > dateConvert(b.modified),
+			parser: (item: T) => item.modified,
+			classes: 'text-center',
+			span: 5, // -1 = fill remaining space, split between all -1s
+		},
+		{
+			enabled: true,
+			order: 1,
+			label: 'ID',
+			hover: 'ID',
+			key: 'ID',
+			sortable: (a: T, b: T) => a.ID.localeCompare(b.ID),
+			parser: (item: T) => item.ID,
+			classes: 'text-center',
+			span: 5, // -1 = fill remaining space, split between all -1s
+		},
+	] as columnType<T>[];
 
 	onMount(async () => {
 		if ($homebrewSources.length === 0) await contentManager.fetchHomebrewIndex();
