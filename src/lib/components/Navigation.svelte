@@ -158,6 +158,7 @@
 							sm:rounded-bl-token
 							sm:rounded-tl-none
 							sm:[&_a:first-child]:rounded-tl-none
+							sm:[&_a:first-child]:rounded-bl-token
 							rounded-bl-none
 							rounded-tl-token
 							[&_a:first-child]:rounded-bl-none

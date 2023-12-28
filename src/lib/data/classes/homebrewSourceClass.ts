@@ -2,6 +2,8 @@ import { homebrewSources as homebrewSourcesSchema } from 'pf2ools-schema';
 import type { z } from 'zod';
 import contentManager from '../contentManager';
 import { derived, get, type Readable } from 'svelte/store';
+import { dateConvert } from '$lib/utils';
+import { dev } from '$app/environment';
 
 export type homebrewSource = z.infer<typeof homebrewSourcesSchema>[number];
 
@@ -40,6 +42,28 @@ class HomebrewSource {
 
 	get _isInstalled(): boolean {
 		return get(this.isInstalled);
+	}
+
+	get isThereNewerVersion(): Readable<boolean> {
+		return derived(contentManager.homebrew, () => {
+			const existingSource = contentManager.sourceByID.get(this.ID);
+			const date = existingSource?.data.modified || '0';
+			if (dev)
+				console.log(
+					'Checking for newer version of ' +
+						this.fullTitle +
+						'\n' +
+						date +
+						' (existing) vs ' +
+						this.modified +
+						' (incoming)'
+				);
+			return dateConvert(date) < dateConvert(this.modified);
+		});
+	}
+
+	get _isThereNewerVersion(): boolean {
+		return get(this.isThereNewerVersion);
 	}
 
 	deleteFromHomebrew(): void {

@@ -32,6 +32,7 @@ import RelicGiftClass from './classes/relicGiftClass';
 import SkillClass from './classes/skillClass';
 import DomainClass from './classes/domainClass';
 import HomebrewSourceClass from './classes/homebrewSourceClass';
+import { dateConvert } from '../utils';
 
 export interface dataTypes {
 	background: z.infer<typeof backgroundSchema>;
@@ -172,14 +173,14 @@ class ContentManager {
 		if (parse.success) {
 			const content = parse.data;
 			const tbdIDs = content.source.map((source) => source.ID);
-			const dateConv = (date: string) => new Date(date).getTime();
 
 			tbdIDs.forEach((ID) => {
 				if (this.brewIDs.includes(ID)) {
 					if (dev) console.warn(`Homebrew with ID ${ID} already exists!`);
 					const offender = content.source.find((source) => source.ID === ID);
 					if (
-						dateConv(this.sourceByID.get(ID)!.data.modified) < dateConv(offender!.data.modified)
+						dateConvert(this.sourceByID.get(ID)!.data.modified) <
+						dateConvert(offender!.data.modified)
 					) {
 						if (dev)
 							console.warn('The existing homebrew is newer, removing from the incoming homebrew.');

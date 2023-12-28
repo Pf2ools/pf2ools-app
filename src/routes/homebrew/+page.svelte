@@ -11,6 +11,7 @@
 
 	let selected: HomebrewSource;
 	let isInstalled = readable(false);
+	let isThereNewerVersion = readable(false);
 
 	const columns = [
 		{
@@ -31,7 +32,7 @@
 	});
 
 	$: if (dev) console.log(selected);
-	$: if (selected) ({ isInstalled } = selected);
+	$: if (selected) ({ isInstalled, isThereNewerVersion } = selected);
 </script>
 
 <svelte:head>
@@ -90,18 +91,20 @@
 					</div>
 					<div class="grid grid-cols-3 gap-1 text-center">
 						<button
-							class="btn-sm rounded-token border-token border-surface-500-400-token"
+							class="btn-sm rounded-token border-token border-surface-500-400-token generic-disabled"
 							on:click={() => selected.addToHomebrew()}
+							disabled={!$isThereNewerVersion}
 						>
-							Download / Update
+							<iconify-icon icon="mdi:download" class="text-lg align-text-bottom" />
+							{$isInstalled && $isThereNewerVersion ? 'Update' : 'Download'}
 						</button>
 						<button
-							class="btn-sm rounded-token border-token border-surface-500-400-token disabled:opacity-50"
+							class="btn-sm rounded-token border-token border-surface-500-400-token generic-disabled"
 							disabled={!$isInstalled}
 							class:variant-soft-error={$isInstalled}
 							on:click={() => (selected = selected) && selected.deleteFromHomebrew()}
 						>
-							Delete
+							<iconify-icon icon="mdi:trash-can" class="text-lg align-text-bottom" /> Delete
 						</button>
 						<a
 							href={selected.URL}

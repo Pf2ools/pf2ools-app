@@ -6,19 +6,6 @@
 @tailwind utilities;
 @tailwind variants;
 
-html,
-body {
-	@apply h-full overflow-hidden;
-}
-
-hr {
-	@apply my-1;
-}
-
-* {
-	@apply tabular-nums;
-}
-
 @layer utilities {
 	.border-r-next:has(~ .border-r-next) {
 		@apply border-r border-surface-500 border-dashed;
@@ -54,6 +41,19 @@ hr {
 	.secondary-shadow {
 		box-shadow: inset rgb(22 101 52 / 7.312%) 0 0 0 20rem;
 	}
+}
+
+html,
+body {
+	@apply h-full overflow-hidden;
+}
+
+hr {
+	@apply my-1;
+}
+
+* {
+	@apply tabular-nums;
 }
 
 #title + .app-bar,
