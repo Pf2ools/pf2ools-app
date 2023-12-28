@@ -11,8 +11,9 @@ import {
 	domain as domainSchema,
 	data as dataSchema,
 	bySource as contentWithSourceSchema,
+	homebrewSources as homebrewSourcesSchema,
 } from 'pf2ools-schema';
-import { derived, get, type Writable } from 'svelte/store';
+import { derived, get, type Writable, writable } from 'svelte/store';
 import type { z } from 'zod';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { condition as conditionData } from './pf2ools-data/bundles/byDatatype/core/condition.json' assert { type: 'json' };
@@ -65,8 +66,11 @@ export interface classConstructorTypes {
 }
 
 class ContentManager {
-	public homebrew: Writable<Map<string, z.infer<typeof contentWithSourceSchema>>>;
+	public homebrew: Writable<z.infer<typeof contentWithSourceSchema>[]>;
 	public homebrewIndexes: Writable<string[]>;
+	public homebrewSources: Writable<
+		Extract<z.infer<typeof homebrewSourcesSchema>[string], unknown>[]
+	>;
 	public core: {
 		background: dataTypes['background'][];
 		source: dataTypes['source'][];
@@ -89,50 +93,25 @@ class ContentManager {
 			skill: Object.freeze(skillData) as unknown as dataTypes['skill'][],
 		});
 
-		this.homebrew = localStorageStore('homebrew', new Map());
+		this.homebrew = localStorageStore('homebrew', []);
+		this.homebrewSources = writable([]);
 		this.homebrewIndexes = localStorageStore('homebrewIndex', [
 			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master',
 		]);
 
-		if (dev) console.log(this);
+		if (dev) {
+			console.log(this);
+			this.homebrew.subscribe((homebrew) => console.log('%cHomebrew:', 'color: yellow', homebrew));
+			this.homebrewIndexes.subscribe((homebrewIndexes) =>
+				console.log('%cHomebrewIndexes:', 'color: yellow', homebrewIndexes)
+			);
+			this.homebrewSources.subscribe((homebrewSources) =>
+				console.log('%cHomebrewSources:', 'color: yellow', homebrewSources)
+			);
+		}
 	}
 
-	/* async fetchHomebrew(): Promise<classTypes['homebrewSource'][]> {
-		return (
-			(
-				await Promise.all(
-					get(contentManager.homebrewIndex).map(async (url) => {
-						const fullUrl = `${url}/indexes/homebrewSources.json`;
-						const response = await fetch(`${fullUrl}`);
-						if (response.ok) {
-							if (dev) console.log(`Fetching homebrew index from:\n${fullUrl}`);
-							const homebrewSources = await response.json();
-							const parsedHomebrewSources = homebrewSourcesIndexSchema.safeParse(homebrewSources);
-
-							if (parsedHomebrewSources.success) {
-								return Object.keys(parsedHomebrewSources.data).map((key) => {
-									parsedHomebrewSources.data[key].sourceURL ??= url;
-									return parsedHomebrewSources.data[key];
-								});
-							} else {
-								console.error(
-									`Homebrew index at ${fullUrl} failed validation!`,
-									parsedHomebrewSources.error
-								);
-								return {};
-							}
-						} else {
-							console.error(`${response.status} ${response.statusText}`);
-							return {};
-						}
-					})
-				)
-			)
-				.flat()
-				.filter((source) => Object.keys(source).length > 0) as classTypes['homebrewSource'][]
-		).map((source) => new HomebrewSourceClass(source));
-	}
- */
+	//#region Homebrew
 
 	get _homebrew() {
 		return get(this.homebrew);
@@ -142,8 +121,24 @@ class ContentManager {
 		return get(this.homebrewIndexes);
 	}
 
+	get _homebrewSources() {
+		return get(this.homebrewSources);
+	}
+
+	addHomebrewSource(content: z.infer<typeof contentWithSourceSchema>) {
+		const parse = contentWithSourceSchema.safeParse(content);
+		if (parse.success) {
+			this.homebrew.update((homebrew) => [...homebrew, content]);
+			console.log(`Added the following homebrew:\n`, parse.data);
+			return true;
+		} else {
+			console.error(parse.error);
+			return false;
+		}
+	}
+
 	getHomebrewByType<T extends keyof dataTypes>(type: T, homebrew = this._homebrew) {
-		const homebrewSources = [...homebrew.values()].filter((source) => source[type] !== undefined);
+		const homebrewSources = homebrew.filter((source) => source[type] !== undefined);
 		const homebrewData = homebrewSources.map((source) => source[type]).flat();
 
 		const parsed = homebrewData.filter((statblock) => {
@@ -157,6 +152,77 @@ class ContentManager {
 
 		return parsed as dataTypes[T][];
 	}
+
+	async unleashTheHomebrew() {
+		this.fetchHomebrewIndex().then(() => {
+			this._homebrewSources.forEach((source) => {
+				const fullUrl = `${source.sourceURL}/${source.path}`;
+
+				fetch(fullUrl)
+					.then((response) => response.json())
+					.then((data) => {
+						const parse = contentWithSourceSchema.safeParse(data);
+						if (parse.success) {
+							this.addHomebrewSource(parse.data);
+						} else {
+							console.error(parse.error);
+						}
+					});
+			});
+		});
+	}
+
+	async fetchHomebrewIndex() {
+		this._homebrewIndexes.forEach(async (url) => {
+			let fullUrl = url;
+			if (!fullUrl.endsWith('.json')) fullUrl = `${url}/indexes/homebrewSources.json`;
+			const response = await fetch(`${fullUrl}`);
+
+			if (response.ok) {
+				if (dev) console.log(`Fetching homebrew index from:\n${fullUrl}`);
+				const homebrewJSON = await response.json();
+				const parsedHomebrewSources = homebrewSourcesSchema.safeParse(homebrewJSON);
+
+				if (parsedHomebrewSources.success) {
+					Object.keys(parsedHomebrewSources.data).forEach((key) => {
+						parsedHomebrewSources.data[key].sourceURL ??= url;
+						parsedHomebrewSources.data[key].ID = key;
+					});
+
+					const homebrewSources = Object.keys(parsedHomebrewSources.data).map(
+						(key) => parsedHomebrewSources.data[key]
+					);
+
+					this.homebrewSources.update((srcs) => [...srcs, ...homebrewSources]);
+				} else {
+					console.error(
+						`Homebrew index at ${fullUrl} failed validation!`,
+						parsedHomebrewSources.error
+					);
+				}
+			} else {
+				console.error(`${response.status} ${response.statusText}`);
+			}
+		});
+	}
+
+	async addHomebrewFromUrl(url: string) {
+		const response = await fetch(url);
+		if (response.ok) {
+			const homebrewJSON = await response.json();
+			const parsedHomebrew = contentWithSourceSchema.safeParse(homebrewJSON);
+
+			if (parsedHomebrew.success) {
+				this.addHomebrewSource(parsedHomebrew.data);
+			} else {
+				console.error(`Homebrew at ${url} failed validation!`, parsedHomebrew.error);
+			}
+		} else {
+			console.error(`${response.status} ${response.statusText}`);
+		}
+	}
+
+	//#endregion
 
 	//#region Background
 	static backgroundClass = BackgroundClass;

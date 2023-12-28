@@ -12,3 +12,15 @@ export function joinConjunct(
 	});
 	return formatter.format(arr);
 }
+
+export function dedupe<T extends object>(
+	arr: T[],
+	keyProp: keyof T,
+	sort?: (a: T, b: T) => number
+) {
+	return [
+		...(sort ? arr.sort(sort) : arr)
+			.reduce((acc, obj) => (acc.set(obj[keyProp], obj), acc), new Map())
+			.values(),
+	];
+}
