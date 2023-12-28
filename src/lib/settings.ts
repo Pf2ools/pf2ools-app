@@ -1,11 +1,12 @@
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import { get } from 'svelte/store';
+import { dev } from '$app/environment';
 
 const defaults = {
 	debug: {
 		borders: false,
 	},
-	clearFooter: false,
+	clearFooter: dev ? true : false,
 	wideMode: false,
 	listSize: 'text-sm' as 'text-xs' | 'text-sm' | 'text-base' | 'text-lg',
 };
