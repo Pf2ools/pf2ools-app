@@ -51,6 +51,7 @@
 	);
 
 	let search = '';
+	columns[0].sorted = 1;
 
 	let filteredItems = items;
 	$: {
