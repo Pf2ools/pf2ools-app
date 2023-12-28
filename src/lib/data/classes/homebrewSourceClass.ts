@@ -33,6 +33,14 @@ class HomebrewSource {
 		this.sourceURL = homebrewSource.sourceURL;
 	}
 
+	get isInstalled(): boolean {
+		return contentManager.brewIDs.includes(this.ID);
+	}
+
+	deleteFromHomebrew(): void {
+		contentManager.removeID(this.ID);
+	}
+
 	addToHomebrew(): void {
 		contentManager.addHomebrewFromUrl(this.downloadURL);
 	}

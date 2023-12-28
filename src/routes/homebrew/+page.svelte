@@ -5,6 +5,7 @@
 	import { joinConjunct } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import type HomebrewSource from '$lib/data/classes/homebrewSourceClass';
+	import { dev } from '$app/environment';
 	const { homebrew, homebrewSources } = contentManager;
 
 	let selected: HomebrewSource;
@@ -27,6 +28,8 @@
 		await contentManager.fetchHomebrewIndex();
 		selected = $homebrewSources[0];
 	});
+
+	$: if (dev) console.log(selected);
 </script>
 
 <svelte:head>
@@ -84,10 +87,15 @@
 							class="btn-sm rounded-token border-token border-surface-500-400-token"
 							on:click={() => selected.addToHomebrew()}
 						>
-							Download
+							Download / Update
 						</button>
-						<button class="btn-sm rounded-token border-token border-surface-500-400-token">
-							Disable / Enable
+						<button
+							class="btn-sm rounded-token border-token border-surface-500-400-token disabled:opacity-50"
+							disabled={!selected.isInstalled}
+							class:variant-soft-error={selected.isInstalled}
+							on:click={() => selected.deleteFromHomebrew()}
+						>
+							Delete
 						</button>
 						<a
 							href={selected.URL}
