@@ -2,16 +2,16 @@ import { dev } from '$app/environment';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import {
 	background as backgroundSchema,
+	bySource as contentWithSourceSchema,
 	condition as conditionSchema,
+	data as dataSchema,
 	divineIntercession as divineIntercessionSchema,
+	domain as domainSchema,
 	event as eventSchema,
+	homebrewSources as homebrewSourcesSchema,
 	relicGift as relicGiftSchema,
 	skill as skillSchema,
 	source as sourceSchema,
-	domain as domainSchema,
-	data as dataSchema,
-	bySource as contentWithSourceSchema,
-	homebrewSources as homebrewSourcesSchema,
 } from 'pf2ools-schema';
 import { derived, get, type Writable, writable } from 'svelte/store';
 import type { z } from 'zod';
@@ -31,6 +31,7 @@ import EventClass from './classes/eventClass';
 import RelicGiftClass from './classes/relicGiftClass';
 import SkillClass from './classes/skillClass';
 import DomainClass from './classes/domainClass';
+import HomebrewSourceClass from './classes/homebrewSourceClass';
 
 export interface dataTypes {
 	background: z.infer<typeof backgroundSchema>;
@@ -52,6 +53,7 @@ export interface classTypes {
 	relicGift: RelicGiftClass;
 	skill: SkillClass;
 	domain: DomainClass;
+	homebrewSources: HomebrewSourceClass;
 }
 
 export interface classConstructorTypes {
@@ -63,12 +65,13 @@ export interface classConstructorTypes {
 	relicGift: typeof RelicGiftClass;
 	skill: typeof SkillClass;
 	domain: typeof DomainClass;
+	homebrewSources: typeof HomebrewSourceClass;
 }
 
 class ContentManager {
 	public homebrew: Writable<z.infer<typeof contentWithSourceSchema>[]>;
 	public homebrewIndexes: Writable<string[]>;
-	public homebrewSources: Writable<z.infer<typeof homebrewSourcesSchema>>;
+	public homebrewSources: Writable<classTypes['homebrewSources'][]>;
 	public core: {
 		background: dataTypes['background'][];
 		source: dataTypes['source'][];
@@ -137,15 +140,13 @@ class ContentManager {
 		keys.forEach((key) => {
 			const keyProp = obj[key];
 			if (Array.isArray(keyProp)) {
-				const filtered = keyProp.filter((item) => {
+				// @ts-expect-error - I know what I'm doing
+				obj[key] = keyProp.filter((item) => {
 					if ('source' in item) {
 						return item.source.ID !== ID;
 					}
 					return item.ID !== ID;
 				});
-
-				// @ts-expect-error - I know what I'm doing
-				obj[key] = filtered;
 			}
 		});
 		return obj;
@@ -253,7 +254,9 @@ class ContentManager {
 						return src;
 					});
 
-					this.homebrewSources.update((srcs) => [...srcs, ...homebrewSources]);
+					this.homebrewSources.update((srcs) =>
+						[...srcs, ...homebrewSources].map((src) => new HomebrewSourceClass(src))
+					);
 					console.log(`Added the following homebrew sources:\n`, homebrewSources);
 				} else {
 					console.error(

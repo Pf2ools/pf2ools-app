@@ -3,9 +3,11 @@
 	import contentManager, { type classTypes } from '$lib/data/contentManager';
 	import ItemList from '$lib/components/ItemList.svelte';
 	import { joinConjunct } from '$lib/utils';
-	const { homebrew, homebrewIndex, fetchHomebrew } = contentManager;
+	import { onMount } from 'svelte';
+	import type HomebrewSource from '$lib/data/classes/homebrewSourceClass';
+	const { homebrew, homebrewSources } = contentManager;
 
-	let selected: classTypes['homebrewSource'];
+	let selected: HomebrewSource;
 
 	const columns = [
 		{
@@ -21,18 +23,10 @@
 		},
 	];
 
-	function addUrlToHomebrew(url: string) {
-		fetch(url).then((res) => {
-			res.json().then((data) => {
-				// TODO: Notify
-				// TODO: Parse with _statblock type
-				homebrew.update((hb) => {
-					hb.push(data);
-					return hb;
-				});
-			});
-		});
-	}
+	onMount(async () => {
+		await contentManager.fetchHomebrewIndex();
+		selected = $homebrewSources[0];
+	});
 </script>
 
 <svelte:head>
@@ -62,11 +56,7 @@
 		class="w-full h-[calc(var(--slotHeight)_-_2.75rem)] grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-none gap-2"
 	>
 		<div style="--listHeight: calc(var(--slotHeight) - 2.75rem)">
-			{#await fetchHomebrew()}
-				<p>Loading Homebrew Indexes...</p>
-			{:then items}
-				<ItemList bind:selected {items} {columns} />
-			{/await}
+			<ItemList bind:selected items={$homebrewSources} {columns} />
 		</div>
 		<div>
 			<div class="p-3 pb-1.5 card space-y-1">
@@ -82,7 +72,7 @@
 					<div>
 						<p>
 							<b>Contains:</b>
-							{joinConjunct(selected.indexOfDatatypes)}
+							{joinConjunct(selected.datatypes)}
 						</p>
 						<p>
 							<b>Author(s):</b>
@@ -92,7 +82,7 @@
 					<div class="grid grid-cols-3 gap-1 text-center">
 						<button
 							class="btn-sm rounded-token border-token border-surface-500-400-token"
-							on:click={() => addUrlToHomebrew(selected.url)}
+							on:click={() => console.log(selected.URL)}
 						>
 							Download
 						</button>
@@ -100,7 +90,7 @@
 							Disable / Enable
 						</button>
 						<a
-							href={selected.url}
+							href={selected.URL}
 							target="_blank"
 							class="btn-sm rounded-token border-token border-surface-500-400-token flex items-center justify-center"
 						>
