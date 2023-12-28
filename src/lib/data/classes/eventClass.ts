@@ -1,4 +1,4 @@
-import { type dataTypes } from '$lib/data/contentManager';
+import contentManager, { type dataTypes } from '$lib/data/contentManager';
 
 class Event {
 	private _document: dataTypes['event'];
@@ -18,6 +18,24 @@ class Event {
 
 	get title(): string {
 		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
+	}
+	get sourceData(): dataTypes['source'] {
+		return (contentManager._source.find((src) => src.ID === this.source.ID) ?? {
+			ID: 'unknown',
+			title: { full: 'Unknown', short: 'UNK' },
+		}) as dataTypes['source'];
+	}
+
+	get sourceFull(): string {
+		return this.sourceData.title.full;
+	}
+
+	get sourceShort(): string {
+		return this.sourceData.title.short;
+	}
+
+	get official(): boolean {
+		return this.sourceData.tags?.misc?.Official ?? false;
 	}
 }
 

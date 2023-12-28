@@ -35,6 +35,10 @@ class HomebrewSource {
 	get title(): string {
 		return this.fullTitle;
 	}
+
+	get official(): boolean {
+		return false;
+	}
 }
 
 export default HomebrewSource;

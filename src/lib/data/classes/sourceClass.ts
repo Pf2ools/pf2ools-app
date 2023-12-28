@@ -13,6 +13,10 @@ class Source {
 		this.title = source.title;
 		this.tags = source.tags;
 	}
+
+	get official(): boolean {
+		return this.tags?.misc?.Official ?? false;
+	}
 }
 
 export default Source;
