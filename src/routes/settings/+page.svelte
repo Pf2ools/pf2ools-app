@@ -41,5 +41,17 @@
 				</ListBoxItem>
 			</ListBox>
 		</div>
+
+		<div class="card flex-row space-y-2 p-2">
+			<div class="text-center border-b border-surface-500 border-dashed pb-1">Themes</div>
+			<ListBox labelledby="theme" active="variant-soft-primary">
+				<ListBoxItem bind:group={$settings.theme} name="theme" value="CoreRed">
+					Core Red
+				</ListBoxItem>
+				<ListBoxItem bind:group={$settings.theme} name="theme" value="RemasterGreen">
+					Remaster Green
+				</ListBoxItem>
+			</ListBox>
+		</div>
 	</div>
 </div>

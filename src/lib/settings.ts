@@ -8,7 +8,8 @@ const defaults = {
 	},
 	clearFooter: dev ? true : false,
 	wideMode: false,
-	listSize: 'text-sm' as 'text-xs' | 'text-sm' | 'text-base' | 'text-lg',
+	listSize: 'text-sm' as 'text -xs' | 'text-sm' | 'text-base' | 'text-lg',
+	theme: 'CoreRed' as 'CoreRed' | 'RemasterGreen',
 };
 
 export const settings = {
@@ -25,3 +26,8 @@ export const settings = {
 };
 
 window.settings = settings;
+
+settings.subscribe((value) => {
+	// When value.theme changes, update the body `data-theme` attribute
+	document.querySelector('body')?.setAttribute('data-theme', value.theme ?? 'CoreRed');
+});

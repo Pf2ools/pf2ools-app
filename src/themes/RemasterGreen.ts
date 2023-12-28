@@ -19,17 +19,17 @@ export const RemasterGreen: CustomThemeConfig = {
 		'--on-error': '255 255 255',
 		'--on-surface': '255 255 255',
 		// =~= Theme Colors  =~=
-		// primary | #012a18
-		'--color-primary-50': '217 223 220', // #d9dfdc
-		'--color-primary-100': '204 212 209', // #ccd4d1
-		'--color-primary-200': '192 202 197', // #c0cac5
-		'--color-primary-300': '153 170 163', // #99aaa3
-		'--color-primary-400': '77 106 93', // #4d6a5d
-		'--color-primary-500': '1 42 24', // #012a18
-		'--color-primary-600': '1 38 22', // #012616
-		'--color-primary-700': '1 32 18', // #012012
-		'--color-primary-800': '1 25 14', // #01190e
-		'--color-primary-900': '0 21 12', // #00150c
+		// primary | #073622
+		'--color-primary-50': '218 225 222', // #dae1de
+		'--color-primary-100': '205 215 211', // #cdd7d3
+		'--color-primary-200': '193 205 200', // #c1cdc8
+		'--color-primary-300': '156 175 167', // #9cafa7
+		'--color-primary-400': '81 114 100', // #517264
+		'--color-primary-500': '7 54 34', // #073622
+		'--color-primary-600': '6 49 31', // #06311f
+		'--color-primary-700': '5 41 26', // #05291a
+		'--color-primary-800': '4 32 20', // #042014
+		'--color-primary-900': '3 26 17', // #031a11
 		// secondary | #c2a200
 		'--color-secondary-50': '246 241 217', // #f6f1d9
 		'--color-secondary-100': '243 236 204', // #f3eccc
