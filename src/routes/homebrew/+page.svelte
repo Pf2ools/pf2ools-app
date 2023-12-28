@@ -82,7 +82,7 @@
 					<div class="grid grid-cols-3 gap-1 text-center">
 						<button
 							class="btn-sm rounded-token border-token border-surface-500-400-token"
-							on:click={() => console.log(selected.URL)}
+							on:click={() => selected.addToHomebrew()}
 						>
 							Download
 						</button>

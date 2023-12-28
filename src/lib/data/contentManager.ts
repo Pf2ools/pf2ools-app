@@ -229,8 +229,7 @@ class ContentManager {
 
 		const unsubscribe = this.homebrewSources.subscribe(async (src) =>
 			src.forEach(async (source) => {
-				const fullUrl = `${source.sourceURL}/${source.path}`;
-				await this.addHomebrewFromUrl(fullUrl);
+				await this.addHomebrewFromUrl(source.downloadURL);
 			})
 		);
 

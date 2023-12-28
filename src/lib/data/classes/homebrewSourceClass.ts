@@ -1,5 +1,6 @@
 import { homebrewSources as homebrewSourcesSchema } from 'pf2ools-schema';
 import type { z } from 'zod';
+import contentManager from '../contentManager';
 
 export type homebrewSource = z.infer<typeof homebrewSourcesSchema>[number];
 
@@ -30,6 +31,14 @@ class HomebrewSource {
 		this.datatypes = homebrewSource.datatypes;
 		this.tags = homebrewSource.tags;
 		this.sourceURL = homebrewSource.sourceURL;
+	}
+
+	addToHomebrew(): void {
+		contentManager.addHomebrewFromUrl(this.downloadURL);
+	}
+
+	get downloadURL(): string {
+		return this.sourceURL + '/' + this.path;
 	}
 
 	get title(): string {
