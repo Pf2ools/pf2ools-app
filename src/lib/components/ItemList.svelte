@@ -17,6 +17,7 @@
 <script lang="ts">
 	import { settings } from '$lib/settings';
 	import type { classTypes } from '$lib/data/contentManager';
+	import { onMount } from 'svelte';
 	export let items: classTypes[keyof classTypes][] = [];
 	export let selected = items[0];
 	export let columns: columnType<any>[];
@@ -74,6 +75,11 @@
 			}
 		});
 	}
+
+	// Set the selected item to the "real" first item on the list, as the list might be filtered or sorted by default.
+	onMount(() => {
+		selected = filteredItems[0];
+	});
 
 	function move(event: KeyboardEvent) {
 		if ((event.key === 'j' || event.key === 'k') && document?.activeElement?.tagName !== 'INPUT') {
