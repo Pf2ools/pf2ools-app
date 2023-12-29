@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
 // You can also use the generator at https://skeleton.dev/docs/generator to create these values for you
-import type { CustomThemeConfig } from '@skeletonlabs/tw-plugin';
-export const RemasterGreen: CustomThemeConfig = {
+import type { ThemeConfig } from './types';
+
+export const RemasterGreen: ThemeConfig = {
 	name: 'RemasterGreen',
 	properties: {
 		// =~= Theme Properties =~=
@@ -97,4 +99,5 @@ export const RemasterGreen: CustomThemeConfig = {
 		'--color-surface-800': '31 31 31', // #1f1f1f
 		'--color-surface-900': '25 25 25', // #191919
 	},
+	properties_dark: {},
 };
