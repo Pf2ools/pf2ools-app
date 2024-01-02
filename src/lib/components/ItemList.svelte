@@ -1,29 +1,4 @@
 <script context="module" lang="ts">
-	export type columnType<T> = {
-		enabled: boolean;
-		order: number;
-		label: string;
-		hover: string;
-		key: string;
-		sortable: (a: T, b: T) => number;
-		parser: (item: T) => string;
-		classes: string;
-		span: number;
-		sorted?: 0 | 1 | -1;
-		sortedHidden?: boolean;
-	};
-</script>
-
-<script lang="ts">
-	import { settings } from '$lib/settings';
-	import type { classTypes } from '$lib/data/contentManager';
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	export let items: classTypes[keyof classTypes][] = [];
-	export let selected = items[0];
-	export let columns: columnType<any>[];
-
 	/*
 	[
 		{
@@ -48,6 +23,31 @@
 		},
 	];
 	*/
+
+	export type columnType<T> = {
+		enabled: boolean;
+		order: number;
+		label: string;
+		hover: string;
+		key: string;
+		sortable: (a: T, b: T) => number;
+		parser: (item: T) => string;
+		classes: string;
+		span: number;
+		sorted?: 0 | 1 | -1;
+		sortedHidden?: boolean;
+	};
+</script>
+
+<script lang="ts">
+	import { settings } from '$lib/settings';
+	import type { classTypes } from '$lib/data/contentManager';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	export let items: classTypes[keyof classTypes][] = [];
+	export let selected = items[0];
+	export let columns: columnType<any>[];
 
 	let remainingSpan = Math.max(
 		1,
@@ -76,15 +76,20 @@
 		});
 	}
 
-	// Set the selected item to the "real" first item on the list, as the list might be filtered or sorted by default.
+	function findByHash(hash: string) {
+		if (hash.includes('#')) hash = hash.split('#')[1];
+		return items.find((item) => item.hash === hash);
+	}
+
 	onMount(() => {
+		// If there is a hash, set the selected item to the item with the same title as the hash.
 		if ($page.url.hash) {
-			const hash = decodeURI($page.url.hash).replace('#', '');
-			const found = items.find((item) => item.title === hash);
+			const found = findByHash($page.url.hash);
 			if (found) selected = found;
 		} else {
+			// Set the selected item to the "real" first item on the list, as the list might be filtered or sorted by default.
 			selected = filteredItems[0];
-			if (selected) goto(`#${encodeURI(selected.title)}`);
+			if (selected) goto(`#${selected.hash}`);
 		}
 	});
 
@@ -106,8 +111,9 @@
 	}
 
 	function hashChange(event: HashChangeEvent & { currentTarget: EventTarget & Window }) {
-		const hash = decodeURI(event.newURL.split('#')[1]).replace('#', '');
-		const found = items.find((item) => item.title === hash);
+		const hash = event.newURL.split('#')[1]?.replace('#', '');
+		if (!hash) return;
+		const found = findByHash(hash);
 		if (found) selected = found;
 	}
 
@@ -179,7 +185,7 @@
 				class:active={selected === item}
 				on:click={() => {
 					if (selected !== item) selected = item;
-					goto(`#${encodeURI(item.title)}`);
+					goto(`#${item.hash}`);
 				}}
 			>
 				{#each columns

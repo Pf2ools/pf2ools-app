@@ -18,6 +18,10 @@ class Source {
 		return this.name.full;
 	}
 
+	get hash(): string {
+		return encodeURI(this.title + '_' + this.ID);
+	}
+
 	get official(): boolean {
 		return this.tags?.misc?.Official || this.data.publisher?.includes('Paizo') || false;
 	}

@@ -23,6 +23,10 @@ class Document<T extends dataTypesWithoutSource> {
 		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
 	}
 
+	get hash(): string {
+		return encodeURI(this.title + '_' + this.source.ID);
+	}
+
 	get sourceData() {
 		return (
 			contentManager._source.find((src) => src.ID === this.source.ID) ?? {

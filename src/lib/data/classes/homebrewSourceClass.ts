@@ -86,6 +86,10 @@ class HomebrewSource {
 		return this.fullTitle;
 	}
 
+	get hash(): string {
+		return encodeURI(this.title + '_' + this.ID);
+	}
+
 	get official(): boolean {
 		return false;
 	}
