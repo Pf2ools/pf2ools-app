@@ -7,8 +7,8 @@ const defaults = {
 		borders: false,
 	},
 	clearFooter: dev ? true : false,
-	wideMode: false,
-	listSize: 'text-sm' as 'text -xs' | 'text-sm' | 'text-base' | 'text-lg',
+	wideMode: window.__TAURI__ ? true : false,
+	listSize: 'text-sm' as 'text-xs' | 'text-sm' | 'text-base' | 'text-lg',
 	theme: 'CoreRed' as 'CoreRed' | 'RemasterGreen',
 };
 

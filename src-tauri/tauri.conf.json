@@ -55,11 +55,12 @@
 		},
 		"windows": [
 			{
-				"fullscreen": false,
-				"height": 600,
-				"resizable": true,
 				"title": "pf2ools",
-				"width": 800
+				"width": 800,
+				"height": 600,
+				"fullscreen": false,
+				"resizable": true,
+				"maximized": true
 			}
 		]
 	}
