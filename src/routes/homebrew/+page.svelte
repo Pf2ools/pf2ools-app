@@ -20,9 +20,9 @@
 			order: 1,
 			label: 'Name',
 			hover: 'Name',
-			key: 'title',
-			sortable: (a: T, b: T) => a.title.localeCompare(b.title),
-			parser: (item: T) => item.title,
+			key: 'label',
+			sortable: (a: T, b: T) => a.label.localeCompare(b.label),
+			parser: (item: T) => item.label,
 			classes: 'text-left',
 			span: -1, // -1 = fill remaining space, split between all -1s
 		},
@@ -122,7 +122,7 @@
 		<div>
 			<div class="p-3 pb-1.5 card space-y-1">
 				{#if selected}
-					<h3 class="h3">{selected.title}</h3>
+					<h3 class="h3">{selected.label}</h3>
 					<hr />
 					<div class="grid grid-cols-3 text-center">
 						<div class="border-r-next p-1"><b>Released:</b> {selected.released}</div>

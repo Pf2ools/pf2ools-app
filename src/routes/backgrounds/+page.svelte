@@ -15,9 +15,9 @@
 			order: 1,
 			label: 'Name',
 			hover: 'Name',
-			key: 'title',
-			sortable: (a: bg, b: bg) => a.title.localeCompare(b.title),
-			parser: (item: bg) => item.title,
+			key: 'label',
+			sortable: (a: bg, b: bg) => a.label.localeCompare(b.label),
+			parser: (item: bg) => item.label,
 			classes: 'text-left',
 			span: -1, // -1 = fill remaining space, split between all -1s
 			sorted: 1,
@@ -79,7 +79,7 @@
 </script>
 
 <svelte:head>
-	<title>{selected ? selected.title : 'Backgrounds'} - pf2ools</title>
+	<title>{selected ? selected.label : 'Backgrounds'} - pf2ools</title>
 </svelte:head>
 
 <div
@@ -92,7 +92,7 @@
 		<div class="[&_p]:-indent-5 [&_p]:ml-5">
 			<div class="p-3 pb-1.5 card">
 				{#if selected}
-					<h1 class="h2">{selected.title}</h1>
+					<h1 class="h2">{selected.label}</h1>
 					<hr />
 					<div>
 						{#each selected.data.entries as entry}

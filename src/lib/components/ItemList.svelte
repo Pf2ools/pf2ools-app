@@ -64,7 +64,7 @@
 				.split(',')
 				.map((term) => term.trim())
 				.every((term) => {
-					return item.title.toLowerCase().includes(term);
+					return item.label.toLowerCase().includes(term);
 				});
 		});
 		columns.forEach((col) => {
@@ -82,7 +82,7 @@
 	}
 
 	onMount(() => {
-		// If there is a hash, set the selected item to the item with the same title as the hash.
+		// If there is a hash, set the selected item to the item with that hash.
 		if ($page.url.hash) {
 			const found = findByHash($page.url.hash);
 			if (found) selected = found;

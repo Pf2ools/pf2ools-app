@@ -82,12 +82,12 @@ class HomebrewSource {
 		return this.sourceURL + '/' + this.path;
 	}
 
-	get title(): string {
+	get label(): string {
 		return this.fullTitle;
 	}
 
 	get hash(): string {
-		return encodeURI(this.title + '_' + this.ID);
+		return encodeURI(this.label + '_' + this.ID);
 	}
 
 	get official(): boolean {

@@ -19,19 +19,19 @@ class Document<T extends dataTypesWithoutSource> {
 		this.type = document.type;
 	}
 
-	get title(): string {
+	get label(): string {
 		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
 	}
 
 	get hash(): string {
-		return encodeURI(this.title + '_' + this.source.ID);
+		return encodeURI(this.label + '_' + this.source.ID);
 	}
 
 	get sourceData() {
 		return (
 			contentManager._source.find((src) => src.ID === this.source.ID) ?? {
 				ID: 'unknown',
-				name: { full: 'Unknown', short: 'UNK' },
+				title: { full: 'Unknown', short: 'UNK' },
 				official: false,
 				secondaryContent: false,
 			}
@@ -39,11 +39,11 @@ class Document<T extends dataTypesWithoutSource> {
 	}
 
 	get sourceFull(): string {
-		return this.sourceData.name.full;
+		return this.sourceData.title.full;
 	}
 
 	get sourceShort(): string {
-		return this.sourceData.name.short;
+		return this.sourceData.title.short;
 	}
 
 	get official(): boolean {
