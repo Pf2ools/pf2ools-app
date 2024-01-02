@@ -84,7 +84,7 @@
 			if (found) selected = found;
 		} else {
 			selected = filteredItems[0];
-			goto(`#${encodeURI(selected.title)}`);
+			if (selected) goto(`#${encodeURI(selected.title)}`);
 		}
 	});
 
