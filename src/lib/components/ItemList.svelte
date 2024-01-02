@@ -18,6 +18,8 @@
 	import { settings } from '$lib/settings';
 	import type { classTypes } from '$lib/data/contentManager';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	export let items: classTypes[keyof classTypes][] = [];
 	export let selected = items[0];
 	export let columns: columnType<any>[];
@@ -62,9 +64,7 @@
 				.split(',')
 				.map((term) => term.trim())
 				.every((term) => {
-					return (typeof item.title === 'string' ? item.title : item.title.full)
-						.toLowerCase()
-						.includes(term);
+					return item.title.toLowerCase().includes(term);
 				});
 		});
 		columns.forEach((col) => {
@@ -78,7 +78,14 @@
 
 	// Set the selected item to the "real" first item on the list, as the list might be filtered or sorted by default.
 	onMount(() => {
-		selected = filteredItems[0];
+		if ($page.url.hash) {
+			const hash = decodeURI($page.url.hash).replace('#', '');
+			const found = items.find((item) => item.title === hash);
+			if (found) selected = found;
+		} else {
+			selected = filteredItems[0];
+			goto(`#${encodeURI(selected.title)}`);
+		}
 	});
 
 	function move(event: KeyboardEvent) {
@@ -98,10 +105,16 @@
 		}
 	}
 
+	function hashChange(event: HashChangeEvent & { currentTarget: EventTarget & Window }) {
+		const hash = decodeURI(event.newURL.split('#')[1]).replace('#', '');
+		const found = items.find((item) => item.title === hash);
+		if (found) selected = found;
+	}
+
 	let headerHeight = 50;
 </script>
 
-<svelte:window on:keydown={move} />
+<svelte:window on:keydown={move} on:hashchange={(event) => hashChange(event)} />
 
 <div class="card flex flex-col" style="--headerHeight: {headerHeight}px">
 	<div class="top-0" bind:clientHeight={headerHeight}>
@@ -164,7 +177,10 @@
 				class:secondary-shadow={item?.secondaryContent}
 				class:!variant-soft-primary={selected === item}
 				class:active={selected === item}
-				on:click={() => (selected !== item ? (selected = item) : null)}
+				on:click={() => {
+					if (selected !== item) selected = item;
+					goto(`#${encodeURI(item.title)}`);
+				}}
 			>
 				{#each columns
 					.filter((col) => col.enabled)
