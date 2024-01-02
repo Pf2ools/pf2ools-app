@@ -5,10 +5,6 @@ class RelicGift extends Document<'relicGift'> {
 	constructor(relicGift: dataTypes['relicGift']) {
 		super(relicGift);
 	}
-
-	get title(): string {
-		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
-	}
 }
 
 export default RelicGift;

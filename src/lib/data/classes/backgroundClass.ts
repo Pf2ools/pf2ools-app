@@ -6,10 +6,6 @@ class Background extends Document<'background'> {
 		super(background);
 	}
 
-	get title(): string {
-		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
-	}
-
 	get abilityBoosts() {
 		const abilities = this?.tags?.abilityBoosts?.abilities;
 		return {

@@ -19,6 +19,10 @@ class Document<T extends dataTypesWithoutSource> {
 		this.type = document.type;
 	}
 
+	get title(): string {
+		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
+	}
+
 	get sourceData() {
 		return (
 			contentManager._source.find((src) => src.ID === this.source.ID) ?? {
