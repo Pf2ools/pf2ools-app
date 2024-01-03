@@ -1,21 +1,29 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import { getModalStore } from '@skeletonlabs/skeleton';
+	export let parent: any;
 	const modalStore = getModalStore();
 
-	if ($modalStore[0]) console.log($modalStore[0]);
+	const filter = $modalStore[0].value;
+
+	if (filter && dev) console.log(filter);
+
+	function response() {
+		return 'lmao';
+	}
 </script>
 
 {#if $modalStore[0]}
 	<div
-		class="w-modal-wide bg-surface-100-800-token p-2 rounded-container-token space-y-2 drop-shadow-lg"
+		class="w-modal-wide {parent.background} p-3 rounded-container-token space-y-2 drop-shadow-lg"
 	>
 		<div id="body" class="">lol test</div>
 		<hr />
-		<div id="footer" class="flex justify-center space-x-2">
+		<div id="footer" class="{parent.regionFooter} justify-center">
 			<button
 				class="btn btn-primary border-token border-surface-500-400-token variant-ghost-warning"
 				on:click={() => {
-					$modalStore[0].response?.({ foo: 'bar' });
+					$modalStore[0].response?.(response());
 					modalStore.close();
 				}}
 			>

@@ -25,7 +25,7 @@
 	export let items: T[] = [];
 	export let selected: T;
 	export let columns: columnType<T>[];
-	export let filter = '';
+	export let filter = 'lol';
 
 	selected ??= items[0];
 
@@ -33,7 +33,7 @@
 	const modalSettings = {
 		type: 'component',
 		component: 'FilterPage',
-		props: { filter },
+		value: filter,
 		response: (result: boolean | undefined) => {
 			console.log('result', result);
 		},
