@@ -14,10 +14,9 @@
 	};
 
 	export type filter<T> = {
-		enabled: boolean;
 		order: number;
 		label: string;
-		options: { label: string; value: string; enabled: boolean }[];
+		options: { label: string; value: string; default: boolean }[];
 		filterBy: (item: T) => string;
 	};
 </script>

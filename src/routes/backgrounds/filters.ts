@@ -6,7 +6,6 @@ type bg = classTypes['background'];
 
 export const filters: Readable<filter<bg>[]> = derived(cm.background, ($backgrounds) => [
 	{
-		enabled: true,
 		order: 1,
 		label: 'Source',
 		options: [...new Set($backgrounds.map((background) => background.source.ID))].map((source) => {
@@ -14,7 +13,7 @@ export const filters: Readable<filter<bg>[]> = derived(cm.background, ($backgrou
 			return {
 				label: srcData?.label ?? source,
 				value: source,
-				enabled: srcData?.official ?? false,
+				default: srcData?.official ?? false,
 				category: srcData?.official ? 0 : srcData?.secondaryContent ? 1 : srcData?.homebrew ? 2 : 3,
 			};
 		}),
