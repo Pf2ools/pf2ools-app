@@ -8,8 +8,6 @@
 
 	const { background: backgrounds } = cm;
 	let selected = $backgrounds[0];
-
-	$: if (dev) console.log(selected);
 </script>
 
 <svelte:head>

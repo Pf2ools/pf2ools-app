@@ -13,8 +13,8 @@ export const filters: Readable<filter<bg>[]> = derived(cm.background, ($backgrou
 			return {
 				label: srcData?.label ?? source,
 				value: source,
-				default: srcData?.official ?? false,
-				category: srcData?.official ? 0 : srcData?.secondaryContent ? 1 : srcData?.homebrew ? 2 : 3,
+				default: srcData?.official ?? srcData?.homebrew ?? false, // official or homebrew are displayed by default
+				category: srcData?.official ? 0 : srcData?.secondaryContent ? 1 : srcData?.homebrew ? 2 : 3, // official, secondary, homebrew, some other unknown thing
 			};
 		}),
 		filterBy: (item: bg) => item.source.ID,
