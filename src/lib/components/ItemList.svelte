@@ -39,15 +39,15 @@
 	};
 </script>
 
-<script lang="ts">
+<script lang="ts" generics="T extends classTypes[keyof classTypes]">
 	import { settings } from '$lib/settings';
 	import type { classTypes } from '$lib/data/contentManager';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	export let items: classTypes[keyof classTypes][] = [];
+	export let items: T[] = [];
 	export let selected = items[0];
-	export let columns: columnType<classTypes[keyof classTypes]>[];
+	export let columns: columnType<T>[];
 
 	let remainingSpan = Math.max(
 		1,
