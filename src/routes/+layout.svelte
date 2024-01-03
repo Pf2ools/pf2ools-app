@@ -5,8 +5,15 @@
 	import { onNavigate } from '$app/navigation';
 	import { settings } from '$lib/settings';
 	import { slide } from 'svelte/transition';
+
+	// Modals
+	import { Modal, initializeStores } from '@skeletonlabs/skeleton';
+	import { modalRegistry } from '$lib/components/ModalRegistry';
+	initializeStores();
+
+	// For debugging, does nothing but adds the contentManager to the window object
 	import contentManager from '$lib/data/contentManager';
-	contentManager; // For debugging, does nothing but adds the contentManager to the window object
+	contentManager;
 
 	// Floating UI for Popups
 	import { AppShell, storePopup } from '@skeletonlabs/skeleton';
@@ -35,6 +42,8 @@
 </script>
 
 <svelte:window bind:innerHeight={windowHeight} bind:innerWidth={windowWidth} />
+
+<Modal components={modalRegistry} />
 
 <AppShell>
 	<svelte:fragment slot="header">

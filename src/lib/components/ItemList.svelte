@@ -21,11 +21,23 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	export let items: T[] = [];
 	export let selected: T;
 	export let columns: columnType<T>[];
+	export let filter = '';
 
 	selected ??= items[0];
+
+	const modalStore = getModalStore();
+	const modalSettings = {
+		type: 'component',
+		component: 'FilterPage',
+		props: { filter },
+		response: (result: boolean | undefined) => {
+			console.log('result', result);
+		},
+	} as ModalSettings;
 
 	$: if (dev) {
 		console.log(selected);
@@ -109,7 +121,8 @@
 		<div>
 			<div class="input-group input-group-divider flex flex-row rounded-b-none">
 				<div class="input-group-shim !p-0">
-					<button class="btn p-0">Filters</button>
+					<button class="btn p-0" on:click={() => modalStore.trigger(modalSettings)}>Filters</button
+					>
 				</div>
 				<input
 					class="input rounded-b-none rounded-l-none p-1 pl-2"
