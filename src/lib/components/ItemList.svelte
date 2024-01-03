@@ -12,20 +12,12 @@
 		sorted?: 0 | 1 | -1;
 		sortedHidden?: boolean;
 	};
-
-	export type filter<T> = {
-		order: number;
-		label: string;
-		options: { label: string; value: string; default: boolean }[];
-		filterBy: (item: T) => string;
-	};
 </script>
 
 <script lang="ts" generics="T extends classTypes[keyof classTypes]">
 	import { dev } from '$app/environment';
 
 	import { settings } from '$lib/settings';
-	import { FilterManager } from './FilterClass';
 	import type { classTypes } from '$lib/data/contentManager';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
@@ -33,7 +25,6 @@
 	export let items: T[] = [];
 	export let selected: T;
 	export let columns: columnType<T>[];
-	export let filters: filter<T>[];
 
 	selected ??= items[0];
 
@@ -44,12 +35,8 @@
 
 	let search = '';
 
-	const filterMg = new FilterManager<T>(filters, $page.route.id ?? 'unknown');
-
 	$: if (dev) {
-		console.clear();
 		console.log(selected);
-		console.log(filterMg);
 	}
 
 	let filteredItems = items;

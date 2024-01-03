@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { dev } from '$app/environment';
 	import ItemList from '$lib/components/ItemList.svelte';
 	import cm from '$lib/data/contentManager';
 	import { settings } from '$lib/settings';
 	import { columns } from './columns';
-	import { filters } from './filters';
 
 	const { background: backgrounds } = cm;
 	let selected = $backgrounds[0];
@@ -20,7 +18,7 @@
 	class:px-2={$settings.wideMode}
 >
 	<div class="w-full h-slot grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-none gap-4">
-		<ItemList bind:selected items={$backgrounds} {columns} filters={$filters} />
+		<ItemList bind:selected items={$backgrounds} {columns} />
 		<div class="[&_p]:-indent-5 [&_p]:ml-5">
 			<div class="p-3 pb-1.5 card">
 				{#if selected}
