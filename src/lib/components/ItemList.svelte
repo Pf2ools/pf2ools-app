@@ -16,7 +16,6 @@
 
 <script lang="ts" generics="T extends classTypes[keyof classTypes]">
 	import { dev } from '$app/environment';
-
 	import { settings } from '$lib/settings';
 	import type { classTypes } from '$lib/data/contentManager';
 	import { onMount } from 'svelte';
@@ -28,17 +27,11 @@
 
 	selected ??= items[0];
 
-	let remainingSpan = Math.max(
-		1,
-		columns.filter((col) => col.enabled).reduce((a, b) => Math.max(a, 0) - Math.max(b.span, 0), 24)
-	);
-
-	let search = '';
-
 	$: if (dev) {
 		console.log(selected);
 	}
 
+	let search = '';
 	let filteredItems = items;
 	$: {
 		filteredItems = items.filter((item) => {
@@ -100,6 +93,11 @@
 		const found = findByHash(hash);
 		if (found) selected = found;
 	}
+
+	let remainingSpan = Math.max(
+		1,
+		columns.filter((col) => col.enabled).reduce((a, b) => Math.max(a, 0) - Math.max(b.span, 0), 24)
+	);
 
 	let headerHeight = 50;
 </script>
