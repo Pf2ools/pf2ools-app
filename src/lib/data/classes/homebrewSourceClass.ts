@@ -97,6 +97,10 @@ class HomebrewSource {
 	get secondaryContent(): boolean {
 		return false;
 	}
+
+	get homebrew(): boolean {
+		return true;
+	}
 }
 
 export default HomebrewSource;

@@ -29,6 +29,10 @@ class Source {
 	get secondaryContent(): boolean {
 		return Object.keys(this.tags?.publicationType ?? {}).length > 0 && this.official;
 	}
+
+	get homebrew(): boolean {
+		return !this.official && !this.secondaryContent;
+	}
 }
 
 export default Source;

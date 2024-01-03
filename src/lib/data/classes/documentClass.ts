@@ -53,6 +53,10 @@ class Document<T extends dataTypesWithoutSource> {
 	get secondaryContent(): boolean {
 		return this.sourceData.secondaryContent ?? false;
 	}
+
+	get homebrew(): boolean {
+		return !this.official && !this.secondaryContent;
+	}
 }
 
 export default Document;

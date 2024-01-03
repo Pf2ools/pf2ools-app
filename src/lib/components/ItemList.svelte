@@ -1,29 +1,4 @@
 <script context="module" lang="ts">
-	/*
-	[
-		{
-			enabled: true,
-			order: 1,
-			label: 'Name',
-			key: 'name.primary',
-			sortable: (a: itemType, b: itemType) => a.name.primary.localeCompare(b.name.primary),
-			parser: (item: itemType) => item.name.primary,
-			classes: 'text-left',
-			span: -1, // -1 = fill remaining space
-		},
-		{
-			enabled: true,
-			order: -1,
-			label: 'Source',
-			key: 'source.ID',
-			sortable: (a: itemType, b: itemType) => a.source.ID.localeCompare(b.source.ID),
-			parser: (item: itemType) => item.source.ID,
-			classes: 'text-center',
-			span: 2,
-		},
-	];
-	*/
-
 	export type columnType<T> = {
 		enabled: boolean;
 		order: number;
@@ -37,6 +12,14 @@
 		sorted?: 0 | 1 | -1;
 		sortedHidden?: boolean;
 	};
+
+	export type filter<T> = {
+		enabled: boolean;
+		order: number;
+		label: string;
+		options: { label: string; value: string; enabled: boolean }[];
+		filterBy: (item: T) => string;
+	};
 </script>
 
 <script lang="ts" generics="T extends classTypes[keyof classTypes]">
@@ -48,6 +31,7 @@
 	export let items: T[] = [];
 	export let selected = items[0];
 	export let columns: columnType<T>[];
+	export let filters: filter<T>[];
 
 	let remainingSpan = Math.max(
 		1,
@@ -55,6 +39,8 @@
 	);
 
 	let search = '';
+
+	$: console.log(filters);
 
 	let filteredItems = items;
 	$: {
@@ -67,6 +53,7 @@
 					return item.label.toLowerCase().includes(term);
 				});
 		});
+
 		columns.forEach((col) => {
 			if (col.sorted !== 0) {
 				filteredItems.sort((a, b) => {
