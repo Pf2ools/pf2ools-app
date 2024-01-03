@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { settings } from '$lib/settings';
-	import contentManager, { type classTypes } from '$lib/data/contentManager';
+	import { dev } from '$app/environment';
 	import ItemList, { type columnType } from '$lib/components/ItemList.svelte';
+	import type HomebrewSource from '$lib/data/classes/homebrewSourceClass';
+	import contentManager from '$lib/data/contentManager';
+	import { settings } from '$lib/settings';
 	import { dateConvert, joinConjunct } from '$lib/utils';
 	import { onMount } from 'svelte';
-	import type HomebrewSource from '$lib/data/classes/homebrewSourceClass';
-	import { dev } from '$app/environment';
 	import { readable } from 'svelte/store';
-	const { homebrew, homebrewSources } = contentManager;
+	const { homebrewSources } = contentManager;
 
 	let selected: HomebrewSource;
 	let isInstalled = readable(false);

@@ -47,7 +47,7 @@
 	import { page } from '$app/stores';
 	export let items: classTypes[keyof classTypes][] = [];
 	export let selected = items[0];
-	export let columns: columnType<any>[];
+	export let columns: columnType<classTypes[keyof classTypes]>[];
 
 	let remainingSpan = Math.max(
 		1,

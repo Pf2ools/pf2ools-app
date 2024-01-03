@@ -30,6 +30,6 @@ module.exports = {
 	],
 	rules: {
 		camelcase: ['warn'],
-		'id-length': ['warn', { exceptions: ['t', 'i'] }], // i for incrementing loops, t for translations
+		'id-length': ['warn', { exceptions: ['t', 'i', 'a', 'b'] }], // i for incrementing loops, t for translations, a + b for sorting
 	},
 };
