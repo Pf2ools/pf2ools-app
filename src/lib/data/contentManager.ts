@@ -69,7 +69,7 @@ export interface classConstructorTypes {
 	homebrewSources: typeof HomebrewSourceClass;
 }
 
-class ContentManager {
+export class ContentManager {
 	public homebrew: Writable<z.infer<typeof contentWithSourceSchema>[]>;
 	public homebrewIndexes: Writable<string[]>;
 	public homebrewSources: Writable<classTypes['homebrewSources'][]>;
@@ -105,6 +105,14 @@ class ContentManager {
 	}
 
 	//#region Utils
+
+	static unknownSource = {
+		ID: 'unknown',
+		label: 'Unknown',
+		title: { full: 'Unknown', short: 'UNK' },
+		official: false,
+		secondaryContent: false,
+	};
 
 	get brewIDs() {
 		return [
