@@ -98,6 +98,17 @@ export const CoreRed: ThemeConfig = {
 		'--color-surface-700': '38 38 38', // #262626
 		'--color-surface-800': '31 31 31', // #1f1f1f
 		'--color-surface-900': '25 25 25', // #191919
+		// interact | #337AB7
+		'--color-interact-50': '224 235 244', // #e0ebf4
+		'--color-interact-100': '214 228 241', // #d6e4f1
+		'--color-interact-200': '204 222 237', // #ccdeed
+		'--color-interact-300': '173 202 226', // #adcae2
+		'--color-interact-400': '112 162 205', // #70a2cd
+		'--color-interact-500': '51 122 183', // #337AB7
+		'--color-interact-600': '46 110 165', // #2e6ea5
+		'--color-interact-700': '38 92 137', // #265c89
+		'--color-interact-800': '31 73 110', // #1f496e
+		'--color-interact-900': '25 60 90', // #193c5a
 	},
 	properties_dark: {},
 };

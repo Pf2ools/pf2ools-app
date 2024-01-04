@@ -12,16 +12,25 @@
 		sorted?: 0 | 1 | -1;
 		sortedHidden?: boolean;
 	};
+
+	export type filterType<T> = {
+		label: string;
+		func: (item: T) => boolean;
+	};
+
+	export type filteringArray<T> = (filterType<T> | { OR: filterType<T>[] })[];
 </script>
 
 <script lang="ts" generics="T extends classTypes[keyof classTypes]">
+	import type { Writable } from 'svelte/store';
+
 	import { dev } from '$app/environment';
 	import { settings } from '$lib/settings';
 	import type { classTypes } from '$lib/data/contentManager';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { getModalStore, localStorageStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	export let items: T[] = [];
 	export let selected: T;
 	export let columns: columnType<T>[];
@@ -29,32 +38,56 @@
 
 	selected ??= items[0];
 
+	$: if (dev) {
+		console.log(selected);
+	}
+
+	let filters: Writable<filteringArray<T>> = localStorageStore('filters-background', [
+		{
+			OR: [
+				{ label: 'those that start with A', func: (item) => item.label.startsWith('A') },
+				{ label: 'those that start with B', func: (item) => item.label.startsWith('B') },
+			],
+		},
+		{ label: 'those that end with R', func: (item) => item.label.endsWith('r') },
+	]);
 	const modalStore = getModalStore();
-	const modalSettings = {
+	const modalSettings: ModalSettings = {
 		type: 'component',
 		component: 'FilterPage',
 		value: filter,
-		response: (result: boolean | undefined) => {
+		response: (result: filteringArray<T> | undefined) => {
 			console.log('result', result);
+			if (result) filters.set(result);
 		},
-	} as ModalSettings;
+	};
 
-	$: if (dev) {
-		console.log(selected);
+	function resolveFiltering(item: T) {
+		return $filters
+			.map((filter) => {
+				if ('OR' in filter) {
+					return filter.OR.some((filter) => filter.func(item));
+				} else {
+					return filter.func(item);
+				}
+			})
+			.every((filter) => filter);
 	}
 
 	let search = '';
 	let filteredItems = items;
 	$: {
-		filteredItems = items.filter((item) => {
-			return search
-				.toLowerCase()
-				.split(',')
-				.map((term) => term.trim())
-				.every((term) => {
-					return item.label.toLowerCase().includes(term);
-				});
-		});
+		filteredItems = items
+			.filter((item) => {
+				return search
+					.toLowerCase()
+					.split(',')
+					.map((term) => term.trim())
+					.every((term) => {
+						return item.label.toLowerCase().includes(term);
+					});
+			})
+			.filter(resolveFiltering);
 
 		columns.forEach((col) => {
 			if (col.sorted !== 0) {
@@ -130,6 +163,27 @@
 					placeholder="Search..."
 					bind:value={search}
 				/>
+			</div>
+			<div class="space-x-1 [&_div]:space-x-1 [&_div]:flex [&_div]:flex-row flex flex-row">
+				{#each $filters as filter}
+					{#if 'OR' in filter}
+						<div class="border-token rounded-token p-px">
+							{#each filter.OR as orFilter}
+								<div>
+									<button class="chip border-token rounded-token px-0.5 py-px bg-interact-900">
+										{orFilter.label}
+									</button>
+								</div>
+							{/each}
+						</div>
+					{:else}
+						<div>
+							<button class="chip border-token rounded-token px-0.5 py-px bg-interact-900">
+								{filter.label}
+							</button>
+						</div>
+					{/if}
+				{/each}
 			</div>
 		</div>
 		<div

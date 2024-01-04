@@ -4,6 +4,7 @@ import forms from '@tailwindcss/forms';
 import { skeleton } from '@skeletonlabs/tw-plugin';
 import { RemasterGreen } from './src/themes/RemasterGreen';
 import { CoreRed } from './src/themes/CoreRed';
+import pf2ools from './scripts/tailwind-plugin';
 
 export default {
 	darkMode: 'class',
@@ -52,6 +53,7 @@ export default {
 		},
 	},
 	plugins: [
+		pf2ools,
 		forms,
 		skeleton({
 			themes: {
