@@ -41,7 +41,7 @@
 		console.log(selected);
 	}
 
-	let filters: Writable<filteringArray<T>> = localStorageStore('filters-background', [
+	const initialValue = [
 		{
 			OR: [{ label: 'start Z' }, { label: 'start X' }],
 		},
@@ -49,7 +49,8 @@
 			OR: [{ label: 'start A' }, { label: 'start B' }, { label: 'start C' }],
 		},
 		{ label: 'end R' },
-	]);
+	];
+	let filters: Writable<filteringArray<T>> = localStorageStore('filters-background', initialValue);
 	const modalStore = getModalStore();
 	const modalSettings: ModalSettings = {
 		type: 'component',
@@ -99,6 +100,10 @@
 	});
 
 	function move(event: KeyboardEvent) {
+		if (dev && event.shiftKey && event.key === 'R') {
+			if (event.altKey) filters.set([]);
+			else filters.set(initialValue);
+		}
 		if ((event.key === 'j' || event.key === 'k') && document?.activeElement?.tagName !== 'INPUT') {
 			event.preventDefault();
 			// Find the current selected row with #row and .active
@@ -148,7 +153,12 @@
 				/>
 			</div>
 			{#if $filters.length}
-				<div class="flex flex-wrap [&_*]:mr-1 last:[&_*]:mr-0 overflow-x-clip">
+				<div
+					class="flex flex-wrap [&_*]:mr-1 last:[&_*]:mr-0 overflow-x-clip border-b border-surface-300-600-token"
+					title={dev
+						? 'Shift + R to reset. Shift + Alt + R to remove all filters.'
+						: 'Remove filters by clicking on them.'}
+				>
 					{#each $filters as filter}
 						{#if 'OR' in filter}
 							<div class="p-px flex rounded-token variant-ghost-interact">
