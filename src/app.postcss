@@ -6,6 +6,16 @@
 @tailwind utilities;
 @tailwind variants;
 
+@layer components {
+	.variant-outline-interact {
+		@apply ring-[1px] ring-interact-500 dark:ring-interact-500 ring-inset;
+	}
+
+	.variant-ghost-interact {
+		@apply bg-interact-500/20 dark:bg-interact-500/20 variant-outline-interact;
+	}
+}
+
 @layer utilities {
 	.border-r-next:has(~ .border-r-next) {
 		@apply border-r border-surface-500 border-dashed;

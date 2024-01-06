@@ -15,7 +15,6 @@
 
 	export type filterType<T> = {
 		label: string;
-		func: (item: T) => boolean;
 	};
 
 	export type filteringArray<T> = (filterType<T> | { OR: filterType<T>[] })[];
@@ -44,12 +43,12 @@
 
 	let filters: Writable<filteringArray<T>> = localStorageStore('filters-background', [
 		{
-			OR: [
-				{ label: 'those that start with A', func: (item) => item.label.startsWith('A') },
-				{ label: 'those that start with B', func: (item) => item.label.startsWith('B') },
-			],
+			OR: [{ label: 'start Z' }, { label: 'start X' }],
 		},
-		{ label: 'those that end with R', func: (item) => item.label.endsWith('r') },
+		{
+			OR: [{ label: 'start A' }, { label: 'start B' }, { label: 'start C' }],
+		},
+		{ label: 'end R' },
 	]);
 	const modalStore = getModalStore();
 	const modalSettings: ModalSettings = {
@@ -62,41 +61,25 @@
 		},
 	};
 
-	function resolveFiltering(item: T) {
-		return $filters
-			.map((filter) => {
-				if ('OR' in filter) {
-					return filter.OR.some((filter) => filter.func(item));
-				} else {
-					return filter.func(item);
-				}
-			})
-			.every((filter) => filter);
-	}
-
 	let search = '';
 	let filteredItems = items;
-	$: {
-		filteredItems = items
-			.filter((item) => {
-				return search
-					.toLowerCase()
-					.split(',')
-					.map((term) => term.trim())
-					.every((term) => {
-						return item.label.toLowerCase().includes(term);
-					});
-			})
-			.filter(resolveFiltering);
+	$: filteredItems = items.filter((item) => {
+		return search
+			.toLowerCase()
+			.split(',')
+			.map((term) => term.trim())
+			.every((term) => {
+				return item.label.toLowerCase().includes(term);
+			});
+	});
 
-		columns.forEach((col) => {
-			if (col.sorted !== 0) {
-				filteredItems.sort((a, b) => {
-					return (col.sorted || 0) * col.sortable(a, b);
-				});
-			}
-		});
-	}
+	$: columns.forEach((col) => {
+		if (col.sorted !== 0) {
+			filteredItems.sort((a, b) => {
+				return (col.sorted || 0) * col.sortable(a, b);
+			});
+		}
+	});
 
 	function findByHash(hash: string) {
 		if (hash.includes('#')) hash = hash.split('#')[1];
@@ -164,27 +147,37 @@
 					bind:value={search}
 				/>
 			</div>
-			<div class="space-x-1 [&_div]:space-x-1 [&_div]:flex [&_div]:flex-row flex flex-row">
-				{#each $filters as filter}
-					{#if 'OR' in filter}
-						<div class="border-token rounded-token p-px">
-							{#each filter.OR as orFilter}
-								<div>
-									<button class="chip border-token rounded-token px-0.5 py-px bg-interact-900">
+			{#if $filters.length}
+				<div class="flex flex-wrap [&_*]:mr-1 last:[&_*]:mr-0 overflow-x-clip">
+					{#each $filters as filter}
+						{#if 'OR' in filter}
+							<div class="p-px flex rounded-token variant-ghost-interact">
+								{#each filter.OR as orFilter, index}
+									<button
+										class="chip border-token rounded-token px-0.5 py-px bg-interact-900 hover:bg-error-900"
+									>
 										{orFilter.label}
 									</button>
-								</div>
-							{/each}
-						</div>
-					{:else}
-						<div>
-							<button class="chip border-token rounded-token px-0.5 py-px bg-interact-900">
+									{#if index !== filter.OR.length - 1}
+										<div class="px-px text-sm">/</div>
+									{/if}
+								{/each}
+							</div>
+						{:else}
+							<button
+								class="chip border-token rounded-token px-0.5 py-px bg-interact-900 hover:bg-error-900 my-px"
+								on:click={() => {
+									filters.update((filters) => {
+										return filters.filter((f) => f !== filter);
+									});
+								}}
+							>
 								{filter.label}
 							</button>
-						</div>
-					{/if}
-				{/each}
-			</div>
+						{/if}
+					{/each}
+				</div>
+			{/if}
 		</div>
 		<div
 			class="pl-0.5 pb-0.5 grid grid-cols-24 bg-surface-100-800-token text-sm border-b border-surface-500"
