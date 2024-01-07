@@ -15,6 +15,7 @@
 
 	export type filterType<T> = {
 		label: string;
+		not?: boolean;
 	};
 
 	export type filteringArray<T> = (filterType<T> | { OR: filterType<T>[] })[];
@@ -22,7 +23,6 @@
 
 <script lang="ts" generics="T extends classTypes[keyof classTypes]">
 	import type { Writable } from 'svelte/store';
-
 	import { dev } from '$app/environment';
 	import { settings } from '$lib/settings';
 	import type { classTypes } from '$lib/data/contentManager';
@@ -30,6 +30,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { getModalStore, localStorageStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import FilterChip from './ItemList/FilterChip.svelte';
 	export let items: T[] = [];
 	export let selected: T;
 	export let columns: columnType<T>[];
@@ -41,23 +42,22 @@
 		console.log(selected);
 	}
 
-	const initialValue = [
+	const initialValue: filteringArray<T> = [
 		{
 			OR: [{ label: 'start Z' }, { label: 'start X' }],
 		},
 		{
 			OR: [{ label: 'start A' }, { label: 'start B' }, { label: 'start C' }],
 		},
-		{ label: 'end R' },
+		{ label: 'end R', not: true },
 	];
-	let filters: Writable<filteringArray<T>> = localStorageStore('filters-background', initialValue);
+	let filters = localStorageStore('filters-background', initialValue);
 	const modalStore = getModalStore();
 	const modalSettings: ModalSettings = {
 		type: 'component',
 		component: 'FilterPage',
 		value: filter,
 		response: (result: filteringArray<T> | undefined) => {
-			console.log('result', result);
 			if (result) filters.set(result);
 		},
 	};
@@ -99,10 +99,14 @@
 		}
 	});
 
+	function restartFilters(all = false) {
+		if (all) filters.set([]);
+		else filters.set(initialValue);
+	}
+
 	function move(event: KeyboardEvent) {
-		if (dev && event.shiftKey && event.key === 'R') {
-			if (event.altKey) filters.set([]);
-			else filters.set(initialValue);
+		if (dev && event.altKey && event.key === 'R' && document?.activeElement?.tagName !== 'INPUT') {
+			restartFilters(event.shiftKey);
 		}
 		if ((event.key === 'j' || event.key === 'k') && document?.activeElement?.tagName !== 'INPUT') {
 			event.preventDefault();
@@ -133,6 +137,8 @@
 	);
 
 	let headerHeight = 50;
+
+	let hideFilters = false;
 </script>
 
 <svelte:window on:keydown={move} on:hashchange={(event) => hashChange(event)} />
@@ -141,49 +147,66 @@
 	<div class="top-0" bind:clientHeight={headerHeight}>
 		<div>
 			<div class="input-group input-group-divider flex flex-row rounded-b-none">
-				<div class="input-group-shim !p-0">
-					<button class="btn p-0" on:click={() => modalStore.trigger(modalSettings)}>Filters</button
-					>
-				</div>
+				<button class="input-group-shim" on:click={() => modalStore.trigger(modalSettings)}>
+					Filter
+				</button>
+				<button
+					class="input-group-shim !px-2 border-l border-surface-400-500-token"
+					on:click={() => (hideFilters = !hideFilters)}
+					title="Toggle Filters"
+				>
+					<iconify-icon
+						icon="mdi:arrow-{!hideFilters ? 'collapse' : 'expand'}-vertical"
+						class="text-xl"
+					/>
+				</button>
 				<input
 					class="input rounded-b-none rounded-l-none p-1 pl-2"
 					type="text"
 					placeholder="Search..."
 					bind:value={search}
 				/>
+				<button
+					class="input-group-shim !px-2 border-r border-surface-400-500-token"
+					on:click={() =>
+						(selected = filteredItems[Math.floor(Math.random() * filteredItems.length)])}
+					title="Feeling Lucky?"
+				>
+					<iconify-icon icon="mdi:dice-multiple" class="text-xl" />
+				</button>
+				<button
+					class="input-group-shim !px-2"
+					on:click={(event) => restartFilters(event.shiftKey)}
+					title="Click to reset to default filters. Shift-Click to remove all filters.
+You can also do these actions by holding Alt and pressing R or Shift-R."
+				>
+					<iconify-icon icon="mdi:restart" class="text-xl" />
+				</button>
 			</div>
-			{#if $filters.length}
+			{#if $filters.length && !hideFilters}
 				<div
-					class="flex flex-wrap [&_*]:mr-1 last:[&_*]:mr-0 overflow-x-clip border-b border-surface-300-600-token"
-					title={dev
-						? 'Shift + R to reset. Shift + Alt + R to remove all filters.'
-						: 'Remove filters by clicking on them.'}
+					class="flex flex-wrap [&>*]:mr-1 last:[&>*]:mr-0 overflow-x-clip border-b border-surface-300-600-token text-dark-token"
+					title="Remove filters by clicking on them."
 				>
 					{#each $filters as filter}
 						{#if 'OR' in filter}
 							<div class="p-px flex rounded-token variant-ghost-interact">
 								{#each filter.OR as orFilter, index}
-									<button
-										class="chip border-token rounded-token px-0.5 py-px bg-interact-900 hover:bg-error-900"
-									>
-										{orFilter.label}
-									</button>
-									{#if index !== filter.OR.length - 1}
-										<div class="px-px text-sm">/</div>
-									{/if}
+									<FilterChip label={orFilter.label}>
+										<div slot="outside">
+											{#if index !== filter.OR.length - 1}
+												<div class="px-1 text-sm text-base-token dark:text-dark-token">/</div>
+											{/if}
+										</div>
+									</FilterChip>
 								{/each}
 							</div>
 						{:else}
-							<button
-								class="chip border-token rounded-token px-0.5 py-px bg-interact-900 hover:bg-error-900 my-px"
-								on:click={() => {
-									filters.update((filters) => {
-										return filters.filter((f) => f !== filter);
-									});
-								}}
-							>
-								{filter.label}
-							</button>
+							<FilterChip
+								label={filter.label}
+								onClick={() => filters.update((filters) => filters.filter((f) => f !== filter))}
+								classes={filter.not ? 'bg-surface-600' : ''}
+							/>
 						{/if}
 					{/each}
 				</div>
