@@ -22,7 +22,6 @@
 </script>
 
 <script lang="ts" generics="T extends classTypes[keyof classTypes]">
-	import type { Writable } from 'svelte/store';
 	import { dev } from '$app/environment';
 	import { settings } from '$lib/settings';
 	import type { classTypes } from '$lib/data/contentManager';
@@ -64,14 +63,22 @@
 
 	let search = '';
 	let filteredItems = items;
-	$: filteredItems = items.filter((item) => {
-		return search
-			.toLowerCase()
-			.split(',')
-			.map((term) => term.trim())
-			.every((term) => {
-				return item.label.toLowerCase().includes(term);
-			});
+
+	$: search,
+		(filteredItems = items.filter((item) => {
+			return search
+				.toLowerCase()
+				.split(',')
+				.map((term) => term.trim())
+				.every((term) => {
+					return item.label.toLowerCase().includes(term);
+				});
+		}));
+
+	filters.subscribe((value) => {
+		filteredItems = items.filter((item) => {
+			return item;
+		});
 	});
 
 	$: columns.forEach((col) => {
@@ -192,7 +199,7 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 			</div>
 			{#if $filters.length && !hideFilters}
 				<div
-					class="flex flex-wrap [&>*]:mr-1 last:[&>*]:mr-0 overflow-x-clip border-b border-surface-300-600-token text-dark-token"
+					class="flex flex-wrap [&>*]:mr-1 last:[&>*]:mr-0 overflow-x-clip border-b border-surface-300-600-token text-dark-token bg-surface-200-700-token"
 					title="Remove filters by clicking on them."
 				>
 					{#each $filters as filter}
