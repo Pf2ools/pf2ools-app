@@ -147,7 +147,7 @@
 	<div class="top-0" bind:clientHeight={headerHeight}>
 		<div>
 			<div class="input-group input-group-divider flex flex-row rounded-b-none">
-				<button class="input-group-shim" on:click={() => modalStore.trigger(modalSettings)}>
+				<button class="input-group-shim !px-3" on:click={() => modalStore.trigger(modalSettings)}>
 					Filter
 				</button>
 				<button
@@ -160,12 +160,19 @@
 						class="text-xl"
 					/>
 				</button>
-				<input
-					class="input rounded-b-none rounded-l-none p-1 pl-2"
-					type="text"
-					placeholder="Search..."
-					bind:value={search}
-				/>
+
+				<div class="w-full relative !px-2">
+					<input
+						class="input rounded-b-none rounded-l-none p-0 py-1"
+						type="text"
+						placeholder="Search..."
+						bind:value={search}
+					/>
+					<span class="text-sm absolute right-2 opacity-50">
+						{filteredItems.length}/{items.length}
+					</span>
+				</div>
+
 				<button
 					class="input-group-shim !px-2 border-r border-surface-400-500-token"
 					on:click={() =>
