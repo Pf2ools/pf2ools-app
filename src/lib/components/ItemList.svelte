@@ -42,9 +42,7 @@
 	}
 
 	const initialValue: filteringArray<T> = [
-		{
-			OR: [{ label: 'start Z' }, { label: 'start X' }],
-		},
+		{ label: 'start Z' },
 		{
 			OR: [{ label: 'start A' }, { label: 'start B' }, { label: 'start C' }],
 		},
@@ -219,7 +217,7 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 							<FilterChip
 								label={filter.label}
 								onClick={() => filters.update((filters) => filters.filter((f) => f !== filter))}
-								classes={filter.not ? 'bg-surface-600' : ''}
+								classes={`my-px ${filter.not ? 'bg-surface-600' : ''}`}
 							/>
 						{/if}
 					{/each}
