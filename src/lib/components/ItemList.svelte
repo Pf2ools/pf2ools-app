@@ -18,7 +18,7 @@
 		not?: boolean;
 	};
 
-	export type filteringArray<T> = (filterType<T> | { OR: filterType<T>[] })[];
+	export type filteringArray<T> = (filterType<T> | { OR: filterType<T>[]; not?: boolean })[];
 </script>
 
 <script lang="ts" generics="T extends classTypes[keyof classTypes]">
@@ -45,6 +45,10 @@
 		{ label: 'start Z' },
 		{
 			OR: [{ label: 'start A' }, { label: 'start B' }, { label: 'start C' }],
+		},
+		{
+			OR: [{ label: 'start D' }, { label: 'start E' }, { label: 'start F' }],
+			not: true,
 		},
 		{ label: 'end R', not: true },
 	];
@@ -110,22 +114,23 @@
 	}
 
 	function move(event: KeyboardEvent) {
-		if (dev && event.altKey && event.key === 'R' && document?.activeElement?.tagName !== 'INPUT') {
-			restartFilters(event.shiftKey);
-		}
-		if ((event.key === 'j' || event.key === 'k') && document?.activeElement?.tagName !== 'INPUT') {
-			event.preventDefault();
-			// Find the current selected row with #row and .active
-			const current = document.querySelector('#row.active');
-			// Grab the next or previous row
-			const next = (
-				event.key === 'j' ? current?.nextElementSibling : current?.previousElementSibling
-			) as HTMLElement | null | undefined;
-			// Grab the button and click it
-			next?.click();
-			next?.focus();
-			// Scroll to this element
-			next?.scrollIntoView({ block: 'center' });
+		if (document?.activeElement?.tagName !== 'INPUT') {
+			if (event.altKey && event.key === 'R') restartFilters(event.shiftKey);
+
+			if (event.key === 'j' || event.key === 'k') {
+				event.preventDefault();
+				// Find the current selected row with #row and .active
+				const current = document.querySelector('#row.active');
+				// Grab the next or previous row
+				const next = (
+					event.key === 'j' ? current?.nextElementSibling : current?.previousElementSibling
+				) as HTMLElement | null | undefined;
+				// Grab the button and click it
+				next?.click();
+				next?.focus();
+				// Scroll to this element
+				next?.scrollIntoView({ block: 'center' });
+			}
 		}
 	}
 
@@ -151,12 +156,12 @@
 <div class="card flex flex-col" style="--headerHeight: {headerHeight}px">
 	<div class="top-0" bind:clientHeight={headerHeight}>
 		<div>
-			<div class="input-group input-group-divider flex flex-row rounded-b-none">
-				<button class="input-group-shim !px-3" on:click={() => modalStore.trigger(modalSettings)}>
+			<div class="input-group input-group-divider flex flex-row rounded-b-none [&>*]:!px-2">
+				<button class="input-group-shim" on:click={() => modalStore.trigger(modalSettings)}>
 					Filter
 				</button>
 				<button
-					class="input-group-shim !px-2 border-l border-surface-400-500-token"
+					class="input-group-shim border-l border-surface-400-500-token"
 					on:click={() => (hideFilters = !hideFilters)}
 					title="Toggle Filters"
 				>
@@ -166,7 +171,7 @@
 					/>
 				</button>
 
-				<div class="w-full relative !px-2">
+				<div class="w-full relative">
 					<input
 						class="input rounded-b-none rounded-l-none p-0 py-1"
 						type="text"
@@ -179,7 +184,7 @@
 				</div>
 
 				<button
-					class="input-group-shim !px-2 border-r border-surface-400-500-token"
+					class="input-group-shim border-r border-surface-400-500-token"
 					on:click={() =>
 						(selected = filteredItems[Math.floor(Math.random() * filteredItems.length)])}
 					title="Feeling Lucky?"
@@ -187,7 +192,7 @@
 					<iconify-icon icon="mdi:dice-multiple" class="text-xl" />
 				</button>
 				<button
-					class="input-group-shim !px-2"
+					class="input-group-shim"
 					on:click={(event) => restartFilters(event.shiftKey)}
 					title="Click to reset to default filters. Shift-Click to remove all filters.
 You can also do these actions by holding Alt and pressing R or Shift-R."
@@ -202,9 +207,13 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 				>
 					{#each $filters as filter}
 						{#if 'OR' in filter}
-							<div class="p-px flex rounded-token variant-ghost-interact">
+							<div
+								class="p-px flex rounded-token"
+								class:variant-ghost-surface={filter.not}
+								class:variant-ghost-interact={!filter.not}
+							>
 								{#each filter.OR as orFilter, index}
-									<FilterChip label={orFilter.label}>
+									<FilterChip label={orFilter.label} classes={filter.not ? 'bg-surface-600' : ''}>
 										<div slot="outside">
 											{#if index !== filter.OR.length - 1}
 												<div class="px-1 text-sm text-base-token dark:text-dark-token">/</div>
