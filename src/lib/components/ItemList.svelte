@@ -30,6 +30,7 @@
 	import { page } from '$app/stores';
 	import { getModalStore, localStorageStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import FilterChip from './ItemList/FilterChip.svelte';
+	// import { queryParam } from 'sveltekit-search-params'; https://github.com/paoloricciuti/sveltekit-search-params/tree/master
 	export let items: T[] = [];
 	export let selected: T;
 	export let columns: columnType<T>[];
