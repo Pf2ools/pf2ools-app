@@ -17,7 +17,7 @@
 		"@crikey/stores-select": "^0.2.2",
 		"@floating-ui/dom": "^1.5.3",
 		"@skeletonlabs/skeleton": "2.6.1",
-		"@skeletonlabs/tw-plugin": "0.3.0",
+		"@skeletonlabs/tw-plugin": "0.3.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-static": "^3.0.0",
 		"@sveltejs/kit": "^2.0.2",
