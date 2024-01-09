@@ -162,9 +162,12 @@
 					Filter
 				</button>
 				<button
-					class="input-group-shim border-l border-surface-400-500-token"
+					class="input-group-shim border-l border-surface-400-500-token generic-disabled"
+					disabled={!$filters.length}
 					on:click={() => (hideFilters = !hideFilters)}
-					title="Toggle Filters"
+					title={$filters.length
+						? 'Toggle Filter Visibility'
+						: 'There are no filters to be hidden or shown!'}
 				>
 					<iconify-icon
 						icon="mdi:arrow-{!hideFilters ? 'collapse' : 'expand'}-vertical"
