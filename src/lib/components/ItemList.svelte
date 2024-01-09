@@ -31,6 +31,7 @@
 	import { getModalStore, localStorageStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import FilterChip from './ItemList/FilterChip.svelte';
 	// import { queryParam } from 'sveltekit-search-params'; https://github.com/paoloricciuti/sveltekit-search-params/tree/master
+	export let classes = '';
 	export let items: T[] = [];
 	export let selected: T;
 	export let columns: columnType<T>[];
@@ -154,7 +155,7 @@
 
 <svelte:window on:keydown={move} on:hashchange={(event) => hashChange(event)} />
 
-<div class="card flex flex-col" style="--headerHeight: {headerHeight}px">
+<div class="card flex flex-col {classes}" style="--headerHeight: {headerHeight}px">
 	<div class="top-0" bind:clientHeight={headerHeight}>
 		<div>
 			<div class="input-group input-group-divider flex flex-row rounded-b-none [&>*]:!px-2">
