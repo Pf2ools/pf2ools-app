@@ -18,7 +18,7 @@ export const columns = [
 	{
 		enabled: true,
 		order: -1,
-		label: 'Src.',
+		label: 'Source',
 		hover: 'Source',
 		key: 'sourceShort',
 		sortable: (a: bg, b: bg) => a.sourceShort.localeCompare(b.sourceShort),
@@ -29,13 +29,13 @@ export const columns = [
 	{
 		enabled: true,
 		order: 2,
-		label: 'C.',
-		hover: 'Count',
+		label: 'Count',
+		hover: 'Ability Boost Count',
 		key: 'abilityBoosts.count',
 		sortable: (a: bg, b: bg) => (a?.abilityBoosts?.count ?? 0) - (b?.abilityBoosts?.count ?? 0),
 		parser: (item: bg) => item?.abilityBoosts?.count ?? 0,
 		classes: 'text-center',
-		span: 1,
+		span: 2,
 	},
 	{
 		enabled: true,

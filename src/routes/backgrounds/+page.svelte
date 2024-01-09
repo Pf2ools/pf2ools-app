@@ -17,9 +17,11 @@
 	class:container={!$settings.wideMode}
 	class:px-2={$settings.wideMode}
 >
-	<div class="w-full h-slot grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-none gap-4">
-		<ItemList bind:selected items={$backgrounds} {columns} />
-		<div class="[&_p]:-indent-5 [&_p]:ml-5">
+	<div class="w-full h-slot grid grid-rows-2 sm:grid-cols-5 sm:grid-rows-none gap-4">
+		<div class="sm:col-span-3">
+			<ItemList bind:selected items={$backgrounds} {columns} />
+		</div>
+		<div class="sm:col-span-2 [&_p]:-indent-5 [&_p]:ml-5">
 			<div class="p-3 pb-1.5 card">
 				{#if selected}
 					<h1 class="h2">{selected.label}</h1>
