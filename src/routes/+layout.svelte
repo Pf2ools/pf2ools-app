@@ -70,7 +70,7 @@
 
 	<!-- (pageFooter) -->
 	<svelte:fragment slot="footer">
-		<div class="absolute opacity-15 text-xs bottom-0 left-1">
+		<div class="absolute opacity-15 text-xs bottom-0 left-1 select-none">
 			Ver. {new Date(Number(version)).toLocaleDateString('af-ZA', {
 				year: 'numeric',
 				month: '2-digit',
