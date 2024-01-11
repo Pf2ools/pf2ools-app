@@ -81,7 +81,7 @@
 		</div>
 		{#if !$settings.clearFooter}
 			<div bind:clientHeight={footerElement} transition:slide>
-				<div class="relative hidden md:flex justify-center items-center pb-1">
+				<div class="relative hidden md:flex justify-center items-center pb-1 opacity-30">
 					<p class="text-gray-500 text-xs">
 						<span class="text-gray-400">©</span>
 						{new Date().getFullYear()} pf2ools |

@@ -5,6 +5,7 @@ import { skeleton } from '@skeletonlabs/tw-plugin';
 import { RemasterGreen } from './src/themes/RemasterGreen';
 import { CoreRed } from './src/themes/CoreRed';
 import pf2ools from './scripts/tailwind-plugin';
+import colors from 'tailwindcss/colors';
 
 export default {
 	darkMode: 'class',
@@ -39,6 +40,9 @@ export default {
 			fontFamily: {
 				flavor: ['var(--theme-font-family-flavor)'],
 				action: ['pathfinder2eactions'],
+			},
+			colors: {
+				gray: colors.gray,
 			},
 		},
 		container: {
