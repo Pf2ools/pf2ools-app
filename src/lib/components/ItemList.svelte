@@ -61,7 +61,8 @@
 		component: 'FilterPage',
 		value: filter,
 		response: (result: filteringArray<T> | undefined) => {
-			if (result) filters.set(result);
+			// if (result) filters.set(result);
+			console.log(result);
 		},
 	};
 
@@ -209,13 +210,13 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 			</div>
 			{#if $filters.length && !hideFilters}
 				<div
-					class="flex flex-wrap [&>*]:mr-1 last:[&>*]:mr-0 overflow-x-clip border-b border-surface-300-600-token text-dark-token bg-surface-200-700-token text-xs"
+					class="flex flex-wrap [&>*]:mr-1 last:[&>*]:mr-0 overflow-x-clip border-b border-surface-300-600-token text-dark-token bg-surface-200-700-token text-xs px-0.5"
 					title="Remove filters by clicking on them."
 				>
 					{#each $filters as filter}
 						{#if 'OR' in filter}
 							<div
-								class="p-px flex rounded-token"
+								class="p-px flex rounded-md"
 								class:variant-ghost-surface={filter.not}
 								class:variant-ghost-interact={!filter.not}
 							>
