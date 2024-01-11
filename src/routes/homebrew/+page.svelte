@@ -115,7 +115,7 @@
 		h-[calc(var(--slotHeight)_-_2.75rem)]
 	-->
 
-	<div class="w-full h-slot grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-none gap-2">
+	<div class="w-full h-slot grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-none gap-2">
 		<!-- <div style="--listHeight: calc(var(--slotHeight) - 2.75rem)"> -->
 		<ItemList bind:selected items={$homebrewSources} {columns} />
 		<!-- </div> -->
@@ -140,9 +140,9 @@
 							{selected.publisherAuthors}
 						</p>
 					</div>
-					<div class="grid grid-cols-3 gap-1 text-center">
+					<div class="grid grid-cols-6 gap-1 text-center">
 						<button
-							class="btn-sm rounded-token border-token border-surface-500-400-token generic-disabled"
+							class="btn-sm rounded-token border-token border-surface-500-400-token generic-disabled col-span-2"
 							on:click={async () => {
 								await selected.addToHomebrew();
 								selected = selected;
@@ -153,7 +153,7 @@
 							{$isInstalled && $isThereNewerVersion ? 'Update' : 'Download'}
 						</button>
 						<button
-							class="btn-sm rounded-token border-token border-surface-500-400-token generic-disabled"
+							class="btn-sm rounded-token border-token border-surface-500-400-token generic-disabled col-span-2"
 							disabled={!$isInstalled}
 							class:variant-soft-error={$isInstalled}
 							on:click={() => (selected = selected) && selected.deleteFromHomebrew()}
@@ -165,7 +165,14 @@
 							target="_blank"
 							class="btn-sm rounded-token border-token border-surface-500-400-token flex items-center justify-center"
 						>
-							See Code <iconify-icon icon="mdi:open-in-new" class="pl-1" />
+							Source <iconify-icon icon="mdi:open-in-new" class="pl-1" />
+						</a>
+						<a
+							href={selected.downloadURL}
+							target="_blank"
+							class="btn-sm rounded-token border-token border-surface-500-400-token flex items-center justify-center"
+						>
+							Code <iconify-icon icon="mdi:open-in-new" class="pl-1" />
 						</a>
 					</div>
 				{/if}
