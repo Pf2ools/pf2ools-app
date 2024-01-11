@@ -14,6 +14,29 @@
 	.variant-ghost-interact {
 		@apply bg-interact-500/20 dark:bg-interact-500/20 variant-outline-interact;
 	}
+
+	.variant-soft-interact {
+		@apply bg-interact-400/20 dark:bg-interact-500/20 text-interact-700-200-token !ring-0;
+	}
+
+	.selected {
+		box-shadow: inset 0 0 0 200px rgba(0, 107, 196, 0.3);
+	}
+
+	.homebrew-shadow {
+		box-shadow: inset 0 0 5px rgb(192 132 252 / 25%);
+	}
+
+	.secondary-shadow {
+		box-shadow: inset 0 0 5px rgb(72 152 52 / 25%);
+	}
+
+	.offset-scroll {
+		margin-right: calc(-1 * var(--scrollbar-width, 8px));
+		::-webkit-scrollbar {
+			width: var(--scrollbar-width, 8px);
+		}
+	}
 }
 
 @layer utilities {
@@ -35,21 +58,6 @@
 	}
 	.scroll-stable {
 		scrollbar-gutter: stable;
-	}
-
-	.offset-scroll {
-		margin-right: calc(-1 * var(--scrollbar-width, 8px));
-		::-webkit-scrollbar {
-			width: var(--scrollbar-width, 8px);
-		}
-	}
-
-	.homebrew-shadow {
-		box-shadow: inset 0 0 5px rgb(192 132 252 / 25%);
-	}
-
-	.secondary-shadow {
-		box-shadow: inset 0 0 5px rgb(72 152 52 / 25%);
 	}
 }
 

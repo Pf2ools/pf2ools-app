@@ -6,7 +6,7 @@
 
 <button
 	on:click={onClick}
-	class="chip border-surface-400 border-token rounded-token px-0.5 py-px bg-interact-900 hover:bg-error-900 hover:line-through {classes}"
+	class="chip rounded-token px-0.5 py-px bg-interact-700 hover:bg-error-800 hover:line-through {classes}"
 >
 	{label}
 	<slot name="inside" />

@@ -44,15 +44,15 @@
 	}
 
 	const initialValue: filteringArray<T> = [
-		{ label: 'start Z' },
+		{ label: 'Z' },
 		{
-			OR: [{ label: 'start A' }, { label: 'start B' }, { label: 'start C' }],
+			OR: [{ label: 'A' }, { label: 'B' }, { label: 'C' }],
 		},
 		{
-			OR: [{ label: 'start D' }, { label: 'start E' }, { label: 'start F' }],
+			OR: [{ label: 'D' }, { label: 'E' }, { label: 'F' }],
 			not: true,
 		},
-		{ label: 'end R', not: true },
+		{ label: '!R', not: true },
 	];
 	let filters = localStorageStore('filters-background', initialValue);
 	const modalStore = getModalStore();
@@ -158,7 +158,9 @@
 <div class="card flex flex-col {classes}" style="--headerHeight: {headerHeight}px">
 	<div class="top-0" bind:clientHeight={headerHeight}>
 		<div>
-			<div class="input-group input-group-divider flex flex-row rounded-b-none [&>*]:!px-2">
+			<div
+				class="input-group input-group-divider flex flex-row rounded-b-none [&>*]:!px-2 [&_*]:bg-surface-100-800-token"
+			>
 				<button class="input-group-shim" on:click={() => modalStore.trigger(modalSettings)}>
 					Filter
 				</button>
@@ -189,7 +191,7 @@
 				</div>
 
 				<button
-					class="input-group-shim border-r border-surface-400-500-token"
+					class="input-group-shim border-r border-surface-400-500-token border-l"
 					on:click={() =>
 						(selected = filteredItems[Math.floor(Math.random() * filteredItems.length)])}
 					title="Feeling Lucky?"
@@ -207,7 +209,7 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 			</div>
 			{#if $filters.length && !hideFilters}
 				<div
-					class="flex flex-wrap [&>*]:mr-1 last:[&>*]:mr-0 overflow-x-clip border-b border-surface-300-600-token text-dark-token bg-surface-200-700-token"
+					class="flex flex-wrap [&>*]:mr-1 last:[&>*]:mr-0 overflow-x-clip border-b border-surface-300-600-token text-dark-token bg-surface-200-700-token text-xs"
 					title="Remove filters by clicking on them."
 				>
 					{#each $filters as filter}
@@ -221,7 +223,9 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 									<FilterChip label={orFilter.label} classes={filter.not ? 'bg-surface-600' : ''}>
 										<div slot="outside">
 											{#if index !== filter.OR.length - 1}
-												<div class="px-1 text-sm text-base-token dark:text-dark-token">/</div>
+												<div class="px-1 text-sm -mt-px text-base-token dark:text-dark-token">
+													/
+												</div>
 											{/if}
 										</div>
 									</FilterChip>
@@ -282,7 +286,7 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 				class="pl-0.5 grid grid-cols-24 w-full {$settings.listSize} hover:!variant-ghost-primary focus:!variant-ghost-primary"
 				class:homebrew-shadow={!item?.official}
 				class:secondary-shadow={item?.secondaryContent}
-				class:!variant-soft-primary={selected === item}
+				class:selected={selected === item}
 				class:active={selected === item}
 				on:click={() => {
 					if (selected !== item) selected = item;
