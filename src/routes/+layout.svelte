@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { version } from '$app/environment';
 	import '../app.postcss';
 	import 'iconify-icon';
 	import Navigation from '$lib/components/Navigation.svelte';
@@ -69,6 +70,15 @@
 
 	<!-- (pageFooter) -->
 	<svelte:fragment slot="footer">
+		<div class="absolute opacity-15 text-xs bottom-0 left-1">
+			Ver. {new Date(Number(version)).toLocaleDateString('af-ZA', {
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit',
+				hour: '2-digit',
+				minute: '2-digit',
+			})}
+		</div>
 		{#if !$settings.clearFooter}
 			<div bind:clientHeight={footerElement} transition:slide>
 				<div class="relative hidden md:flex justify-center items-center pb-1">
