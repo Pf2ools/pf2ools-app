@@ -173,6 +173,7 @@
 						<a
 							href={selected.URL}
 							target="_blank"
+							rel="noopener noreferrer"
 							class="btn-sm rounded-token border-token border-surface-500-400-token flex items-center justify-center"
 						>
 							Source <iconify-icon icon="mdi:open-in-new" class="pl-1" />
@@ -180,6 +181,7 @@
 						<a
 							href={selected.downloadURL}
 							target="_blank"
+							rel="noopener noreferrer"
 							class="btn-sm rounded-token border-token border-surface-500-400-token flex items-center justify-center"
 						>
 							Code <iconify-icon icon="mdi:open-in-new" class="pl-1" />
