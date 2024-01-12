@@ -21,14 +21,26 @@
 
 	.selected {
 		box-shadow: inset 0 0 0 200px rgba(0, 107, 196, 0.3) !important;
+		&.homebrew-shadow {
+			box-shadow: inset 0 0 0 200px rgba(192, 132, 252, 0.3) !important;
+		}
+		&.secondary-shadow {
+			box-shadow: inset 0 0 0 200px rgba(72, 152, 52, 0.3) !important;
+		}
 	}
 
 	.homebrew-shadow {
-		box-shadow: inset 0 0 5px rgb(192 132 252 / 25%);
+		box-shadow: inset 0 0 25px rgb(192 132 252 / 20%);
+		.dark & {
+			box-shadow: inset 0 0 25px rgb(192 132 252 / 10%);
+		}
 	}
 
 	.secondary-shadow {
-		box-shadow: inset 0 0 5px rgb(72 152 52 / 25%);
+		box-shadow: inset 0 0 25px rgb(72 152 52 / 30%);
+		.dark & {
+			box-shadow: inset 0 0 25px rgb(72 152 52 / 15%);
+		}
 	}
 
 	.offset-scroll {
