@@ -84,6 +84,10 @@
 	$: if (dev) console.log(selected);
 	$: if (selected) ({ isInstalled, isThereNewerVersion } = selected);
 	$: selected, (columns = columns);
+
+	function dblClick(item: T, event: Event) {
+		item.addToHomebrew().then(() => (selected = item));
+	}
 </script>
 
 <svelte:head>
@@ -117,7 +121,13 @@
 
 	<div class="w-full h-slot grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-none gap-2">
 		<!-- <div style="--listHeight: calc(var(--slotHeight) - 2.75rem)"> -->
-		<ItemList bind:selected items={$homebrewSources} {columns} />
+		<ItemList
+			bind:selected
+			items={$homebrewSources}
+			{columns}
+			{dblClick}
+			title="Double Click to immediately download."
+		/>
 		<!-- </div> -->
 		<div>
 			<div class="p-3 pb-1.5 card space-y-1">

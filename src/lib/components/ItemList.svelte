@@ -31,11 +31,13 @@
 	import { getModalStore, localStorageStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import FilterChip from './ItemList/FilterChip.svelte';
 	// import { queryParam } from 'sveltekit-search-params'; https://github.com/paoloricciuti/sveltekit-search-params/tree/master
+	export let dblClick = (item: T, event: Event) => {};
 	export let classes = '';
 	export let items: T[] = [];
 	export let selected: T;
 	export let columns: columnType<T>[];
 	export let filter = 'lol';
+	export let title = '';
 
 	selected ??= items[0];
 
@@ -283,6 +285,7 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 	>
 		{#each filteredItems as item}
 			<button
+				{title}
 				id="row"
 				class="pl-0.5 grid grid-cols-24 w-full {$settings.listSize} hover:!variant-ghost-primary focus:!variant-ghost-primary"
 				class:homebrew-shadow={!item?.official}
@@ -293,6 +296,7 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 					if (selected !== item) selected = item;
 					goto(`#${item.hash}`);
 				}}
+				on:dblclick={(event) => dblClick(item, event)}
 			>
 				{#each columns
 					.filter((col) => col.enabled)
