@@ -70,14 +70,20 @@
 
 	<!-- (pageFooter) -->
 	<svelte:fragment slot="footer">
-		<div class="absolute opacity-15 text-xs bottom-0 left-1 select-none">
-			Ver. {new Date(Number(version)).toLocaleDateString('af-ZA', {
-				year: 'numeric',
-				month: '2-digit',
-				day: '2-digit',
-				hour: '2-digit',
-				minute: '2-digit',
-			})}
+		<div
+			class="hidden sm:block z-10 absolute opacity-15 select-none {$settings.wideMode
+				? 'text-xss left-1/2 top-0 [&>div]:-translate-x-1/2'
+				: 'text-xs left-1 bottom-0'}"
+		>
+			<div>
+				Ver. {new Date(Number(version)).toLocaleDateString('af-ZA', {
+					year: 'numeric',
+					month: '2-digit',
+					day: '2-digit',
+					hour: '2-digit',
+					minute: '2-digit',
+				})}
+			</div>
 		</div>
 		{#if !$settings.clearFooter}
 			<div bind:clientHeight={footerElement} transition:slide>
