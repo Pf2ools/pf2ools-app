@@ -22,6 +22,13 @@ const config = {
 	},
 
 	kit: {
+		version: {
+			// Not sure whether I should reverse the logic here.
+			// Currently we are using the version from the environment variable, which has to be set outside.
+			// This is meant to allow to have "no version" as per debug builds (next.pf2oo.ls) and "version" as per release builds
+			// But we might want to instead have the versions by default and build timestamp with a debug flag. But then this can cause issues in terms of what version is what.
+			name: process.env.VERSION ?? undefined,
+		},
 		adapter: adapter({
 			fallback: '404.html',
 		}),

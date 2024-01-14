@@ -41,7 +41,20 @@ jobs:
           node-version: 'lts/*'
           cache: 'npm'
 
+      # get part of the tag after the `v`
+      - name: Extract tag version number
+        id: get_version
+        uses: battila7/get-version-action@v2
+
+      - name: Change package.json version to the tag version
+        id: info
+        uses: jaywcjlove/github-action-package@main
+        with:
+          version: ${{steps.get_version.outputs.version-without-v}}
+
       - name: Install frontend dependencies
+        env:
+          VERSION: ${{steps.get_version.outputs.version-without-v}}
         run: npm install
 
       - name: Build the app
