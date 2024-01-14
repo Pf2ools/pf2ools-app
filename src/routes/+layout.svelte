@@ -76,13 +76,15 @@
 				: 'text-xs left-1 bottom-0'}"
 		>
 			<div>
-				Ver. {new Date(Number(version)).toLocaleDateString('af-ZA', {
-					year: 'numeric',
-					month: '2-digit',
-					day: '2-digit',
-					hour: '2-digit',
-					minute: '2-digit',
-				})}
+				Ver. {isNaN(Number(version))
+					? version
+					: new Date(Number(version)).toLocaleDateString('af-ZA', {
+							year: 'numeric',
+							month: '2-digit',
+							day: '2-digit',
+							hour: '2-digit',
+							minute: '2-digit',
+						})}
 			</div>
 		</div>
 		{#if !$settings.clearFooter}
