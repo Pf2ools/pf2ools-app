@@ -34,7 +34,7 @@
 		"iconify-icon": "^1.0.8",
 		"pf2ools-schema": "github:Pf2ools/pf2ools-schema",
 		"postcss": "8.4.33",
-		"prettier": "^3.0.0",
+		"prettier": "^3.2.2",
 		"prettier-plugin-svelte": "^3.0.0",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
