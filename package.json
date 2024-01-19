@@ -34,6 +34,8 @@
 		"iconify-icon": "^1.0.8",
 		"pf2ools-schema": "github:Pf2ools/pf2ools-schema",
 		"postcss": "8.4.33",
+		"postcss-import": "^16.0.0",
+		"postcss-preset-env": "^9.3.0",
 		"prettier": "^3.0.0",
 		"prettier-plugin-svelte": "^3.0.0",
 		"svelte": "^4.2.7",
