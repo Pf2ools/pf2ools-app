@@ -13,5 +13,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 			),
 	});
 
+	/*
+		TODO: use the 'reroute' hook to redirect shareable pages to a hash-based URL.
+		Example: backgrounds/Academy%20Dropout_SoM => backgrounds#Academy%20Dropout_SoM
+		Additionally, add embeds.
+	*/
+
 	return response;
 };
