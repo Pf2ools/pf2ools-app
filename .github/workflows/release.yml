@@ -52,6 +52,11 @@ jobs:
         with:
           version: ${{steps.get_version.outputs.version-without-v}}
 
+      - name: Add VERSION Env Variable (Windows only)
+        if: matrix.platform == 'windows-latest'
+        run: |
+          echo "VERSION=${{steps.get_version.outputs.version-without-v}}" | Out-File -FilePath $env:GITHUB_ENV -Append # no need for -Encoding utf8
+
       - name: Install frontend dependencies
         env:
           VERSION: ${{steps.get_version.outputs.version-without-v}}
