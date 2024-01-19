@@ -25,4 +25,4 @@ export function dedupe<T extends object>(
 	];
 }
 
-export const dateConvert = (date: string) => new Date(date).getTime();
+export const dateConvert = (date: number | string) => new Date(Number(date)).getTime();

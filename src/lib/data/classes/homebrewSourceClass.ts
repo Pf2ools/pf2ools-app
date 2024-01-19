@@ -47,7 +47,7 @@ class HomebrewSource {
 	get isThereNewerVersion(): Readable<boolean> {
 		return derived(contentManager.homebrew, () => {
 			const existingSource = contentManager.sourceByID.get(this.ID);
-			const date = existingSource?.data.modified || '0';
+			const date = existingSource?.data.modified ?? 0;
 			if (dev)
 				console.log(
 					'Checking for newer version of ' +
