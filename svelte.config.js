@@ -1,4 +1,5 @@
-import adapter from '@sveltejs/adapter-static';
+import adapterStatic from '@sveltejs/adapter-static';
+import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -29,9 +30,11 @@ const config = {
 			// But we might want to instead have the versions by default and build timestamp with a debug flag. But then this can cause issues in terms of what version is what.
 			name: process.env.VERSION ?? undefined,
 		},
-		adapter: adapter({
-			fallback: '404.html',
-		}),
+		adapter: process.env.CF_PAGES
+			? adapterCloudflare()
+			: adapterStatic({
+					fallback: '404.html',
+				}),
 		paths: {
 			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH,
 		},
