@@ -91,7 +91,10 @@ hr {
 	@apply tabular-nums;
 }
 
-#title + .app-bar,
-#title:has(+ .app-bar) {
-	@apply bg-gradient-to-l dark:bg-blend-color dark:from-surface-800 dark:to-primary-500/20 bg-surface-300/75 dark:bg-surface-100-800-token;
+#shell-header .app-bar,
+#shell-header #title {
+	@apply bg-surface-300/75;
+	.dark & {
+		@apply bg-gradient-to-l bg-blend-color from-surface-800 to-primary-500/20 bg-surface-800;
+	}
 }
