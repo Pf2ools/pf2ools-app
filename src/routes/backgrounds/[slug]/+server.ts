@@ -36,7 +36,7 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 export const entries: EntryGenerator = async () => {
 	return [
 		{
-			slug: "Abadar's Avenger_FRP0",
+			slug: "Abadar's Avenger_FRP0.html",
 		},
 	];
 };
