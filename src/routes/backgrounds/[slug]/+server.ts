@@ -18,4 +18,4 @@ export const entries: EntryGenerator = async () => {
 	];
 };
 
-export const prerender = !!(CF_PAGES || SEO);
+export const prerender = CF_PAGES || SEO ? 'auto' : false;
