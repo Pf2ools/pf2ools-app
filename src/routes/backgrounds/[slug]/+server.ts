@@ -24,6 +24,8 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 				<meta name="twitter:site" content="@Pf2eTools" />
 				<meta property="og:url" content="${base}/backgrounds#${slug}" />
 
+				${dev ? '' : `<meta http-equiv="refresh" content="0; url=${base}/backgrounds#${slug}">`}
+
 				<!-- Modify This -->
 
 				<title>${slug} - pf2ools</title>
