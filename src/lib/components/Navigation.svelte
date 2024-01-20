@@ -91,6 +91,7 @@
 </script>
 
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { AppBar, LightSwitch, popup } from '@skeletonlabs/skeleton';
 	import { get } from 'svelte/store';
@@ -99,7 +100,7 @@
 <div data-popup="search">
 	<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] rounded-none">
 		<input class="" type="text" placeholder="Search Anything..." id="searchInput" />
-		<a class="rounded-none variant-filled-surface" href="/search">
+		<a class="rounded-none variant-filled-surface" href="{base}/search">
 			<iconify-icon icon="mdi:search" class="text-2xl" />
 		</a>
 	</div>
@@ -172,7 +173,7 @@
 							{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
 								<a
 									class="hover:variant-ghost-primary rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 text-md sm:text-sm"
-									href={subAnchor.href}
+									href={`${base}${subAnchor.href}`}
 									class:variant-filled-primary={$page.url.pathname === subAnchor.href}
 									use:popup={{
 										event: 'click',
@@ -192,7 +193,7 @@
 						class="border-r-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm items-start"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
-						href={anchor.href ?? undefined}
+						href={anchor.href ? `${base}${anchor.href}` : undefined}
 					>
 						<iconify-icon icon={anchor.icon} class="block md:hidden text-3xl" />
 						<span class="hidden md:block">{anchor.name}</span>
@@ -203,7 +204,7 @@
 				class="input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none hidden sm:flex"
 			>
 				<input type="text" placeholder="Search Anything..." />
-				<a class="rounded-none variant-filled-surface !p-2" href="/search">
+				<a class="rounded-none variant-filled-surface !p-2" href="{base}/search">
 					<iconify-icon icon="mdi:search" class="text-2xl" />
 				</a>
 			</div>

@@ -19,6 +19,7 @@
 	// Floating UI for Popups
 	import { AppShell, storePopup } from '@skeletonlabs/skeleton';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+	import { base } from '$app/paths';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	onNavigate((navigation) => {
@@ -93,7 +94,7 @@
 					<p class="text-gray-500 text-xs">
 						<span class="text-gray-400">©</span>
 						{new Date().getFullYear()} pf2ools |
-						<a href="/licenses" class="anchor !text-gray-500 underline-offset-auto">
+						<a href="{base}/licenses" class="anchor !text-gray-500 underline-offset-auto">
 							pf2ools is not affiliated with or endorsed by Paizo, see Licenses for more information
 						</a>
 					</p>
