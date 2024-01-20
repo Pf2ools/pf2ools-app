@@ -6,7 +6,7 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 	console.log(slug);
 
 	return new Response(
-		`We're Sorry, You Have Reached a PF2E Slug that has not yet been implemented: ${slug}. Please try again later.`
+		`Go no further, wretched intruder. You have attempted entry into the hitherto unbuilt sanctum, named by decree "${slug}". Your fortune has thus turned. Exeunt, and reconsider your actions in the morrow.`
 	);
 };
 
@@ -18,4 +18,4 @@ export const entries: EntryGenerator = async () => {
 	];
 };
 
-export const prerender = !!process.env.CF_PAGES ?? !!env.PUBLIC_SEO ?? false;
+export const prerender = env.CF_PAGES || env.SEO;

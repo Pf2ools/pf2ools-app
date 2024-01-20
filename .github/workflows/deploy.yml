@@ -46,6 +46,7 @@ jobs:
 
       - name: Build
         env:
+          BASE_PATH: '/${{ github.event.repository.name }}'
           PUBLIC_SEO: true
         run: npm run build
 
