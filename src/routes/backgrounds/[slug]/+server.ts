@@ -1,5 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import type { EntryGenerator } from './$types';
+import env from '$env/static/public';
 
 export const GET: RequestHandler = ({ params: { slug } }) => {
 	console.log(slug);
@@ -17,4 +18,4 @@ export const entries: EntryGenerator = async () => {
 	];
 };
 
-export const prerender = import.meta.env.CF_PAGES ?? import.meta.env.SEO ?? false;
+export const prerender = !!process.env.CF_PAGES ?? !!env.PUBLIC_SEO ?? false;

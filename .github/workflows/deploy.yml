@@ -46,7 +46,7 @@ jobs:
 
       - name: Build
         env:
-          SEO: true
+          PUBLIC_SEO: true
         run: npm run build
 
       - name: Upload Artifacts
