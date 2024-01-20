@@ -47,7 +47,7 @@ jobs:
       - name: Build
         env:
           BASE_PATH: '/${{ github.event.repository.name }}'
-          PUBLIC_SEO: true
+          SEO: true
         run: npm run build
 
       - name: Upload Artifacts
