@@ -40,7 +40,4 @@ const config = {
 		},
 	},
 };
-
-console.log('Building for path:', process.env.BASE_PATH);
-
 export default config;
