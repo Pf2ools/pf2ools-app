@@ -9,7 +9,7 @@ export const prerender = CF_PAGES || SEO ? 'auto' : false;
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
-		slug: bg.hash,
+		slug: bg.slug + '.html',
 	}));
 };
 
@@ -24,7 +24,7 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 		});
 	}
 
-	const bg = contentManager._background.find((bg) => bg.hash === encodeURI(slug)) ?? null;
+	const bg = contentManager._background.find((bg) => bg.slug === slug.replace('.html', '')) ?? null;
 
 	if (!bg) {
 		return new Response('Not Found', { status: 404 });

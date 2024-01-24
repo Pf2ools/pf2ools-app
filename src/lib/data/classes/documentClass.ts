@@ -23,8 +23,12 @@ class Document<T extends dataTypesWithoutSource> {
 		return this.name.primary + (this.name.specifier ? `; ${this.name.specifier}` : '');
 	}
 
+	get slug(): string {
+		return this.label + '_' + this.source.ID;
+	}
+
 	get hash(): string {
-		return encodeURI(this.label + '_' + this.source.ID);
+		return encodeURI(this.slug);
 	}
 
 	get sourceData() {
