@@ -59,7 +59,7 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 					<meta property="og:description" content="${bg.data.entries.join(' ')} Description" />
 
 					<meta property="og:image" content="${base}/icons/android-chrome-512x512.png" />
-					<meta name="twitter:card" content="summary_large_image">
+					<!-- <meta name="twitter:card" content="summary_large_image"> -->
 
 					<meta property="og:url" content="${base}/backgrounds#${slug}" />
 				</head>
