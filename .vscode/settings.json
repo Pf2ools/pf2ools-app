@@ -1,6 +1,18 @@
 {
 	"editor.formatOnSave": true,
-	"explorer.excludeGitIgnore": true,
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/.idea": true,
+		"**/.svelte-kit": true,
+		"**/package": true,
+		"**/node_modules": true,
+		".env.local": false
+	},
 	"prettier.documentSelectors": ["**/*.svelte"],
 	"tailwindCSS.classAttributes": [
 		"class",
