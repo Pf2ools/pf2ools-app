@@ -10,7 +10,7 @@ export const prerender = CF_PAGES || SEO ? 'auto' : false;
 export const entries: EntryGenerator = async () => {
 	return contentManager._background
 		.map((bg) => ({
-			slug: encodeURI(bg.hash),
+			slug: bg.hash,
 		}))
 		.map((obj) => ({ ...obj, slug: obj.slug + '.html' }));
 };
