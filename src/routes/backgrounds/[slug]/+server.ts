@@ -8,11 +8,9 @@ import contentManager from '$lib/data/contentManager';
 export const prerender = CF_PAGES || SEO ? 'auto' : false;
 
 export const entries: EntryGenerator = async () => {
-	return contentManager._background
-		.map((bg) => ({
-			slug: bg.hash,
-		}))
-		.map((obj) => ({ ...obj, slug: obj.slug + '.html' }));
+	return contentManager._background.map((bg) => ({
+		slug: bg.hash,
+	}));
 };
 
 export const GET: RequestHandler = ({ params: { slug } }) => {
