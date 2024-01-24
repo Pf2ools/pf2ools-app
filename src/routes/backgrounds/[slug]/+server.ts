@@ -24,7 +24,9 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 		});
 	}
 
-	const bg = contentManager._background.find((bg) => bg.slug === slug.replace('.html', '')) ?? null;
+	slug = slug.replace('.html', '');
+
+	const bg = contentManager._background.find((bg) => bg.slug === slug) ?? null;
 
 	if (!bg) {
 		return new Response('Not Found', { status: 404 });
