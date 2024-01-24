@@ -5,6 +5,16 @@ import { base } from '$app/paths';
 import { dev } from '$app/environment';
 import contentManager from '$lib/data/contentManager';
 
+export const prerender = CF_PAGES || SEO ? 'auto' : false;
+
+export const entries: EntryGenerator = async () => {
+	return contentManager._background
+		.map((bg) => ({
+			slug: encodeURI(bg.hash),
+		}))
+		.map((obj) => ({ ...obj, slug: obj.slug + '.html' }));
+};
+
 export const GET: RequestHandler = ({ params: { slug } }) => {
 	if (!slug) {
 		// Redirect straight to the backgrounds page
@@ -68,13 +78,3 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 		}
 	);
 };
-
-export const entries: EntryGenerator = async () => {
-	return contentManager._background
-		.map((bg) => ({
-			slug: encodeURI(bg.hash),
-		}))
-		.map((obj) => ({ ...obj, slug: obj.slug + '.html' }));
-};
-
-export const prerender = CF_PAGES || SEO ? 'auto' : false;
