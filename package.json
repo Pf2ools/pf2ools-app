@@ -33,7 +33,6 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.30.0",
 		"iconify-icon": "^1.0.8",
-		"pf2ools-schema": "github:Pf2ools/pf2ools-schema",
 		"postcss": "8.4.33",
 		"postcss-import": "^16.0.0",
 		"postcss-preset-env": "^9.3.0",
@@ -51,5 +50,8 @@
 		"vite-plugin-tailwind-purgecss": "0.2.0",
 		"zod": "^3.22.4"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"pf2ools-schema": "github:Pf2ools/pf2ools-schema"
+	}
 }
