@@ -55,8 +55,8 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 					<title>${slug} - pf2ools</title>
 					<meta property="og:title" content="${bg.label} - pf2ools" />
 
-					<meta name="description"  content="${bg.data.entries.join(' ')} Description" />
-					<meta property="og:description" content="${bg.data.entries.join(' ')} Description" />
+					<meta name="description" content="${bg.data.entries.join(' ')}" />
+					<meta property="og:description" content="${bg.data.entries.join(' ')}" />
 
 					<!-- <meta property="og:image" content="${base}/icons/android-chrome-512x512.png" /> -->
 					<!-- <meta name="twitter:card" content="summary_large_image"> -->
@@ -72,6 +72,7 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 			</html>`,
 		{
 			headers: {
+				Location: `${base}/backgrounds#${slug}`,
 				'content-type': 'text/html; charset=utf-8',
 				'cache-control': 's-maxage=1, stale-while-revalidate',
 			},
