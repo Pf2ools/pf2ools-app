@@ -6,6 +6,7 @@
 	import { onNavigate } from '$app/navigation';
 	import { settings } from '$lib/settings';
 	import { slide } from 'svelte/transition';
+	import { setContext } from 'svelte';
 
 	// Modals
 	import { Modal, initializeStores } from '@skeletonlabs/skeleton';
@@ -20,6 +21,7 @@
 	import { AppShell, storePopup } from '@skeletonlabs/skeleton';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 	import { base } from '$app/paths';
+	import { writable } from 'svelte/store';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	onNavigate((navigation) => {
@@ -38,16 +40,18 @@
 	let footerElement: number = 0;
 	let windowWidth: number = 0;
 	let windowHeight: number = 0;
-	let slotHeight = windowHeight - headerElement - footerElement;
+	let slotHeight = writable(windowHeight - headerElement - footerElement);
 
-	$: slotHeight = windowHeight - headerElement - footerElement;
+	$: $slotHeight = windowHeight - headerElement - footerElement;
+
+	setContext('slotHeight', slotHeight);
 </script>
 
 <svelte:window bind:innerHeight={windowHeight} bind:innerWidth={windowWidth} />
 
 <Modal components={modalRegistry} />
 
-<AppShell>
+<AppShell scrollbarGutter="" regionPage="scroll-stable scroll-thin">
 	<svelte:fragment slot="header">
 		{#if windowWidth >= 640}
 			<div bind:clientHeight={headerElement}>
@@ -63,7 +67,7 @@
 	<div
 		class="pb-1 pt-2 h-full"
 		class:[&_*]:border={$settings.debug.borders}
-		style="--slotHeight:calc({slotHeight}px - 1rem);"
+		style="--slotHeight:calc({$slotHeight}px - 1rem);"
 	>
 		<slot />
 	</div>

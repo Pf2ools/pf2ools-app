@@ -7,7 +7,7 @@ const defaults = {
 		borders: false,
 	},
 	clearFooter: dev ? true : false,
-	wideMode: window.__TAURI__ ? true : false,
+	wideMode: window?.__TAURI__ ? true : false,
 	listSize: 'text-sm' as 'text-xs' | 'text-sm' | 'text-base' | 'text-lg',
 	theme: 'CoreRed' as 'CoreRed' | 'RemasterGreen',
 };
@@ -25,7 +25,7 @@ export const settings = {
 	},
 };
 
-window.settings = settings;
+if (window) window.settings = settings;
 
 settings.subscribe((value) => {
 	// When value.theme changes, update the body `data-theme` attribute

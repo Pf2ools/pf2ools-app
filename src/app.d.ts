@@ -13,6 +13,7 @@ declare global {
 	interface Window {
 		settings: typeof settings;
 		contentManager: typeof contentManager;
+		__TAURI__?: object;
 	}
 
 	interface ViewTransition {

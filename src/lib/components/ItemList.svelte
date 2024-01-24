@@ -280,7 +280,7 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 		</div>
 	</div>
 	<div
-		class="h-[calc(var(--listHeight,var(--slotHeight))-var(--headerHeight))] overflow-y-scroll overflow-x-hidden offset-scroll scroll-thin
+		class="h-[calc(max(var(--listHeight,0px),var(--slotHeight))-var(--headerHeight))] overflow-y-scroll overflow-x-hidden offset-scroll scroll-thin
 		[&_button:nth-child(odd)]:bg-surface-200/50 dark:[&_button:nth-child(odd)]:bg-surface-700/50"
 	>
 		{#each filteredItems as item}

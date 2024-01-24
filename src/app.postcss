@@ -44,9 +44,9 @@
 	}
 
 	.offset-scroll {
-		margin-right: calc(-1 * var(--scrollbar-width, 8px));
+		margin-right: calc(-1 * var(--scrollbar-width, 11px));
 		::-webkit-scrollbar {
-			width: var(--scrollbar-width, 8px);
+			width: var(--scrollbar-width, 11px);
 		}
 	}
 
@@ -73,8 +73,9 @@
 	.scroll-thin {
 		scrollbar-width: thin;
 	}
+
 	.scroll-stable {
-		scrollbar-gutter: stable;
+		scrollbar-gutter: stable both-edges;
 	}
 }
 
