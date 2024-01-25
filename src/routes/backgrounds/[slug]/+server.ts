@@ -19,6 +19,7 @@ import { html as convertToReact } from 'satori-html';
 import FilterChip from '$lib/components/ItemList/FilterChip.svelte';
 import { twi } from 'tw-to-css';
 import { readFile } from 'fs/promises';
+// TODO: Turn SVG into PNG https://github.com/yisibl/resvg-js
 // End Image Stuff
 
 export const GET: RequestHandler = async ({ params: { slug } }) => {
