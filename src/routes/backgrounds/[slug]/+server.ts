@@ -13,7 +13,15 @@ export const entries: EntryGenerator = async () => {
 	}));
 };
 
-export const GET: RequestHandler = ({ params: { slug } }) => {
+// Image Stuff
+import satori from 'satori';
+import { html as convertToReact } from 'satori-html';
+import FilterChip from '$lib/components/ItemList/FilterChip.svelte';
+import { twi } from 'tw-to-css';
+import { readFile } from 'fs/promises';
+// End Image Stuff
+
+export const GET: RequestHandler = async ({ params: { slug } }) => {
 	if (!slug) {
 		// Redirect straight to the backgrounds page
 		return new Response('', {
@@ -31,6 +39,28 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 	if (!bg) {
 		return new Response('Not Found', { status: 404 });
 	}
+
+	// Image Stuff
+	const fontData = await readFile(
+		base + `${dev ? 'static/' : ''}fonts/Quicksand/Quicksand-Regular.ttf`
+	);
+	const resultHtml = FilterChip.render({ label: 'It Works!' }).html.replace(
+		/class="(.+?)"/g,
+		(m, p1) => `style='${twi(p1)};background-color:white'`
+	);
+	const markup = convertToReact(resultHtml);
+	const svg = await satori(markup, {
+		height: 1080,
+		width: 1080,
+		fonts: [
+			{
+				name: 'Quicksand',
+				data: await fontData,
+				style: 'normal',
+			},
+		],
+	});
+	// End Image Stuff
 
 	return new Response(
 		`<!DOCTYPE html>
@@ -65,6 +95,8 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 				</head>
 				<body style="background: black; color: gray">
 					You are getting redirected to <a href="${base}/backgrounds#${slug}">"${base}/backgrounds#${slug}"</a>.
+					${resultHtml}
+					${svg}
 				</body>
 				<script>
 					${dev ? '' : `window.location.replace("${base}/backgrounds#" + "${slug}");`}
