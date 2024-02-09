@@ -4,6 +4,8 @@ import { CF_PAGES, SEO } from '$env/static/private';
 import { base } from '$app/paths';
 import { dev } from '$app/environment';
 import contentManager from '$lib/data/contentManager';
+import nodeHtmlToImage from 'node-html-to-image';
+import { writeFile } from 'fs';
 
 export const prerender = CF_PAGES || SEO ? 'auto' : false;
 
@@ -13,7 +15,7 @@ export const entries: EntryGenerator = async () => {
 	}));
 };
 
-export const GET: RequestHandler = ({ params: { slug } }) => {
+export const GET: RequestHandler = async ({ params: { slug }, url }) => {
 	if (!slug || slug === '') {
 		// Redirect straight to the backgrounds page
 		return new Response('', {
@@ -31,6 +33,14 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 	if (!bg) {
 		return new Response('Not Found', { status: 404 });
 	}
+
+	const image = (await nodeHtmlToImage({
+		html: `<html><body><b>${bg.label}</b><br>${bg.data.entries.join('<br>')}</body></html>`,
+	})) as Buffer;
+
+	writeFile(`./static/${slug}.png`, image, (err) => {
+		if (err) console.error(err);
+	});
 
 	return new Response(
 		`<!DOCTYPE html>
@@ -58,7 +68,7 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 					<meta name="description" content="${bg.data.entries.join(' ')}" />
 					<meta property="og:description" content="${bg.data.entries.join(' ')}" />
 
-					<!-- <meta property="og:image" content="${base}/icons/android-chrome-512x512.png" /> -->
+					<!-- <meta property="og:image" content="${base}/backgrounds/img/${slug}.png" /> -->
 					<!-- <meta name="twitter:card" content="summary_large_image"> -->
 
 					<meta property="og:url" content="${base}/backgrounds#${slug}" />

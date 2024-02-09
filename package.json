@@ -52,6 +52,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"node-html-to-image": "^4.0.0",
 		"pf2ools-schema": "github:Pf2ools/pf2ools-schema"
 	}
 }
