@@ -4,8 +4,6 @@ import { CF_PAGES, SEO } from '$env/static/private';
 import { base } from '$app/paths';
 import { dev } from '$app/environment';
 import contentManager from '$lib/data/contentManager';
-import nodeHtmlToImage from 'node-html-to-image';
-import { writeFile } from 'fs';
 
 export const prerender = CF_PAGES || SEO ? 'auto' : false;
 
@@ -34,14 +32,6 @@ export const GET: RequestHandler = async ({ params: { slug }, url }) => {
 		return new Response('Not Found', { status: 404 });
 	}
 
-	const image = (await nodeHtmlToImage({
-		html: `<html><body><b>${bg.label}</b><br>${bg.data.entries.join('<br>')}</body></html>`,
-	})) as Buffer;
-
-	writeFile(`./static/${slug}.png`, image, (err) => {
-		if (err) console.error(err);
-	});
-
 	return new Response(
 		`<!DOCTYPE html>
 			<html lang="en">
@@ -68,8 +58,8 @@ export const GET: RequestHandler = async ({ params: { slug }, url }) => {
 					<meta name="description" content="${bg.data.entries.join(' ')}" />
 					<meta property="og:description" content="${bg.data.entries.join(' ')}" />
 
-					<!-- <meta property="og:image" content="${base}/backgrounds/img/${slug}.png" /> -->
-					<!-- <meta name="twitter:card" content="summary_large_image"> -->
+					 <meta property="og:image" content="${url}/png" />
+					 <meta name="twitter:card" content="summary_large_image">
 
 					<meta property="og:url" content="${base}/backgrounds#${slug}" />
 				</head>

@@ -41,7 +41,7 @@ const config = {
 			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH,
 		},
 
-		prerender: { handleHttpError: 'warn' },
+		prerender: { handleHttpError: 'warn', origin: process.env.ORIGIN ? process.env.ORIGIN : undefined },
 	},
 };
 export default config;
