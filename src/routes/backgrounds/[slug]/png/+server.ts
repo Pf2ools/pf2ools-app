@@ -1,10 +1,10 @@
 import { type RequestHandler } from '@sveltejs/kit';
-import { IMAGES_RENDER, SEO } from '$env/static/private';
+import { CF_PAGES, IMAGES_RENDER, SEO } from '$env/static/private';
 import contentManager from '$lib/data/contentManager';
 import nodeHtmlToImage from 'node-html-to-image';
 import type { EntryGenerator } from './$types';
 
-export const prerender = Boolean(Number(IMAGES_RENDER) && Number(SEO));
+export const prerender = Boolean(Number(IMAGES_RENDER) && Number(SEO)) && !CF_PAGES;
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
