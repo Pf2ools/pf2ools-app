@@ -14,7 +14,7 @@ export const entries: EntryGenerator = async () => {
 };
 
 export const GET: RequestHandler = ({ params: { slug } }) => {
-	if (!slug) {
+	if (!slug || slug === '') {
 		// Redirect straight to the backgrounds page
 		return new Response('', {
 			status: 302,
