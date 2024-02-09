@@ -4,7 +4,7 @@ import contentManager from '$lib/data/contentManager';
 import nodeHtmlToImage from 'node-html-to-image';
 import type { EntryGenerator } from './$types';
 
-export const prerender = SEO && IMAGES_RENDER ? 'auto' : false;
+export const prerender = Boolean(Number(IMAGES_RENDER) && Number(SEO));
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
