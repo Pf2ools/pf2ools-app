@@ -1,5 +1,4 @@
 import adapterStatic from '@sveltejs/adapter-static';
-import adapterCloudflare from '@sveltejs/adapter-cloudflare';
 import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -31,9 +30,7 @@ const config = {
 			name: process.env.VERSION ?? undefined,
 		},
 
-		adapter: process.env.CF_PAGES
-			? adapterCloudflare()
-			: adapterStatic({
+		adapter: adapterStatic({
 					fallback: '404.html',
 				}),
 
