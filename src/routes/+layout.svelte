@@ -2,7 +2,7 @@
 	import { version } from '$app/environment';
 	import '../app.postcss';
 	import 'iconify-icon';
-	import Navigation from '$lib/components/Navigation.svelte';
+	import Navigation from '$lib/ui/Navigation.svelte';
 	import { onNavigate } from '$app/navigation';
 	import { settings } from '$lib/settings';
 	import { slide } from 'svelte/transition';
@@ -10,7 +10,7 @@
 
 	// Modals
 	import { Modal, initializeStores } from '@skeletonlabs/skeleton';
-	import { modalRegistry } from '$lib/components/ModalRegistry';
+	import { modalRegistry } from '$lib/ui/ModalRegistry';
 	initializeStores();
 
 	// For debugging, does nothing but adds the contentManager to the window object

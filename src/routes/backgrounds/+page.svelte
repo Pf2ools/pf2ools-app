@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ItemList from '$lib/components/ItemList.svelte';
+	import ItemList from '$lib/ui/ItemList.svelte';
 	import cm from '$lib/data/contentManager';
 	import { settings } from '$lib/settings';
 	import { writable, get, type Readable } from 'svelte/store';

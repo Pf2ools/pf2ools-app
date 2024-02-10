@@ -1,4 +1,4 @@
-import type { columnType } from '$lib/components/ItemList.svelte';
+import type { columnType } from '$lib/ui/ItemList.svelte';
 import type { classTypes } from '$lib/data/contentManager';
 
 type bg = classTypes['background'];

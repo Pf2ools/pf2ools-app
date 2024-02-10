@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
-	import ItemList, { type columnType } from '$lib/components/ItemList.svelte';
+	import ItemList, { type columnType } from '$lib/ui/ItemList.svelte';
 	import type HomebrewSource from '$lib/data/classes/homebrewSourceClass';
 	import contentManager from '$lib/data/contentManager';
 	import { settings } from '$lib/settings';
