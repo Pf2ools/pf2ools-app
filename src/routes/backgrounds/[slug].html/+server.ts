@@ -7,7 +7,7 @@ import contentManager from '$lib/data/contentManager';
 
 export const prerender = Boolean(Number(SEO));
 
-console.log('Prerender SEO: ', prerender);
+console.log('========= Prerender SEO: ' + prerender + ' =========');
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({

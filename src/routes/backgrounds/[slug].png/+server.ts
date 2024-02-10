@@ -7,7 +7,7 @@ import { html as toReactNode } from 'satori-html';
 
 export const prerender = Boolean(Number(SEO) && Number(IMAGES_RENDER));
 
-console.log('Prerender Embed Images: ', prerender);
+console.log('========= Prerender Embed Images: ' + prerender + ' =========');
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
