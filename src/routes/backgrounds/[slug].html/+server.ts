@@ -1,15 +1,17 @@
 import { type RequestHandler } from '@sveltejs/kit';
 import type { EntryGenerator } from './$types';
-import { CF_PAGES, SEO } from '$env/static/private';
+import { SEO } from '$env/static/private';
 import { base } from '$app/paths';
 import { dev } from '$app/environment';
 import contentManager from '$lib/data/contentManager';
 
-export const prerender = Boolean(Number(CF_PAGES) || Number(SEO));
+export const prerender = Boolean(Number(SEO));
+
+console.log('========= Prerender SEO: ' + prerender + ' =========');
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
-		slug: bg.slug + '.html',
+		slug: bg.slug,
 	}));
 };
 
@@ -24,13 +26,13 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 		});
 	}
 
-	slug = slug.replace('.html', '');
-
 	const bg = contentManager._background.find((bg) => bg.slug === slug) ?? null;
 
 	if (!bg) {
 		return new Response('Not Found', { status: 404 });
 	}
+
+	console.log('Generating SEO page for ' + slug);
 
 	return new Response(
 		`<!DOCTYPE html>
@@ -58,8 +60,8 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 					<meta name="description" content="${bg.data.entries.join(' ')}" />
 					<meta property="og:description" content="${bg.data.entries.join(' ')}" />
 
-					<!-- <meta property="og:image" content="${base}/icons/android-chrome-512x512.png" /> -->
-					<!-- <meta name="twitter:card" content="summary_large_image"> -->
+					<meta property="og:image" content="${base}/backgrounds/${slug}.png" />
+					<meta name="twitter:card" content="summary_large_image">
 
 					<meta property="og:url" content="${base}/backgrounds#${slug}" />
 				</head>

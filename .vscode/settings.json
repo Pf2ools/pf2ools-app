@@ -11,6 +11,7 @@
 		"**/.svelte-kit": true,
 		"**/package": true,
 		"**/node_modules": true,
+		"**/build": true,
 		".env.local": false
 	},
 	"prettier.documentSelectors": ["**/*.svelte"],
