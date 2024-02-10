@@ -25,7 +25,7 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 	return new ImageResponse(
 		toReactNode(
 			`<body><h2 style="font-size: 36px">${bg.name.primary}</h2>${bg.data.entries.join('<p/>')}</body>
-			<style>body { background-color: #ffffff; width: 100%; height: 100%; display: flex; flex-direction: column; }</style>`
+			<style>body { padding: 12px; background-color: #ffffff; width: 100%; height: 100%; display: flex; flex-direction: column; }</style>`
 		),
 		{
 			width: 800,
