@@ -14,6 +14,7 @@
 		"tauri": "tauri"
 	},
 	"devDependencies": {
+		"@cloudflare/pages-plugin-vercel-og": "^0.1.0",
 		"@crikey/stores-select": "^0.2.2",
 		"@floating-ui/dom": "^1.6.1",
 		"@skeletonlabs/skeleton": "2.6.1",
@@ -38,6 +39,7 @@
 		"postcss-preset-env": "^9.3.0",
 		"prettier": "^3.2.2",
 		"prettier-plugin-svelte": "^3.0.0",
+		"satori-html": "^0.3.2",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
 		"svelte-preprocess": "^5.1.1",
@@ -52,8 +54,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@cloudflare/pages-plugin-vercel-og": "^0.1.0",
-		"pf2ools-schema": "github:Pf2ools/pf2ools-schema",
-		"satori-html": "^0.3.2"
+		"pf2ools-schema": "github:Pf2ools/pf2ools-schema"
 	}
 }
