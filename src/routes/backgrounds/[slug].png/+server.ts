@@ -7,6 +7,8 @@ import { html as toReactNode } from 'satori-html';
 
 export const prerender = Boolean(Number(SEO) && Number(IMAGES_RENDER));
 
+console.log('Prerender Embed Images: ', prerender);
+
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
 		slug: bg.slug,
@@ -20,6 +22,8 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 	const bg = contentManager._background.find((bg) => bg.slug === slug) ?? null;
 
 	if (!bg) return FoF;
+
+	console.log('Generating embed image for ' + slug);
 
 	// https://github.com/geoffrich/sveltekit-satori/blob/main/src/lib/renderImage.js
 	return new ImageResponse(

@@ -7,6 +7,8 @@ import contentManager from '$lib/data/contentManager';
 
 export const prerender = Boolean(Number(SEO));
 
+console.log('Prerender SEO: ', prerender);
+
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
 		slug: bg.slug,
@@ -29,6 +31,8 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 	if (!bg) {
 		return new Response('Not Found', { status: 404 });
 	}
+
+	console.log('Generating SEO page for ' + slug);
 
 	return new Response(
 		`<!DOCTYPE html>
