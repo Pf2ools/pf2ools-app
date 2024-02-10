@@ -13,7 +13,7 @@ export const entries: EntryGenerator = async () => {
 	}));
 };
 
-export const GET: RequestHandler = ({ params: { slug } }) => {
+export const GET: RequestHandler = ({ params: { slug }, url }) => {
 	if (!slug || slug === '') {
 		// Redirect straight to the backgrounds page
 		return new Response('', {
@@ -58,8 +58,8 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 					<meta name="description" content="${bg.data.entries.join(' ')}" />
 					<meta property="og:description" content="${bg.data.entries.join(' ')}" />
 
-					<!-- <meta property="og:image" content="${base}/icons/android-chrome-512x512.png" /> -->
-					<!-- <meta name="twitter:card" content="summary_large_image"> -->
+					<meta property="og:image" content="${url}.png" />
+					<meta name="twitter:card" content="summary_large_image">
 
 					<meta property="og:url" content="${base}/backgrounds#${slug}" />
 				</head>

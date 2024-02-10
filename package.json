@@ -52,6 +52,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"pf2ools-schema": "github:Pf2ools/pf2ools-schema"
+		"@cloudflare/pages-plugin-vercel-og": "^0.1.0",
+		"pf2ools-schema": "github:Pf2ools/pf2ools-schema",
+		"satori-html": "^0.3.2"
 	}
 }
