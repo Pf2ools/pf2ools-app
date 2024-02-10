@@ -5,7 +5,7 @@ import { base } from '$app/paths';
 import { dev } from '$app/environment';
 import contentManager from '$lib/data/contentManager';
 
-export const prerender = CF_PAGES || SEO ? 'auto' : false;
+export const prerender = Boolean(Number(CF_PAGES) && Number(SEO));
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
