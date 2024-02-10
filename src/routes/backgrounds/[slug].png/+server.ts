@@ -1,11 +1,11 @@
 import { type RequestHandler } from '@sveltejs/kit';
 import type { EntryGenerator } from './$types';
-import { CF_PAGES, SEO, IMAGES_RENDER } from '$env/static/private';
+import { SEO, IMAGES_RENDER } from '$env/static/private';
 import contentManager from '$lib/data/contentManager';
 import { ImageResponse } from '@cloudflare/pages-plugin-vercel-og/api';
 import { html as toReactNode } from 'satori-html';
 
-export const prerender = Boolean(Number(CF_PAGES) || Number(SEO)) && Boolean(Number(IMAGES_RENDER));
+export const prerender = Boolean(Number(SEO) && Number(IMAGES_RENDER));
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({

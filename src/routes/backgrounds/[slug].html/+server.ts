@@ -1,11 +1,11 @@
 import { type RequestHandler } from '@sveltejs/kit';
 import type { EntryGenerator } from './$types';
-import { CF_PAGES, SEO } from '$env/static/private';
+import { SEO } from '$env/static/private';
 import { base } from '$app/paths';
 import { dev } from '$app/environment';
 import contentManager from '$lib/data/contentManager';
 
-export const prerender = Boolean(Number(CF_PAGES) || Number(SEO));
+export const prerender = Boolean(Number(SEO));
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
