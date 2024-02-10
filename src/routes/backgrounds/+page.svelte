@@ -13,6 +13,9 @@
 	let listHeightStore = writable(0);
 	const slotHeightStore: Readable<number> = getContext('slotHeight');
 
+	import { backgrounds as backgroundTest } from '$lib/data/backgrounds';
+	console.log(backgroundTest);
+
 	listHeightStore.subscribe((value) => {
 		if (value > get(slotHeightStore)) listHeight = value;
 		if (value < get(slotHeightStore)) listHeight = get(slotHeightStore) - 20;

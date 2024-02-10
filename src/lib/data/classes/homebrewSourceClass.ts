@@ -1,6 +1,6 @@
 import { homebrewSources as homebrewSourcesSchema } from 'pf2ools-schema';
 import type { z } from 'zod';
-import contentManager from '../contentManager';
+import contentManager from '../contentManager.ts';
 import { derived, get, type Readable } from 'svelte/store';
 import { dateConvert } from '$lib/utils';
 import { dev } from '$app/environment';

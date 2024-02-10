@@ -1,5 +1,5 @@
-import type { dataTypes } from '../contentManager';
-import cm, { ContentManager } from '../contentManager';
+import type { dataTypes } from '../contentManager.ts';
+import cm, { ContentManager } from '../contentManager.ts';
 
 type dataTypesWithoutSource = keyof Omit<dataTypes, 'source'>;
 
