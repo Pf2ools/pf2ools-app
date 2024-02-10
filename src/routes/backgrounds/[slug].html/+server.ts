@@ -9,11 +9,11 @@ export const prerender = Boolean(Number(CF_PAGES) || Number(SEO));
 
 export const entries: EntryGenerator = async () => {
 	return contentManager._background.map((bg) => ({
-		slug: bg.slug + '.html',
+		slug: bg.slug,
 	}));
 };
 
-export const GET: RequestHandler = ({ params: { slug }, url }) => {
+export const GET: RequestHandler = ({ params: { slug } }) => {
 	if (!slug || slug === '') {
 		// Redirect straight to the backgrounds page
 		return new Response('', {
@@ -23,8 +23,6 @@ export const GET: RequestHandler = ({ params: { slug }, url }) => {
 			},
 		});
 	}
-
-	slug = slug.replace('.html', '');
 
 	const bg = contentManager._background.find((bg) => bg.slug === slug) ?? null;
 
@@ -58,7 +56,7 @@ export const GET: RequestHandler = ({ params: { slug }, url }) => {
 					<meta name="description" content="${bg.data.entries.join(' ')}" />
 					<meta property="og:description" content="${bg.data.entries.join(' ')}" />
 
-					<meta property="og:image" content="${url}.png" />
+					<meta property="og:image" content="${base}/backgrounds/${slug}.png" />
 					<meta name="twitter:card" content="summary_large_image">
 
 					<meta property="og:url" content="${base}/backgrounds#${slug}" />
