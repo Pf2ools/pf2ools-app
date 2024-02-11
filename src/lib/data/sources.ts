@@ -11,7 +11,7 @@ export const sources = {
 	schema: sourceSchema,
 	class: sourceClass,
 	homebrew: {
-		store: derived(homebrew.store, ($hb) => $hb.flatMap((b) => b.source)),
+		store: derived(homebrew.store, ($hb) => $hb.flatMap((b) => b.source || [])),
 		get contents() {
 			return get(this.store);
 		},

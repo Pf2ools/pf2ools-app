@@ -13,7 +13,7 @@ export const backgrounds = {
 	homebrew: {
 		store: derived<typeof homebrew.store, z.infer<typeof backgroundSchema>[]>(
 			homebrew.store,
-			($hb) => $hb.flatMap((b) => (b.background || []) as z.infer<typeof backgroundSchema>[]) // TODO: Fix this type
+			($hb) => $hb.flatMap((b) => b.background || [])
 		),
 		get contents() {
 			return get(this.store);
