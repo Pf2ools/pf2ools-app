@@ -2,11 +2,23 @@ import backgroundClass from './classes/backgroundClass';
 import { background as backgroundData } from './pf2ools-data/bundles/byDatatype/core/background.json' assert { type: 'json' };
 import { background as backgroundSchema } from 'pf2ools-schema';
 // ==========
-import { derived, get } from 'svelte/store';
+import { derived, get, type Readable } from 'svelte/store';
 import { homebrew } from './homebrew';
 import type { z } from 'zod';
 
-export const backgrounds = {
+export interface backgrounds {
+	data: z.infer<typeof backgroundSchema>[];
+	schema: typeof backgroundSchema;
+	class: typeof backgroundClass;
+	homebrew: {
+		store: Readable<z.infer<typeof backgroundSchema>[]>;
+		contents: z.infer<typeof backgroundSchema>[];
+	};
+	contents: z.infer<typeof backgroundSchema>[];
+	store: Readable<z.infer<typeof backgroundSchema>[]>;
+}
+
+export const backgrounds: backgrounds = {
 	data: backgroundData as z.infer<typeof backgroundSchema>[],
 	schema: backgroundSchema,
 	class: backgroundClass,

@@ -24,4 +24,7 @@ export const sources = {
 			[...this.data, ...$hb].map((b) => new this.class(b))
 		);
 	},
+	findID(id: string) {
+		return this.contents.find((source) => source.ID === id);
+	},
 };

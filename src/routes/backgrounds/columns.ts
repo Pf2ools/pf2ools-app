@@ -1,7 +1,7 @@
 import type { columnType } from '$lib/ui/ItemList.svelte';
-import type { classTypes } from '$lib/data/contentManager';
+import backgroundClass from '$lib/data/classes/backgroundClass';
 
-type bg = classTypes['background'];
+type bg = backgroundClass;
 export const columns = [
 	{
 		enabled: true,

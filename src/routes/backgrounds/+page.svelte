@@ -1,20 +1,19 @@
 <script lang="ts">
+	import { backgrounds as data } from '$lib/data/backgrounds';
 	import ItemList from '$lib/ui/ItemList.svelte';
-	import cm from '$lib/data/contentManager';
 	import { settings } from '$lib/settings';
 	import { writable, get, type Readable } from 'svelte/store';
 	import { columns } from './columns';
 	import { getContext } from 'svelte';
+	import { dev } from '$app/environment';
 
-	const { background: backgrounds } = cm;
+	const backgrounds = data.store;
 	let selected = $backgrounds[0];
+	if (dev) console.log('Backgrounds Data', data);
 
 	let listHeight = 0;
 	let listHeightStore = writable(0);
 	const slotHeightStore: Readable<number> = getContext('slotHeight');
-
-	import { backgrounds as backgroundTest } from '$lib/data/backgrounds';
-	console.log(backgroundTest);
 
 	listHeightStore.subscribe((value) => {
 		if (value > get(slotHeightStore)) listHeight = value;

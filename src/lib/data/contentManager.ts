@@ -100,8 +100,6 @@ export class ContentManager {
 		this.homebrewIndexes = localStorageStore('homebrewIndex', [
 			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master',
 		]);
-
-		if (dev) console.log(this);
 	}
 
 	//#region Utils
