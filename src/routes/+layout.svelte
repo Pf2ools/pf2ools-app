@@ -13,10 +13,6 @@
 	import { modalRegistry } from '$lib/ui/ModalRegistry';
 	initializeStores();
 
-	// For debugging, does nothing but adds the contentManager to the window object
-	import contentManager from '$lib/data/contentManager';
-	contentManager;
-
 	// Floating UI for Popups
 	import { AppShell, storePopup } from '@skeletonlabs/skeleton';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
