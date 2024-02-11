@@ -1,8 +1,9 @@
-import { type dataTypes } from '$lib/data/contentManager';
+import type { z } from 'zod';
+import type { backgrounds } from '../backgrounds';
 import Document from './documentClass';
 
 class Background extends Document<'background'> {
-	constructor(background: dataTypes['background']) {
+	constructor(background: z.infer<(typeof backgrounds)['schema']>) {
 		super(background);
 	}
 

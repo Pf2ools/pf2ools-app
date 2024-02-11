@@ -1,9 +1,10 @@
 import { homebrewSources as homebrewSourcesSchema } from 'pf2ools-schema';
 import type { z } from 'zod';
-import contentManager from '../contentManager.ts';
 import { derived, get, type Readable } from 'svelte/store';
 import { dateConvert } from '$lib/utils';
 import { dev } from '$app/environment';
+import { homebrew as homebrewData } from '../homebrew';
+import { sources as sourceData } from '../sources';
 
 export type homebrewSource = z.infer<typeof homebrewSourcesSchema>[number];
 
@@ -37,7 +38,7 @@ class HomebrewSource {
 	}
 
 	get isInstalled(): Readable<boolean> {
-		return derived(contentManager.homebrew, () => contentManager.brewIDs.includes(this.ID));
+		return derived(homebrewData.store, () => homebrewData.brewIDs.includes(this.ID));
 	}
 
 	get _isInstalled(): boolean {
@@ -45,8 +46,8 @@ class HomebrewSource {
 	}
 
 	get isThereNewerVersion(): Readable<boolean> {
-		return derived(contentManager.homebrew, () => {
-			const existingSource = contentManager.sourceByID.get(this.ID);
+		return derived(homebrewData.store, () => {
+			const existingSource = sourceData.findID(this.ID);
 			const date = existingSource?.data.modified ?? 0;
 			if (dev)
 				console.log(
@@ -71,11 +72,11 @@ class HomebrewSource {
 	}
 
 	deleteFromHomebrew(): void {
-		contentManager.removeID(this.ID);
+		homebrewData.removeByID(this.ID);
 	}
 
 	async addToHomebrew() {
-		await contentManager.addHomebrewFromUrl(this.downloadURL);
+		console.warn("Unimplemented method 'addToHomebrew' in HomebrewSource!");
 	}
 
 	get downloadURL(): string {

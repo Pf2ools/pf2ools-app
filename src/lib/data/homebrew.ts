@@ -10,6 +10,7 @@ interface Homebrew {
 	contents: z.infer<typeof bySource>[];
 	removeByID: (id: string) => void;
 	removeAll: () => void;
+	brewIDs: string[];
 }
 
 export const homebrew: Homebrew = {
@@ -19,6 +20,16 @@ export const homebrew: Homebrew = {
 	store: localStorageStore('homebrew', []),
 	get contents() {
 		return get(this.store);
+	},
+	get brewIDs() {
+		return [
+			...new Set(
+				this.contents
+					.map((content) => Object.values(content))
+					.flat(2)
+					.flatMap((content) => ('source' in content ? content?.source?.ID : content?.ID))
+			),
+		];
 	},
 	removeByID(id: string) {
 		this.store.update((homebrewFiles) =>
