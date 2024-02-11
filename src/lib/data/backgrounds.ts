@@ -11,7 +11,10 @@ export const backgrounds = {
 	schema: backgroundSchema,
 	class: backgroundClass,
 	homebrew: {
-		store: derived(homebrew.store, ($hb) => $hb.map((b) => b.background ?? []).flat()),
+		store: derived<typeof homebrew.store, z.infer<typeof backgroundSchema>[]>(
+			homebrew.store,
+			($hb) => $hb.flatMap((b) => (b.background || []) as z.infer<typeof backgroundSchema>[]) // TODO: Fix this type
+		),
 		get contents() {
 			return get(this.store);
 		},
