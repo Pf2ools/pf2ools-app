@@ -3,14 +3,14 @@ import type { EntryGenerator } from './$types';
 import { SEO } from '$env/static/private';
 import { base } from '$app/paths';
 import { dev } from '$app/environment';
-import contentManager from '$lib/data/contentManager';
+import { backgrounds } from '$lib/data/backgrounds';
 
 export const prerender = Boolean(Number(SEO));
 
 console.log('========= Prerender SEO: ' + prerender + ' =========');
 
 export const entries: EntryGenerator = async () => {
-	return contentManager._background.map((bg) => ({
+	return backgrounds.contents.map((bg) => ({
 		slug: bg.slug,
 	}));
 };
@@ -26,7 +26,7 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 		});
 	}
 
-	const bg = contentManager._background.find((bg) => bg.slug === slug) ?? null;
+	const bg = backgrounds.contents.find((bg) => bg.slug === slug) ?? null;
 
 	if (!bg) {
 		return new Response('Not Found', { status: 404 });

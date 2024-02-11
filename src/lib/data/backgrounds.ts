@@ -14,8 +14,8 @@ export interface backgrounds {
 		store: Readable<z.infer<typeof backgroundSchema>[]>;
 		contents: z.infer<typeof backgroundSchema>[];
 	};
-	contents: z.infer<typeof backgroundSchema>[];
-	store: Readable<z.infer<typeof backgroundSchema>[]>;
+	contents: backgroundClass[];
+	store: Readable<backgroundClass[]>;
 }
 
 export const backgrounds: backgrounds = {

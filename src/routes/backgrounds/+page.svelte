@@ -6,6 +6,7 @@
 	import { columns } from './columns';
 	import { getContext } from 'svelte';
 	import { dev } from '$app/environment';
+	import Background from '$lib/renderer/components/background.svelte';
 
 	const backgrounds = data.store;
 	let selected = $backgrounds[0];
@@ -34,18 +35,8 @@
 	<div class="w-full h-slot grid grid-rows-2 lg:grid-cols-5 lg:grid-rows-none gap-4">
 		<ItemList bind:selected items={$backgrounds} {columns} classes="lg:col-span-3" />
 		<div class="[&_p]:-indent-5 [&_p]:ml-5 lg:col-span-2">
-			<div class="p-3 pb-1.5 card" bind:clientHeight={$listHeightStore}>
-				{#if selected}
-					<h1 class="h2">{selected.label}</h1>
-					<hr />
-					<div>
-						{#each selected.data.entries as entry}
-							<p>{entry}</p>
-						{/each}
-					</div>
-					<hr />
-					<p class="text-right"><b>Source:</b> {selected.sourceFull}</p>
-				{/if}
+			<div bind:clientHeight={$listHeightStore}>
+				<Background data={selected} />
 			</div>
 		</div>
 	</div>
