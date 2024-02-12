@@ -76,7 +76,7 @@ export const GET: RequestHandler = ({ params: { slug } }) => {
 			headers: {
 				Location: `${base}/backgrounds#${slug}`,
 				'content-type': 'text/html; charset=utf-8',
-				'cache-control': 's-maxage=1, stale-while-revalidate',
+				'cache-control': 'public, s-maxage=604800,stale-while-revalidate=86400',
 			},
 		}
 	);
