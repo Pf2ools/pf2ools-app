@@ -1,5 +1,4 @@
 import type { settings } from '$lib/settings';
-import type contentManager from '$lib/data/contentManager';
 
 declare global {
 	// preserve any customizations you have here
@@ -12,7 +11,6 @@ declare global {
 
 	interface Window {
 		settings: typeof settings;
-		contentManager: typeof contentManager;
 		__TAURI__?: object;
 	}
 

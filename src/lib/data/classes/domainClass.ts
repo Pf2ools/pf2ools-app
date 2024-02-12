@@ -1,4 +1,4 @@
-import { type dataTypes } from '$lib/data/contentManager';
+import type { dataTypes } from '$lib/data/types';
 import Document from './documentClass';
 
 class Domain extends Document<'domain'> {

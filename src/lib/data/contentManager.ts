@@ -2,7 +2,7 @@ import { dev } from '$app/environment';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import {
 	background as backgroundSchema,
-	bySource as contentWithSourceSchema,
+	bundle as contentWithSourceSchema,
 	condition as conditionSchema,
 	data as dataSchema,
 	divineIntercession as divineIntercessionSchema,
@@ -100,8 +100,6 @@ export class ContentManager {
 		this.homebrewIndexes = localStorageStore('homebrewIndex', [
 			'https://raw.githubusercontent.com/Pf2ools/pf2ools-data/master',
 		]);
-
-		if (dev) console.log(this);
 	}
 
 	//#region Utils
@@ -414,5 +412,4 @@ export class ContentManager {
 }
 
 const contentManager = new ContentManager();
-if (typeof window !== 'undefined') window.contentManager = contentManager;
 export default contentManager;
