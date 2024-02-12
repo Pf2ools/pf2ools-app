@@ -2,6 +2,10 @@ export function objBoolsToArray(obj: { [key: string]: boolean }) {
 	return Object.keys(obj).filter((key) => obj[key]);
 }
 
+export function getTypedKeys<T extends object>(obj: T): Array<keyof T> {
+	return Object.keys(obj) as Array<keyof typeof obj>;
+}
+
 export function joinConjunct(
 	arr: string[],
 	conjunct: 'conjunction' | 'disjunction' = 'conjunction'

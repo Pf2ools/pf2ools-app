@@ -17,11 +17,6 @@ export default defineConfig({
 		'TAURI_DEBUG',
 	],
 	build: {
-		terserOptions: {
-			mangle: {
-				reserved: ['contentManager'],
-			},
-		},
 		rollupOptions: {
 			output: {
 				manualChunks(id: string) {

@@ -1,5 +1,5 @@
-import type { dataTypes } from '../contentManager';
-import cm, { ContentManager } from '../contentManager';
+import { sources } from '../sources';
+import type { dataTypes } from '../types';
 
 type dataTypesWithoutSource = keyof Omit<dataTypes, 'source'>;
 
@@ -32,7 +32,7 @@ class Document<T extends dataTypesWithoutSource> {
 	}
 
 	get sourceData() {
-		return cm._source.find((src) => src.ID === this.source.ID) ?? ContentManager.unknownSource;
+		return sources.findID(this.source.ID);
 	}
 
 	get sourceFull(): string {
