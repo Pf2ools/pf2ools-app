@@ -2,7 +2,7 @@ import { dev } from '$app/environment';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import {
 	background as backgroundSchema,
-	bySource as contentWithSourceSchema,
+	bundle as contentWithSourceSchema,
 	condition as conditionSchema,
 	data as dataSchema,
 	divineIntercession as divineIntercessionSchema,

@@ -53,6 +53,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"pf2ools-schema": "github:Pf2ools/pf2ools-schema#objectIndex"
+		"pf2ools-schema": "github:Pf2ools/pf2ools-schema"
 	}
 }

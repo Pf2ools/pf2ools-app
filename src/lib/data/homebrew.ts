@@ -1,13 +1,13 @@
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import { get, type Writable } from 'svelte/store';
 import type { z } from 'zod';
-import { bySource } from 'pf2ools-schema';
+import { bundle } from 'pf2ools-schema';
 import { getTypedKeys } from '$lib/utils';
 
 interface Homebrew {
 	indexes: Writable<string[]>;
-	store: Writable<z.infer<typeof bySource>[]>;
-	contents: z.infer<typeof bySource>[];
+	store: Writable<z.infer<typeof bundle>[]>;
+	contents: z.infer<typeof bundle>[];
 	removeByID: (id: string) => void;
 	removeAll: () => void;
 	brewIDs: string[];
