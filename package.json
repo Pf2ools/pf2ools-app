@@ -33,7 +33,7 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.30.0",
 		"iconify-icon": "^1.0.8",
-		"postcss": "8.4.33",
+		"postcss": "8.4.35",
 		"postcss-import": "^16.0.0",
 		"postcss-preset-env": "^9.3.0",
 		"prettier": "^3.2.2",
