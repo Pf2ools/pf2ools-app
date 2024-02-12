@@ -48,6 +48,7 @@ jobs:
         env:
           BASE_PATH: '/${{ github.event.repository.name }}'
           SEO: 1
+          IMAGES_RENDER: 1
         run: npm run build
 
       - name: Upload Artifacts

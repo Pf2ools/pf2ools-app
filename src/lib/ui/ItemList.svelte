@@ -24,7 +24,7 @@
 <script lang="ts" generics="T extends classTypes[keyof classTypes]">
 	import { dev } from '$app/environment';
 	import { settings } from '$lib/settings';
-	import type { classTypes } from '$lib/data/contentManager';
+	import type { classTypes } from '$lib/data/types';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';

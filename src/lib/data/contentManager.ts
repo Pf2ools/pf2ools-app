@@ -412,5 +412,4 @@ export class ContentManager {
 }
 
 const contentManager = new ContentManager();
-if (typeof window !== 'undefined') window.contentManager = contentManager;
 export default contentManager;

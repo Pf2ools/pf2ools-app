@@ -25,6 +25,14 @@ export const sources = {
 		);
 	},
 	findID(id: string) {
-		return this.contents.find((source) => source.ID === id);
+		return (
+			this.contents.find((source) => source.ID === id) ?? {
+				ID: 'unknown',
+				label: 'Unknown',
+				title: { full: 'Unknown', short: 'UNK' },
+				official: false,
+				secondaryContent: false,
+			}
+		);
 	},
 };
