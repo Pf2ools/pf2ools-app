@@ -144,7 +144,7 @@
 			{#each anchors as anchor}
 				{#if !anchor.href}
 					<button
-						class="generic-disabled border-r-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
+						class="generic-disabled border-l-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						disabled={anchor.disabled}
@@ -157,10 +157,9 @@
 					>
 						<iconify-icon icon={anchor.icon} class="block md:hidden text-3xl" />
 						<span class="hidden md:block">{anchor.name}</span>
-					</button>
-					<div data-popup={anchor.name}>
-						<div
-							class="card flex flex-col [&_a:not(:last-child)]:border-b
+						<div data-popup={anchor.name}>
+							<div
+								class="card flex flex-col [&_a:not(:last-child)]:border-b
 							sm:rounded-bl-token
 							sm:rounded-tl-none
 							sm:[&_a:first-child]:rounded-tl-none
@@ -169,28 +168,30 @@
 							rounded-tl-token
 							[&_a:first-child]:rounded-bl-none
 							"
-						>
-							{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
-								<a
-									class="hover:variant-ghost-primary rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 text-md sm:text-sm"
-									href={`${base}${subAnchor.href}`}
-									class:variant-filled-primary={$page.url.pathname === subAnchor.href}
-									use:popup={{
+							>
+								{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
+									<a
+										class="hover:variant-ghost-primary rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 text-md sm:text-sm"
+										href={`${base}${subAnchor.href}`}
+										class:variant-filled-primary={$page.url.pathname === subAnchor.href}
+										use:popup={{
 										event: 'click',
 										placement: 'bottom-start',
 										target: subAnchor.name,
 										middleware: { offset: 0, flip: { mainAxis: 'y' } },
 									}}
-								>
-									<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
-									<span>{subAnchor.name}</span>
-								</a>
-							{/each}
+									>
+										<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
+										<span>{subAnchor.name}</span>
+									</a>
+								{/each}
+							</div>
 						</div>
-					</div>
+					</button>
+
 				{:else}
 					<a
-						class="border-r-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm items-start"
+						class="border-l-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm items-start"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						href={anchor.href ? `${base}${anchor.href}` : undefined}
@@ -209,7 +210,7 @@
 				</a>
 			</div>
 			<button
-				class="generic-disabled border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none sm:hidden"
+				class="generic-disabled border-l-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none sm:hidden"
 				use:popup={{
 					event: 'click',
 					placement: 'top',
@@ -217,7 +218,7 @@
 					state: ({ state }) => {
 						if (state) {
 							console.log(document.querySelector('#searchInput'));
-							// @ts-expect-error - This is a valid element, but I cannot use TS inside of a Svelte component yet to tell so.
+							// @ts-expect-error - This is a valid element, but I cannot use TS inside a Svelte component yet to tell so.
 							setTimeout(() => document.querySelector('#searchInput')?.focus(), 100);
 						}
 					},

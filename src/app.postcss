@@ -57,6 +57,12 @@
 }
 
 @layer utilities {
+	.border-l-next + .border-l-next {
+		@apply border-l border-surface-500 border-dashed;
+	}
+	.border-t-next:has(~ .border-t-next) {
+		@apply border-t border-surface-500 border-dashed;
+	}
 	.border-r-next:has(~ .border-r-next) {
 		@apply border-r border-surface-500 border-dashed;
 	}
