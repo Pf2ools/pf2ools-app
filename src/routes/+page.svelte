@@ -1,5 +1,9 @@
 <script>
 	import { base } from '$app/paths';
+
+	// TODO: Remove
+	import { parser } from '$lib/dice';
+	console.log(parser.parse('1d20'));
 </script>
 
 <svelte:head>

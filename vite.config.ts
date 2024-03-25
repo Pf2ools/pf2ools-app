@@ -7,6 +7,7 @@ export default defineConfig({
 	server: {
 		strictPort: true,
 	},
+	assetsInclude: ['*.peggy'],
 	envPrefix: [
 		'VITE_',
 		'TAURI_PLATFORM',
