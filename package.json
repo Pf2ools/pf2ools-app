@@ -14,7 +14,7 @@
 		"tauri": "tauri"
 	},
 	"devDependencies": {
-		"@cloudflare/pages-plugin-vercel-og": "^0.1.0",
+		"@cloudflare/pages-plugin-vercel-og": "^0.1.1",
 		"@crikey/stores-select": "^0.2.2",
 		"@floating-ui/dom": "^1.6.3",
 		"@skeletonlabs/skeleton": "2.9.0",
