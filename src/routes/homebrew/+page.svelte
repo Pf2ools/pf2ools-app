@@ -85,7 +85,7 @@
 	$: if (selected) ({ isInstalled, isThereNewerVersion } = selected);
 	$: selected, (columns = columns);
 
-	function dblClick(item: T, event: Event) {
+	function dblClick(item: T) {
 		item.addToHomebrew().then(() => (selected = item));
 	}
 </script>

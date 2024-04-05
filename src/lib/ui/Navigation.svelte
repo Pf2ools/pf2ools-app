@@ -175,11 +175,11 @@
 										href={`${base}${subAnchor.href}`}
 										class:variant-filled-primary={$page.url.pathname === subAnchor.href}
 										use:popup={{
-										event: 'click',
-										placement: 'bottom-start',
-										target: subAnchor.name,
-										middleware: { offset: 0, flip: { mainAxis: 'y' } },
-									}}
+											event: 'click',
+											placement: 'bottom-start',
+											target: subAnchor.name,
+											middleware: { offset: 0, flip: { mainAxis: 'y' } },
+										}}
 									>
 										<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
 										<span>{subAnchor.name}</span>
@@ -188,7 +188,6 @@
 							</div>
 						</div>
 					</button>
-
 				{:else}
 					<a
 						class="border-l-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm items-start"
