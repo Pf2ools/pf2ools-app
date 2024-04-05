@@ -14,6 +14,11 @@
 		"**/build": true,
 		".env.local": false
 	},
+	"workbench.editor.customLabels.enabled": true,
+	"workbench.editor.customLabels.patterns": {
+		"**/routes/**/+page.svelte": "${dirname(1)}/${dirname}",
+		"**/routes/**/+page.server.ts": "/${dirname} [server]"
+	},
 	"prettier.documentSelectors": ["**/*.svelte"],
 	"tailwindCSS.classAttributes": [
 		"class",
