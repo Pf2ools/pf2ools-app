@@ -95,7 +95,7 @@
 </svelte:head>
 
 <div
-	class="container flex justify-center h-full flex-col"
+	class="container flex h-full flex-col justify-center"
 	class:container={!$settings.wideMode}
 	class:px-2={$settings.wideMode}
 >
@@ -119,7 +119,7 @@
 		h-[calc(var(--slotHeight)_-_2.75rem)]
 	-->
 
-	<div class="w-full h-slot grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-none gap-2">
+	<div class="grid h-slot w-full grid-rows-2 gap-2 lg:grid-cols-2 lg:grid-rows-none">
 		<!-- <div style="--listHeight: calc(var(--slotHeight) - 2.75rem)"> -->
 		<ItemList
 			bind:selected
@@ -130,7 +130,7 @@
 		/>
 		<!-- </div> -->
 		<div>
-			<div class="p-3 pb-1.5 card space-y-1">
+			<div class="card space-y-1 p-3 pb-1.5">
 				{#if selected}
 					<h3 class="h3">{selected.label}</h3>
 					<hr />
@@ -152,29 +152,29 @@
 					</div>
 					<div class="grid grid-cols-6 gap-1 text-center">
 						<button
-							class="btn-sm rounded-token border-token border-surface-500-400-token generic-disabled col-span-2"
+							class="generic-disabled border-surface-500-400-token btn-sm col-span-2 border-token rounded-token"
 							on:click={async () => {
 								await selected.addToHomebrew();
 								selected = selected;
 							}}
 							disabled={!$isThereNewerVersion}
 						>
-							<iconify-icon icon="mdi:download" class="text-lg align-text-bottom" />
+							<iconify-icon icon="mdi:download" class="align-text-bottom text-lg" />
 							{$isInstalled && $isThereNewerVersion ? 'Update' : 'Download'}
 						</button>
 						<button
-							class="btn-sm rounded-token border-token border-surface-500-400-token generic-disabled col-span-2"
+							class="generic-disabled border-surface-500-400-token btn-sm col-span-2 border-token rounded-token"
 							disabled={!$isInstalled}
 							class:variant-soft-error={$isInstalled}
 							on:click={() => (selected = selected) && selected.deleteFromHomebrew()}
 						>
-							<iconify-icon icon="mdi:trash-can" class="text-lg align-text-bottom" /> Delete
+							<iconify-icon icon="mdi:trash-can" class="align-text-bottom text-lg" /> Delete
 						</button>
 						<a
 							href={selected.URL}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="btn-sm rounded-token border-token border-surface-500-400-token flex items-center justify-center"
+							class="border-surface-500-400-token btn-sm flex items-center justify-center border-token rounded-token"
 						>
 							Source <iconify-icon icon="mdi:open-in-new" class="pl-1" />
 						</a>
@@ -182,7 +182,7 @@
 							href={selected.downloadURL}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="btn-sm rounded-token border-token border-surface-500-400-token flex items-center justify-center"
+							class="border-surface-500-400-token btn-sm flex items-center justify-center border-token rounded-token"
 						>
 							Code <iconify-icon icon="mdi:open-in-new" class="pl-1" />
 						</a>

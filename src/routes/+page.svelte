@@ -6,7 +6,7 @@
 	<title>pf2ools</title>
 </svelte:head>
 
-<div class="container flex justify-center h-full">
+<div class="container flex h-full justify-center">
 	<div class="space-y-5">
 		<ul class="list-disc">
 			<li>

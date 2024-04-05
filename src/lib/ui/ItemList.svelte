@@ -162,13 +162,13 @@
 	<div class="top-0" bind:clientHeight={headerHeight}>
 		<div>
 			<div
-				class="input-group input-group-divider flex flex-row rounded-b-none [&>*]:!px-2 [&_*]:bg-surface-100-800-token"
+				class="input-group input-group-divider flex flex-row rounded-b-none [&_*]:bg-surface-100-800-token [&>*]:!px-2"
 			>
 				<button class="input-group-shim" on:click={() => modalStore.trigger(modalSettings)}>
 					Filter
 				</button>
 				<button
-					class="input-group-shim border-l border-surface-400-500-token generic-disabled"
+					class="generic-disabled input-group-shim border-surface-400-500-token border-l"
 					disabled={!$filters.length}
 					on:click={() => (hideFilters = !hideFilters)}
 					title={$filters.length
@@ -181,20 +181,20 @@
 					/>
 				</button>
 
-				<div class="w-full relative">
+				<div class="relative w-full">
 					<input
 						class="input rounded-b-none rounded-l-none p-0 py-1"
 						type="text"
 						placeholder="Search..."
 						bind:value={search}
 					/>
-					<span class="text-sm absolute right-2 opacity-50">
+					<span class="absolute right-2 text-sm opacity-50">
 						{filteredItems.length}/{items.length}
 					</span>
 				</div>
 
 				<button
-					class="input-group-shim border-r border-surface-400-500-token border-l"
+					class="input-group-shim border-surface-400-500-token border-l border-r"
 					on:click={() =>
 						(selected = filteredItems[Math.floor(Math.random() * filteredItems.length)])}
 					title="Feeling Lucky?"
@@ -212,13 +212,13 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 			</div>
 			{#if $filters.length && !hideFilters}
 				<div
-					class="flex flex-wrap [&>*]:mr-1 last:[&>*]:mr-0 overflow-x-clip border-b border-surface-300-600-token text-dark-token bg-surface-200-700-token text-xs px-0.5"
+					class="bg-surface-200-700-token border-surface-300-600-token flex flex-wrap overflow-x-clip border-b px-0.5 text-xs text-dark-token [&>*]:mr-1 last:[&>*]:mr-0"
 					title="Remove filters by clicking on them."
 				>
 					{#each $filters as filter}
 						{#if 'OR' in filter}
 							<div
-								class="p-px flex rounded-md"
+								class="flex rounded-md p-px"
 								class:variant-ghost-surface={filter.not}
 								class:variant-ghost-interact={!filter.not}
 							>
@@ -226,7 +226,7 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 									<FilterChip label={orFilter.label} classes={filter.not ? 'bg-surface-600' : ''}>
 										<div slot="outside">
 											{#if index !== filter.OR.length - 1}
-												<div class="px-1 text-sm -mt-px text-base-token dark:text-dark-token">
+												<div class="-mt-px px-1 text-sm text-base-token dark:text-dark-token">
 													/
 												</div>
 											{/if}
@@ -246,14 +246,14 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 			{/if}
 		</div>
 		<div
-			class="pl-0.5 pb-0.5 grid grid-cols-24 bg-surface-100-800-token text-sm border-b border-surface-500"
+			class="bg-surface-100-800-token grid grid-cols-24 border-b border-surface-500 pb-0.5 pl-0.5 text-sm"
 		>
 			{#each columns
 				.filter((col) => col.enabled)
 				.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { label, classes, span, sorted, hover, sortedHidden }}
 				<button
 					title={hover}
-					class="border-r-next px-1 col-span-var h-full {classes} {$settings.listSize} relative"
+					class="border-r-next col-span-var h-full px-1 {classes} {$settings.listSize} relative"
 					style="--span: {span === -1 ? remainingSpan : span}"
 					on:click={() => {
 						if (sortedHidden) return;
@@ -280,14 +280,14 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 		</div>
 	</div>
 	<div
-		class="h-[calc(max(var(--listHeight,0px),var(--slotHeight))-var(--headerHeight))] overflow-y-scroll overflow-x-hidden offset-scroll scroll-thin
+		class="offset-scroll scroll-thin h-[calc(max(var(--listHeight,0px),var(--slotHeight))-var(--headerHeight))] overflow-x-hidden overflow-y-scroll
 		[&_button:nth-child(odd)]:bg-surface-200/50 dark:[&_button:nth-child(odd)]:bg-surface-700/50"
 	>
 		{#each filteredItems as item}
 			<button
 				{title}
 				id="row"
-				class="pl-0.5 grid grid-cols-24 w-full {$settings.listSize} hover:!variant-ghost-primary focus:!variant-ghost-primary"
+				class="grid w-full grid-cols-24 pl-0.5 {$settings.listSize} hover:!variant-ghost-primary focus:!variant-ghost-primary"
 				class:homebrew-shadow={!item?.official}
 				class:secondary-shadow={item?.secondaryContent}
 				class:selected={selected === item}
@@ -302,7 +302,7 @@ You can also do these actions by holding Alt and pressing R or Shift-R."
 					.filter((col) => col.enabled)
 					.sort( (a, b) => (a.order === -1 ? 1 : b.order === -1 ? -1 : a.order - b.order) ) as { classes, span, parser }}
 					<div
-						class="border-r-next px-1 col-span-var h-full {classes}"
+						class="border-r-next col-span-var h-full px-1 {classes}"
 						style="--span: {span === -1 ? remainingSpan : span}"
 					>
 						{parser(item)}
