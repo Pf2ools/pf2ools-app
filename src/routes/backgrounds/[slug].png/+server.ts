@@ -2,7 +2,7 @@ import { type RequestHandler } from '@sveltejs/kit';
 import type { EntryGenerator } from './$types';
 import { SEO, IMAGES_RENDER } from '$env/static/private';
 import { backgrounds } from '$lib/data/backgrounds';
-import { ImageResponse } from '@cloudflare/pages-plugin-vercel-og/api';
+import { ImageResponse } from '@vercel/og';
 import { html as toReactNode } from 'satori-html';
 
 export const prerender = Boolean(Number(SEO) && Number(IMAGES_RENDER));
