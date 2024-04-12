@@ -3,7 +3,7 @@
 	export let data: backgroundClass;
 </script>
 
-<div class="p-3 pb-1.5 card">
+<div class="card p-3 pb-1.5">
 	<h1 class="h2">{data.label}</h1>
 	<hr />
 	<div>

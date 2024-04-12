@@ -8,15 +8,15 @@
 
 @layer components {
 	.variant-outline-interact {
-		@apply ring-[1px] ring-interact-500 dark:ring-interact-500 ring-inset;
+		@apply ring-[1px] ring-inset ring-interact-500 dark:ring-interact-500;
 	}
 
 	.variant-ghost-interact {
-		@apply bg-interact-500/20 dark:bg-interact-500/20 variant-outline-interact;
+		@apply variant-outline-interact bg-interact-500/20 dark:bg-interact-500/20;
 	}
 
 	.variant-soft-interact {
-		@apply bg-interact-400/20 dark:bg-interact-500/20 text-interact-700-200-token !ring-0;
+		@apply bg-interact-400/20 !ring-0 text-interact-700-200-token dark:bg-interact-500/20;
 	}
 
 	.selected {
@@ -57,11 +57,17 @@
 }
 
 @layer utilities {
+	.border-l-next + .border-l-next {
+		@apply border-l border-dashed border-surface-500;
+	}
+	.border-t-next:has(~ .border-t-next) {
+		@apply border-t border-dashed border-surface-500;
+	}
 	.border-r-next:has(~ .border-r-next) {
-		@apply border-r border-surface-500 border-dashed;
+		@apply border-r border-dashed border-surface-500;
 	}
 	.border-b-next:has(~ .border-b-next) {
-		@apply border-b border-surface-500 border-dashed;
+		@apply border-b border-dashed border-surface-500;
 	}
 
 	.generic-disabled:disabled,
@@ -96,6 +102,6 @@ hr {
 #shell-header #title {
 	@apply bg-surface-300/75;
 	.dark & {
-		@apply bg-gradient-to-l bg-blend-color from-surface-800 to-primary-500/20 bg-surface-800;
+		@apply bg-surface-800 bg-gradient-to-l from-surface-800 to-primary-500/20 bg-blend-color;
 	}
 }

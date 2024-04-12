@@ -27,14 +27,14 @@
 </svelte:head>
 
 <div
-	class="flex justify-center h-full"
+	class="flex h-full justify-center"
 	class:container={!$settings.wideMode}
 	class:px-2={$settings.wideMode}
 	style="--listHeight: {listHeight}px"
 >
-	<div class="w-full h-slot grid grid-rows-2 lg:grid-cols-5 lg:grid-rows-none gap-4">
+	<div class="grid h-slot w-full grid-rows-2 gap-4 lg:grid-cols-5 lg:grid-rows-none">
 		<ItemList bind:selected items={$backgrounds} {columns} classes="lg:col-span-3" />
-		<div class="[&_p]:-indent-5 [&_p]:ml-5 lg:col-span-2">
+		<div class="lg:col-span-2 [&_p]:ml-5 [&_p]:-indent-5">
 			<div bind:clientHeight={$listHeightStore}>
 				<Background data={selected} />
 			</div>

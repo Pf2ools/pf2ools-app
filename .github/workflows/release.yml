@@ -3,7 +3,12 @@ name: Release
 on:
   push:
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   release:
@@ -43,24 +48,31 @@ jobs:
 
       # get part of the tag after the `v`
       - name: Extract tag version number
-        id: get_version
+        id: get-version
         uses: battila7/get-version-action@v2
 
       - name: Change package.json version to the tag version
         id: info
         uses: jaywcjlove/github-action-package@main
         with:
-          version: ${{steps.get_version.outputs.version-without-v}}
+          version: ${{steps.get-version.outputs.version-without-v}}
 
       - name: Add VERSION Env Variable (Windows only)
         if: matrix.platform == 'windows-latest'
         run: |
-          echo "VERSION=${{steps.get_version.outputs.version-without-v}}" | Out-File -FilePath $env:GITHUB_ENV -Append # no need for -Encoding utf8
+          echo "VERSION=${{steps.get-version.outputs.version-without-v}}" | Out-File -FilePath $env:GITHUB_ENV -Append # no need for -Encoding utf8
 
       - name: Install frontend dependencies
         env:
-          VERSION: ${{steps.get_version.outputs.version-without-v}}
+          VERSION: ${{steps.get-version.outputs.version-without-v}}
         run: npm install
+
+      - name: Get changelog release info
+        id: changelog
+        uses: release-flow/keep-a-changelog-action@v3
+        with:
+          command: query
+          version: ${{ steps.get-version.outputs.version-without-v }}
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
@@ -71,6 +83,6 @@ jobs:
         with:
           tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
           releaseName: 'v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
-          # releaseBody: 'TODO: When making changelogs, add them here.'
+          releaseBody: ${{ steps.changelog.outputs.release-notes }}
           releaseDraft: true
           prerelease: false

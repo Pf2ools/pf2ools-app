@@ -15,9 +15,9 @@
 
 {#if $modalStore[0]}
 	<div
-		class="w-modal-wide h-[95svh] {parent.background} p-3 rounded-container-token space-y-2 drop-shadow-lg flex flex-col"
+		class="w-modal-wide h-[95svh] {parent.background} flex flex-col space-y-2 p-3 drop-shadow-lg rounded-container-token"
 	>
-		<div id="body" class="overflow-y-scroll offset-scroll scroll-thin">
+		<div id="body" class="offset-scroll scroll-thin overflow-y-scroll">
 			Gazowe pistolety, z których można Kiedy już pilot ciemniej? Wiódł końcami palców Automaty nie
 			mogą przy bardzo rakiet, miejscem, z którego można oczywiście ze jakim sunął, Instytut i szło
 			na Północ, był dozwolony niezły byłby nie mogą poruszać się na jego pianowej właśnie, że w
@@ -61,9 +61,9 @@
 			z dowodem w ręku. Czy to strop, czy podłoga. Walczył sekundę, oraz wylatującymi za.
 		</div>
 		<hr />
-		<div id="footer" class="{parent.regionFooter} justify-center mt-auto">
+		<div id="footer" class="{parent.regionFooter} mt-auto justify-center">
 			<button
-				class="btn btn-primary border-token border-surface-500-400-token variant-ghost-warning"
+				class="btn-primary variant-ghost-warning border-surface-500-400-token btn border-token"
 				on:click={() => {
 					$modalStore[0].response?.(response());
 					modalStore.close();
@@ -72,7 +72,7 @@
 				Save
 			</button>
 			<button
-				class="btn btn-primary border-token border-surface-500-400-token variant-ghost-surface"
+				class="btn-primary variant-ghost-surface border-surface-500-400-token btn border-token"
 				on:click={() => modalStore.close()}
 			>
 				Cancel

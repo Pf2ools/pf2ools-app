@@ -100,14 +100,14 @@
 <div data-popup="search">
 	<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] rounded-none">
 		<input class="" type="text" placeholder="Search Anything..." id="searchInput" />
-		<a class="rounded-none variant-filled-surface" href="{base}/search">
+		<a class="variant-filled-surface rounded-none" href="{base}/search">
 			<iconify-icon icon="mdi:search" class="text-2xl" />
 		</a>
 	</div>
 </div>
 
 <div
-	class="hidden lg:flex w-full h-12 px-8 p-1 bg-surface-100-800-token flex-row underline underline-offset-1 decoration-primary-500-400-token"
+	class="bg-surface-100-800-token decoration-primary-500-400-token hidden h-12 w-full flex-row p-1 px-8 underline underline-offset-1 lg:flex"
 	id="title"
 >
 	<div class="">
@@ -118,7 +118,7 @@
 	</div>
 	<div class="ml-auto py-1">
 		<a
-			class="chip variant-soft hover:variant-filled"
+			class="variant-soft chip hover:variant-filled"
 			href="https://github.com/Pf2ools"
 			target="_blank"
 			rel="noopener noreferrer"
@@ -140,11 +140,11 @@
 	<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
 
 	<div class="mx-auto space-y-4">
-		<div class="flex flex-row overflow-x-auto hide-scrollbar justify-start">
+		<div class="hide-scrollbar flex flex-row justify-start overflow-x-auto">
 			{#each anchors as anchor}
 				{#if !anchor.href}
 					<button
-						class="generic-disabled border-r-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none"
+						class="generic-disabled border-l-next flex-none cursor-pointer rounded-none px-2 py-2 text-center text-sm transition-colors duration-100 hover:variant-ghost-primary md:px-4"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						disabled={anchor.disabled}
@@ -155,61 +155,61 @@
 							middleware: { offset: 0, flip: {} },
 						}}
 					>
-						<iconify-icon icon={anchor.icon} class="block md:hidden text-3xl" />
+						<iconify-icon icon={anchor.icon} class="block text-3xl md:hidden" />
 						<span class="hidden md:block">{anchor.name}</span>
-					</button>
-					<div data-popup={anchor.name}>
-						<div
-							class="card flex flex-col [&_a:not(:last-child)]:border-b
-							sm:rounded-bl-token
+						<div data-popup={anchor.name}>
+							<div
+								class="card flex flex-col rounded-bl-none
+							rounded-tl-token
 							sm:rounded-tl-none
+							sm:rounded-bl-token
+							[&_a:first-child]:rounded-bl-none
 							sm:[&_a:first-child]:rounded-tl-none
 							sm:[&_a:first-child]:rounded-bl-token
-							rounded-bl-none
-							rounded-tl-token
-							[&_a:first-child]:rounded-bl-none
+							[&_a:not(:last-child)]:border-b
 							"
-						>
-							{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
-								<a
-									class="hover:variant-ghost-primary rounded-token border-surface-300-600-token border-dashed text-center cursor-pointer transition-colors duration-100 flex-none px-4 py-2 text-md sm:text-sm"
-									href={`${base}${subAnchor.href}`}
-									class:variant-filled-primary={$page.url.pathname === subAnchor.href}
-									use:popup={{
-										event: 'click',
-										placement: 'bottom-start',
-										target: subAnchor.name,
-										middleware: { offset: 0, flip: { mainAxis: 'y' } },
-									}}
-								>
-									<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
-									<span>{subAnchor.name}</span>
-								</a>
-							{/each}
+							>
+								{#each anchor.pages.filter((anc) => !anc.disabled) as subAnchor}
+									<a
+										class="text-md border-surface-300-600-token flex-none cursor-pointer border-dashed px-4 py-2 text-center transition-colors duration-100 rounded-token hover:variant-ghost-primary sm:text-sm"
+										href={`${base}${subAnchor.href}`}
+										class:variant-filled-primary={$page.url.pathname === subAnchor.href}
+										use:popup={{
+											event: 'click',
+											placement: 'bottom-start',
+											target: subAnchor.name,
+											middleware: { offset: 0, flip: { mainAxis: 'y' } },
+										}}
+									>
+										<!-- <svelte:fragment slot="lead"></svelte:fragment> -->
+										<span>{subAnchor.name}</span>
+									</a>
+								{/each}
+							</div>
 						</div>
-					</div>
+					</button>
 				{:else}
 					<a
-						class="border-r-next text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm items-start"
+						class="border-l-next flex-none cursor-pointer items-start px-2 py-2 text-center text-sm transition-colors duration-100 hover:variant-ghost-primary md:px-4"
 						class:variant-filled-primary={$page.url.pathname === anchor.href ||
 							anchor.pages?.some((anchor) => get(page).url.pathname === anchor.href)}
 						href={anchor.href ? `${base}${anchor.href}` : undefined}
 					>
-						<iconify-icon icon={anchor.icon} class="block md:hidden text-3xl" />
+						<iconify-icon icon={anchor.icon} class="block text-3xl md:hidden" />
 						<span class="hidden md:block">{anchor.name}</span>
 					</a>
 				{/if}
 			{/each}
 			<div
-				class="input-group input-group-divider grid-cols-[auto_1fr_auto] h-9 [&>*]:h-9 rounded-none hidden sm:flex"
+				class="input-group input-group-divider hidden h-9 grid-cols-[auto_1fr_auto] rounded-none sm:flex [&>*]:h-9"
 			>
 				<input type="text" placeholder="Search Anything..." />
-				<a class="rounded-none variant-filled-surface !p-2" href="{base}/search">
+				<a class="variant-filled-surface rounded-none !p-2" href="{base}/search">
 					<iconify-icon icon="mdi:search" class="text-2xl" />
 				</a>
 			</div>
 			<button
-				class="generic-disabled border-r-next tab-anchor text-center cursor-pointer transition-colors duration-100 flex-none px-2 md:px-4 py-2 hover:variant-ghost-primary text-sm rounded-none sm:hidden"
+				class="generic-disabled border-l-next tab-anchor flex-none cursor-pointer rounded-none px-2 py-2 text-center text-sm transition-colors duration-100 hover:variant-ghost-primary sm:hidden md:px-4"
 				use:popup={{
 					event: 'click',
 					placement: 'top',
@@ -217,14 +217,14 @@
 					state: ({ state }) => {
 						if (state) {
 							console.log(document.querySelector('#searchInput'));
-							// @ts-expect-error - This is a valid element, but I cannot use TS inside of a Svelte component yet to tell so.
+							// @ts-expect-error - This is a valid element, but I cannot use TS inside a Svelte component yet to tell so.
 							setTimeout(() => document.querySelector('#searchInput')?.focus(), 100);
 						}
 					},
 					middleware: { offset: 0 },
 				}}
 			>
-				<iconify-icon icon="mdi:search" class="text-3xl block" />
+				<iconify-icon icon="mdi:search" class="block text-3xl" />
 			</button>
 		</div>
 	</div>

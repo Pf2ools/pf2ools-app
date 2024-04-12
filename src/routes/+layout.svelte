@@ -61,7 +61,7 @@
 
 	<!-- Router Slot -->
 	<div
-		class="pb-1 pt-2 h-full"
+		class="h-full pb-1 pt-2"
 		class:[&_*]:border={$settings.debug.borders}
 		style="--slotHeight:calc({$slotHeight}px - 1rem);"
 	>
@@ -72,9 +72,9 @@
 	<!-- (pageFooter) -->
 	<svelte:fragment slot="footer">
 		<div
-			class="hidden sm:block z-10 absolute opacity-15 select-none {$settings.wideMode
+			class="absolute z-10 hidden select-none opacity-15 sm:block {$settings.wideMode
 				? 'text-xss left-1/2 top-0 [&>div]:-translate-x-1/2'
-				: 'text-xs left-1 bottom-0'}"
+				: 'bottom-0 left-1 text-xs'}"
 		>
 			<div>
 				Ver. {isNaN(Number(version))
@@ -90,8 +90,8 @@
 		</div>
 		{#if !$settings.clearFooter}
 			<div bind:clientHeight={footerElement} transition:slide>
-				<div class="relative hidden md:flex justify-center items-center pb-1 opacity-30">
-					<p class="text-gray-500 text-xs">
+				<div class="relative hidden items-center justify-center pb-1 opacity-30 md:flex">
+					<p class="text-xs text-gray-500">
 						<span class="text-gray-400">©</span>
 						{new Date().getFullYear()} pf2ools |
 						<a href="{base}/licenses" class="anchor !text-gray-500 underline-offset-auto">
@@ -102,7 +102,7 @@
 						class="absolute right-2 text-xs text-gray-500 hover:underline"
 						on:click={() => ($settings.clearFooter = true)}
 					>
-						I understand. <iconify-icon icon="mdi:arrow-down" class="text-sm align-top" />
+						I understand. <iconify-icon icon="mdi:arrow-down" class="align-top text-sm" />
 					</button>
 				</div>
 			</div>

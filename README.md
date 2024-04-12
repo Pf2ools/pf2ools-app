@@ -1,5 +1,7 @@
 # pf2ools
 
+When cloning, use `git clone https://github.com/Pf2ools/pf2ools-app --recurse-submodules`
+
 - [Preffered Icons](https://icon-sets.iconify.design/mdi/)
 
 ## Installers

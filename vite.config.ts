@@ -1,4 +1,4 @@
-import { defineConfig, splitVendorChunkPlugin } from 'vite';
+import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
@@ -31,5 +31,5 @@ export default defineConfig({
 		minify: !process.env.TAURI_DEBUG ? 'terser' : false,
 		sourcemap: true,
 	},
-	plugins: [sveltekit(), purgeCss(), splitVendorChunkPlugin()],
+	plugins: [sveltekit(), purgeCss()],
 });
