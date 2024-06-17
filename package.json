@@ -20,7 +20,7 @@
 		"@skeletonlabs/tw-plugin": "0.3.1",
 		"@sveltejs/adapter-auto": "^3.2.0",
 		"@sveltejs/adapter-static": "^3.0.0",
-		"@sveltejs/kit": "^2.5.6",
+		"@sveltejs/kit": "^2.5.16",
 		"@sveltejs/vite-plugin-svelte": "^3.1.0",
 		"@tailwindcss/forms": "0.5.7",
 		"@tauri-apps/cli": "^1.5.11",
